@@ -1,4 +1,4 @@
-//this folder is to test potential function that we will use
+//this file is to test potential function that we will use
 //for example: monthly salary calculator, taxes calculator ect...
 //this file can also be used to test which data structs we should use to keep out data, like shifts.
 
@@ -12,3 +12,4 @@
 //it should create a object or struct that contains all the above data, but also calculated information like: salary for that day, special rates, overtime, overall duration.
 
 //should we use a class or struct?
+
