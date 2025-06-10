@@ -1,8 +1,7 @@
 //this file is to test potential function that we will use
 //for example: monthly salary calculator, taxes calculator ect...
 //this file can also be used to test which data structs we should use to keep out data, like shifts.
-
-
+import {Duration , WeeklyDuration , WeeklyTimeStamp , DateToDuration} from "./Time.js";
 
 
 
@@ -18,7 +17,7 @@
 //new idea, what if user would like to add special rates into specific times of the shift(cant do this in competitor)?
 
 var HourlyRate = 34; // this variables should be global in our code or apart from a larger class.
-var OvertimeStart = [8,0]; 
+var OvertimeStart = new Duration(8,30); 
 var RestDays = [[5,18,30],[6,18,30]]; //how do we keep reaccuring days and hours for rest days? well we can just keep the days sunday to saturday (0-6) , hours (0-23), and minutes (0-59) , we can easily get the current time of the format by using:
 // const date = new Date(); 
 // day = date.getDay();
@@ -26,8 +25,8 @@ var RestDays = [[5,18,30],[6,18,30]]; //how do we keep reaccuring days and hours
 // minute date.getMinutes();
 
 
-
 class Shift{
+
 constructor(Start, End, HourlyRate, TransportFees, Text) {
     this.Start = Start; //date object
     this.End = End; // date object
@@ -36,7 +35,14 @@ constructor(Start, End, HourlyRate, TransportFees, Text) {
     this.TransportFees = TransportFees; 
     this.Text = Text; //string
     this.RestDays = RestDays; // 2x3 matrix 
-    this.pay = CalculatePay()
+    this.pay = CalcShiftPay();
   }
+
+  CalcShiftPay(){
+
+
+  }
+
+
 
 }
