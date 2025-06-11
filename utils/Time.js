@@ -30,7 +30,7 @@ export class WeeklyTimeStamp{
     }
 }
 
-export function DateToDuration(start, end){
+export function DateToDuration(start, end){ //takes 2 dates and returns a duration
   const ms = Math.abs(end - start);
   const totalSeconds = Math.floor(ms / 1000);
   const hours = Math.floor(totalSeconds / 3600);
@@ -38,9 +38,16 @@ export function DateToDuration(start, end){
   return new Duration(hours,minutes)
 }
 
+export function DateToWeeklyDuration(start, end){ //takes 2 dates and return a weekly Durations
+  return new WeeklyDuration(
+    DateToWeeklyTimeStamp(start) , DateToWeeklyTimeStamp(end)
+  )
+}
+
+export function DateToWeeklyTimeStamp(date){ //takes a date and returns a weekly timestamp
+  return new WeeklyTimeStamp(date.getDay(),date.getHours(),date.getMinutes())
+}
 
 
-/* tests
-dur = new Duration(8,20);
-console.log(dur.DurationToPay(30))
-*/
+
+  
