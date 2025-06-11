@@ -1,13 +1,15 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 
-export default function UserPic({ style }) {
+const UserPic = ({ style }) => {
   return (
     <View style={[styles.pic, style]}>
       <Image source=""></Image>
     </View>
   );
-}
+};
+
+export default UserPic;
 
 const styles = StyleSheet.create({
   pic: {

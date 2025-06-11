@@ -1,26 +1,53 @@
-import { StyleSheet, Text, View } from "react-native";
-import Header from "../components/layout/Header";
-import { useEffect, useState } from "react";
-import { useSegments } from "expo-router";
+import { Drawer } from "expo-router/drawer";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { View, StyleSheet, StatusBar } from "react-native";
+import Header from "../components/Layout/Header"; // adjust path as needed
+import { useNavigation } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+//arrow function
 
 const RootLayout = () => {
-  const segments = useSegments();
-  const [title, setTitle] = useState("Default");
-
-  useEffect(() => {
-    const currentRoute = segments[segments.length - 1] || "index";
-
-    const titles = {
-      index: "Home",
-      shiftTracker: "All Shifts",
-    };
-
-    setTitle(titles[currentRoute] || "App");
-  }, [segments]);
+  const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
+  StatusBar.setBarStyle("light-content", true);
 
   return (
-    <View style={{ flex: 1 }}>
-      <Header title={title} />
+    <View
+      style={{
+        flex: 1,
+        paddingTop: insets.top,
+        // paddingBottom: insets.bottom,
+        backgroundColor: "#6200ee",
+      }}
+    >
+      <GestureHandlerRootView
+        style={{
+          flex: 1,
+        }}
+      >
+        <Drawer
+          screenOptions={{
+            header: ({ route, navigation }) => (
+              <Header title={route.name} navigation={navigation} />
+            ),
+          }}
+        >
+          <Drawer.Screen
+            name="index"
+            options={{
+              drawerLabel: "Home",
+              title: "Home",
+            }}
+          />
+          <Drawer.Screen
+            name="shiftTracker"
+            options={{
+              drawerLabel: "User",
+              title: "All Shifts",
+            }}
+          />
+        </Drawer>
+      </GestureHandlerRootView>
     </View>
   );
 };

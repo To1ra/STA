@@ -1,17 +1,19 @@
-import { StyleSheet, Text, View } from "react-native";
+// components/CustomHeader.tsx
 import React from "react";
-import NavBar from "./NavBar";
 import UserPic from "./UserPic";
-import { useRouter } from "expo-router";
-import { Directions } from "react-native-gesture-handler";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-const Header = (prop) => {
-  const router = useRouter();
+const Header = ({ title, navigation }) => {
   return (
-    <View style={styles.Container}>
-      <UserPic style={styles.UserPic} />
-      <Text style={styles.Title}>{prop.title}</Text>
-      <NavBar style={styles.Nav} />
+    <View style={styles.header}>
+      <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <Text style={styles.menu}>☰</Text>
+      </TouchableOpacity>
+      <Text style={styles.title}>{title}</Text>
+      {/* Add icons or buttons on the right if needed */}
+      <TouchableOpacity onPress={() => {}}>
+        <UserPic />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -19,20 +21,24 @@ const Header = (prop) => {
 export default Header;
 
 const styles = StyleSheet.create({
-  Container: {
-    height: "16%",
-    display: "flex",
-    backgroundColor: "red",
-    flexDirection: "row-reverse",
-    justifyContent: "space-between",
+  header: {
+    height: 60,
+    backgroundColor: "#6200ee",
+    flexDirection: "row",
     alignItems: "center",
+    paddingHorizontal: 15,
+    justifyContent: "space-between",
   },
-  UserPic: { display: "flex" },
-  Nav: {},
-  Title: {
-    marginTop: "12%",
-    alignSelf: "center",
-    fontSize: 18,
-    fontWeight: "bold",
+  title: {
+    color: "#fff",
+    fontSize: 20,
+  },
+  menu: {
+    color: "#fff",
+    fontSize: 24,
+  },
+  settings: {
+    color: "#fff",
+    fontSize: 20,
   },
 });

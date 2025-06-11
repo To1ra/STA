@@ -4,7 +4,7 @@ import React from "react";
 const shiftTracker = () => {
   return (
     <View>
-      <Text>shiftTracker</Text>
+      <Text>this is shiftTracker</Text>
     </View>
   );
 };
