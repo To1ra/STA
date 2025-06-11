@@ -7,10 +7,38 @@ export class Duration{
         this.minutes = minutes;
     }
 
+    Subtraction(Dur){
+        let minutes = this.hours * 60 + this.minutes - Dur.hours*60 - Dur.minutes
+        return new Duration(parseInt(minutes / 60),parseInt(minutes%60))
+    }
+
     DurationToPay(HourlyRate){
         return HourlyRate*(this.hours + (this.minutes/60))
     }
 
+    IsBigger(Dur){
+        return (this.hours * 60 + this.minutes > Dur.hours*60 + Dur.minutes)
+    }
+
+    IsEqual(Dur){
+        return (this.hours * 60 + this.minutes == Dur.hours*60 + Dur.minutes)
+    }
+
+    IsSmaller(Dur){
+        return (this.hours * 60 + this.minutes < Dur.hours*60 + Dur.minutes)
+    }
+
+    ToMinutes(){
+        return this.hours * 60 + this.minutes 
+    }
+
+    get hours(){
+        return this.hours;
+    }
+
+    get minutes(){
+        return this.minutes;
+    }
 
 }
 
@@ -49,5 +77,7 @@ export function DateToWeeklyTimeStamp(date){ //takes a date and returns a weekly
 }
 
 
-
+var dur = new Duration(8,30)
+var dur2 = new Duration(2,34)
+console.log(dur.Subtraction(dur2))
   

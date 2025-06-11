@@ -24,6 +24,42 @@ var RestDays = new WeeklyDuration(new WeeklyTimeStamp(5,18,0),new WeeklyTimeStam
 // hour = date.getHours();
 // minute date.getMinutes();
 
+class Overtime{
+  constructor(StartDuration , IncreaseDuration, SpecialRate1 , SpecialRate2){
+      this.StartDuration = StartDuration;
+      this.IncreaseDuration = IncreaseDuration;
+      this.SpecialRate1 = SpecialRate1
+      this.SpecialRate2 = SpecialRate2
+  }
+
+  Calc1StepOverTimeDuration(ShiftDuration){
+    
+  }
+
+ /* CalculateOvertime(HourlyRate , ShiftDuration){
+    let Sum = 0;
+    if(ShiftDuration.IsBigger(StartDuration)) {
+
+      let OvertimeDuration = ShiftDuration.Subtraction(StartDuration);
+
+      if(OvertimeDuration.IsBigger(IncreaseDuration)){
+        sum+= OvertimeDuration.Subtraction(IncreaseDuration).DurationToPay()
+      }
+
+
+
+    }
+    return Sum
+  } 
+*/
+}
+
+class RestDays{
+
+
+  
+}
+
 
 class Shift{
 
