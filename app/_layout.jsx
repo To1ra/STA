@@ -9,6 +9,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const RootLayout = () => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+
   StatusBar.setBarStyle("light-content", true);
 
   return (
@@ -16,8 +17,7 @@ const RootLayout = () => {
       style={{
         flex: 1,
         paddingTop: insets.top,
-        // paddingBottom: insets.bottom,
-        backgroundColor: "#6200ee",
+        backgroundColor: "#161616",
       }}
     >
       <GestureHandlerRootView
@@ -27,8 +27,8 @@ const RootLayout = () => {
       >
         <Drawer
           screenOptions={{
-            header: ({ route, navigation }) => (
-              <Header title={route.name} navigation={navigation} />
+            header: ({ route, navigation, options }) => (
+              <Header title={options.title} navigation={navigation} />
             ),
           }}
         >

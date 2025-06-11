@@ -1,19 +1,21 @@
 // components/CustomHeader.tsx
-import React from "react";
 import UserPic from "./UserPic";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 const Header = ({ title, navigation }) => {
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.openDrawer()}>
-        <Text style={styles.menu}>☰</Text>
-      </TouchableOpacity>
-      <Text style={styles.title}>{title}</Text>
-      {/* Add icons or buttons on the right if needed */}
-      <TouchableOpacity onPress={() => {}}>
-        <UserPic />
-      </TouchableOpacity>
+      <View style={styles.topRow}>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Text style={styles.menu}>☰</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {}}>
+          <UserPic />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.bottomRow}>
+        <Text style={styles.title}>{title}</Text>
+      </View>
     </View>
   );
 };
@@ -22,23 +24,26 @@ export default Header;
 
 const styles = StyleSheet.create({
   header: {
-    height: 60,
-    backgroundColor: "#6200ee",
+    backgroundColor: "#161616",
+  },
+  topRow: {
     flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 15,
     justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  bottomRow: {
+    paddingTop: "8%",
+    alignItems: "center",
   },
   title: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: 48,
+    fontFamily: "Poppins",
   },
+
   menu: {
     color: "#fff",
-    fontSize: 24,
-  },
-  settings: {
-    color: "#fff",
-    fontSize: 20,
+    fontSize: 38, // Smaller, cleaner icon to match minimalism
   },
 });

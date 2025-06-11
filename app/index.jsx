@@ -3,8 +3,8 @@ import React from "react";
 
 const Home = () => {
   return (
-    <View>
-      <Text>This is index</Text>
+    <View style={{ backgroundColor: "#161616", height: "100%" }}>
+      <Text style={{ color: "#fff" }}>This is index</Text>
     </View>
   );
 };
