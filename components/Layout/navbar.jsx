@@ -1,12 +1,17 @@
-import { View, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { Drawer } from "expo-router/drawer";
 
-const navbar = () => {
+const NavBar = ({ style }) => {
   return (
-    <View>
+    <View style={[styles.conatiner, style]}>
       <Text>navbar</Text>
     </View>
   );
 };
 
-export default navbar;
+export default NavBar;
+
+const styles = StyleSheet.create({
+  conatiner: {},
+});
