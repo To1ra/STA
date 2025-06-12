@@ -1,12 +1,49 @@
-import { View, Text } from "react-native";
-import React from "react";
+// components/CustomHeader.tsx
+import UserPic from "./UserPic";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-const Header = () => {
+const Header = ({ title, navigation }) => {
   return (
-    <View>
-      <Text>Header</Text>
+    <View style={styles.header}>
+      <View style={styles.topRow}>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Text style={styles.menu}>☰</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {}}>
+          <UserPic />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.bottomRow}>
+        <Text style={styles.title}>{title}</Text>
+      </View>
     </View>
   );
 };
 
 export default Header;
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: "#161616",
+  },
+  topRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  bottomRow: {
+    paddingTop: "8%",
+    alignItems: "center",
+  },
+  title: {
+    color: "#fff",
+    fontSize: 48,
+    fontFamily: "Poppins",
+  },
+
+  menu: {
+    color: "#fff",
+    fontSize: 38, // Smaller, cleaner icon to match minimalism
+  },
+});
