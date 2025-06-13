@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { StyleSheet, View } from "react-native";
+import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
 
 const Home = () => {
   return (
