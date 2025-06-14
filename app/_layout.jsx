@@ -1,4 +1,5 @@
 import { Drawer } from "expo-router/drawer";
+import { Slot } from 'expo-router';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { View, StyleSheet, StatusBar } from "react-native";
 import Header from "../components/Layout/Header"; // adjust path as needed
@@ -6,7 +7,7 @@ import DrawerContent from "../components/Layout/DrawerContent"; // adjust path a
 import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as eva from "@eva-design/eva";
-import { ApplicationProvider, Layout } from "@ui-kitten/components";
+import { ApplicationProvider, Layout} from "@ui-kitten/components";
 
 //arrow function
 
@@ -16,6 +17,9 @@ const RootLayout = () => {
   StatusBar.setBarStyle("light-content", true);
 
   return (
+    <>
+  
+ <ApplicationProvider {...eva} theme={eva.light}>
     <View
       style={{
         flex: 1,
@@ -38,9 +42,14 @@ const RootLayout = () => {
               />
             ),
           }}
+
         />
+
       </GestureHandlerRootView>
     </View>
+    </ApplicationProvider>
+    </>        
+
   );
 };
 

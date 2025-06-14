@@ -1,3 +1,4 @@
+
 import { StyleSheet, View } from "react-native";
 import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
 
