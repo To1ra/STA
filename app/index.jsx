@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { Button } from '@ui-kitten/components';
+
+import { StyleSheet, View } from "react-native";
+import { ApplicationProvider, Layout, Text } from "@ui-kitten/components";
+
 const Home = () => {
   return (
     <View style={{ backgroundColor: "#161616", height: "100%" }}>
