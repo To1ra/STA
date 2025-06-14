@@ -1,7 +1,9 @@
 //this file is to test potential function that we will use
 //for example: monthly salary calculator, taxes calculator ect...
 //this file can also be used to test which data structs we should use to keep out data, like shifts.
-import {Duration , WeeklyDuration , WeeklyTimeStamp , DateToDuration, DateToWeeklyDuration, DateToWeeklyTimeStamp} from "./Time.js";
+import {Duration , WeeklyDuration , WeeklyTimeStamp , DateToDuration, DateToWeeklyDuration, DateToWeeklyTimeStamp, IsTimeStampInsideTheWeeklyDuration
+  , IsTimeStampInsideTheWeeklyDuration
+} from "./Time.js";
 
 
 
@@ -11,17 +13,11 @@ import {Duration , WeeklyDuration , WeeklyTimeStamp , DateToDuration, DateToWeek
 //it should create a object or struct that contains all the above data, but also calculated information like: salary for that day, special rates, overtime, overall duration.
 //because overtime, rest day hours, and pay can change, each shift should also keep the value of the variable at the time the shift was created.
 
-//should we use a class or struct?
-
 
 //new idea, what if user would like to add special rates into specific times of the shift(cant do this in competitor)?
 
 var HourlyRate = 34; // this variables should be global in our code or apart from a larger class.
-//var RestDays = new WeeklyDuration(new WeeklyTimeStamp(5,18,0),new WeeklyTimeStamp(5,18,0)); //how do we keep reaccuring days and hours for rest days? well we can just keep the days sunday to saturday (0-6) , hours (0-23), and minutes (0-59) , we can easily get the current time of the format by using:
-// const date = new Date(); 
-// day = date.getDay();
-// hour = date.getHours();
-// minute date.getMinutes();
+
 
 class Overtime{
   constructor(StartDuration , IncreaseDuration, SpecialRate1 , SpecialRate2){
@@ -68,7 +64,11 @@ constructor(WeeklyDuration , SpecialRate){
 
   CalcRestDaysDuration(ShiftWeeklyDuration){ // recives a weekly duration and returns a duration of time inside the restdays
     
+    if( )
 
+{
+
+}
 }
 
 }

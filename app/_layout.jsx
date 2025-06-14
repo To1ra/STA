@@ -1,9 +1,14 @@
 import { Drawer } from "expo-router/drawer";
+import { Slot } from 'expo-router';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { View, StyleSheet, StatusBar } from "react-native";
 import Header from "../components/Layout/Header"; // adjust path as needed
 import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React from 'react';
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
+import * as eva from '@eva-design/eva';
+
 //arrow function
 
 const RootLayout = () => {
@@ -13,6 +18,9 @@ const RootLayout = () => {
   StatusBar.setBarStyle("light-content", true);
 
   return (
+    <>
+  
+ <ApplicationProvider {...eva} theme={eva.light}>
     <View
       style={{
         flex: 1,
@@ -46,9 +54,19 @@ const RootLayout = () => {
               title: "All Shifts",
             }}
           />
+           <Drawer.Screen
+            name="addshift"
+            options={{
+              drawerLabel: "AddShift",
+              title: "Add A Shift",
+            }}
+          />
         </Drawer>
       </GestureHandlerRootView>
     </View>
+    </ApplicationProvider>
+    </>        
+
   );
 };
 
