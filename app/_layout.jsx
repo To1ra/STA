@@ -16,31 +16,33 @@ const RootLayout = () => {
   StatusBar.setBarStyle("light-content", true);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        paddingTop: insets.top,
-        backgroundColor: "#161616",
-      }}
-    >
-      <GestureHandlerRootView
+    <ApplicationProvider {...eva} theme={eva.light}>
+      <Layout
         style={{
           flex: 1,
+          paddingTop: insets.top,
+          backgroundColor: "#161616",
         }}
       >
-        <Drawer
-          drawerContent={(props) => <DrawerContent {...props} />}
-          screenOptions={{
-            header: ({ route, navigation, options }) => (
-              <Header
-                title={options.drawerLabel ?? options.title ?? route.name}
-                navigation={navigation}
-              />
-            ),
+        <GestureHandlerRootView
+          style={{
+            flex: 1,
           }}
-        />
-      </GestureHandlerRootView>
-    </View>
+        >
+          <Drawer
+            drawerContent={(props) => <DrawerContent {...props} />}
+            screenOptions={{
+              header: ({ route, navigation, options }) => (
+                <Header
+                  title={options.drawerLabel ?? options.title ?? route.name}
+                  navigation={navigation}
+                />
+              ),
+            }}
+          />
+        </GestureHandlerRootView>
+      </Layout>
+    </ApplicationProvider>
   );
 };
 
