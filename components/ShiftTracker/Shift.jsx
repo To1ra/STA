@@ -1,25 +1,38 @@
 import { StyleSheet, View } from "react-native";
 import { Layout, Text } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
+import { months, days } from "../../constans/Constans";
 
-const Shift = (data, specs) => {
+const Shift = ({ data }) => {
+  {
+    /*  Change it later*/
+  }
+  const dateString = data["date"];
+  const [day, month, year] = dateString.split("/").map(Number);
+  const dateObj = new Date(year, month - 1, day); // month is 0-indexed
+  const theActualDay = dateObj.getDay();
+
   return (
     <Layout style={styles.shift}>
       {/* Date Section */}
       <View style={styles.dateSection}>
-        <Text style={styles.dateText}>21</Text>
-        <Text style={styles.dateText}>Jan</Text>
+        <Text style={styles.dateText}>{data["date"].split("/")[0]}</Text>
+        <Text style={styles.dateText}>
+          {months[data["date"].split("/")[1]]}
+        </Text>
       </View>
 
       {/* Location & Time Section */}
       <View style={styles.middleSection}>
-        <Text style={styles.locationText}>Time</Text>
-        <Text style={styles.timeText}>5:00 PM - 11:00 PM</Text>
+        <Text style={styles.locationText}>{days[theActualDay]}</Text>
+        <Text style={styles.timeText}>
+          {data["startTime"]} - {data["endTime"]}
+        </Text>
       </View>
 
       {/* Hours Worked */}
       <View style={styles.hoursSection}>
-        <Text style={styles.hoursText}>6</Text>
+        <Text style={styles.hoursText}>{data["totalHours"]}</Text>
         <Text style={styles.labelText}>Hours Worked</Text>
       </View>
 
@@ -40,18 +53,18 @@ export default Shift;
 
 const styles = StyleSheet.create({
   shift: {
-    backgroundColor: "#282828",
+    backgroundColor: "#292929",
     borderRadius: 10,
     padding: 15,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     marginHorizontal: 10,
     marginVertical: 5,
+    marginBottom: "12",
   },
   dateSection: {
     alignItems: "center",
-    marginRight: 10,
   },
   dateText: {
     color: "#FFFFFF",
@@ -59,9 +72,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   middleSection: {
-    flex: 1,
     paddingHorizontal: 10,
+    marginLeft: 25,
+    borderLeftWidth: "2",
+    borderRightWidth: "2",
+    borderColor: "white",
   },
+
   locationText: {
     color: "#FFFFFF",
     fontSize: 16,

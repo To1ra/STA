@@ -1,6 +1,7 @@
 // components/CustomHeader.tsx
 import UserPic from "./UserPic";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { titleParser } from "../../constans/Constans";
 
 const Header = ({ title, navigation }) => {
   return (
@@ -14,7 +15,7 @@ const Header = ({ title, navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.bottomRow}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{titleParser[title]}</Text>
       </View>
     </View>
   );
