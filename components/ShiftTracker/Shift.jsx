@@ -1,25 +1,25 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Layout, Text } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 import { months, days } from "../../constans/Constans";
+import { useSQLiteContext } from "expo-sqlite";
+const Shift = ({ data, db }) => {
+  const del = async () => {
+    await db.execAsync("DELETE FROM ALL_SHIFTS WHERE id =" + data["id"] + ";");
+  };
 
-const Shift = ({ data }) => {
-  {
-    /*  Change it later*/
-  }
-  const dateString = data["date"];
-  const [day, month, year] = dateString.split("/").map(Number);
-  const dateObj = new Date(year, month - 1, day); // month is 0-indexed
+  const dateObj = new Date(
+    data["yearDate"],
+    data["monthDate"],
+    data["dayDate"]
+  );
   const theActualDay = dateObj.getDay();
 
   return (
     <Layout style={styles.shift}>
-      {/* Date Section */}
       <View style={styles.dateSection}>
-        <Text style={styles.dateText}>{data["date"].split("/")[0]}</Text>
-        <Text style={styles.dateText}>
-          {months[data["date"].split("/")[1]]}
-        </Text>
+        <Text style={styles.dateText}>{data["dayDate"]}</Text>
+        <Text style={styles.dateText}>{months[data["monthDate"]]}</Text>
       </View>
 
       {/* Location & Time Section */}
@@ -37,14 +37,16 @@ const Shift = ({ data }) => {
       </View>
 
       {/* Action Icons */}
-      <View style={styles.iconsSection}>
-        <Ionicons
-          name="trash-outline"
-          size={30}
-          color="white"
-          style={styles.icon}
-        />
-      </View>
+      <TouchableOpacity onPress={del}>
+        <View style={styles.iconsSection}>
+          <Ionicons
+            name="trash-outline"
+            size={30}
+            color="white"
+            style={styles.icon}
+          />
+        </View>
+      </TouchableOpacity>
     </Layout>
   );
 };

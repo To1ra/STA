@@ -9,10 +9,7 @@ import { useRouter } from "expo-router";
 const db = SQLite.openDatabaseSync("myDataBase");
 
 const Home = () => {
-  const displayData = async () => {};
-  useEffect(() => {
-    displayData();
-  }, []);
+  useEffect(() => {}, []);
   useSQLiteDevTools(db);
 
   return (
