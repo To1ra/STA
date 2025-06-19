@@ -16,6 +16,7 @@ const DrawerContent = (props) => {
       <View style={{ padding: "10%" }}>
         <DrawerItem label="Home" onPress={() => router.push("./")} />
         <DrawerItem
+          title="All Shifts"
           label="All Shifts"
           onPress={() => router.push("./shiftTracker")}
         />
