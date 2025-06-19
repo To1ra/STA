@@ -4,9 +4,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { months, days } from "../../constans/Constans";
 import AreYouSure from "../AreYouSure";
 import { useState } from "react";
+import { useRouter } from "expo-router";
 
 const Shift = ({ data, db }) => {
   const [vis, setVis] = useState(false);
+  const router = useRouter();
   const del = async () => {
     await db.execAsync("DELETE FROM ALL_SHIFTS WHERE id =" + data["id"] + ";");
   };
@@ -19,40 +21,49 @@ const Shift = ({ data, db }) => {
   const theActualDay = dateObj.getDay();
 
   return (
-    <Layout style={styles.shift}>
-      <AreYouSure action={del} vis={vis} setVis={setVis} />
+    <TouchableOpacity
+      onPress={() =>
+        router.push({
+          pathname: "(view-stuff)/ShowShift",
+          params: data,
+        })
+      }
+    >
+      <Layout style={styles.shift}>
+        <AreYouSure action={del} vis={vis} setVis={setVis} />
 
-      <View style={styles.dateSection}>
-        <Text style={styles.dateText}>{data["dayDate"]}</Text>
-        <Text style={styles.dateText}>{months[data["monthDate"]]}</Text>
-      </View>
-
-      {/* Location & Time Section */}
-      <View style={styles.middleSection}>
-        <Text style={styles.locationText}>{days[theActualDay]}</Text>
-        <Text style={styles.timeText}>
-          {data["startTime"]} - {data["endTime"]}
-        </Text>
-      </View>
-
-      {/* Hours Worked */}
-      <View style={styles.hoursSection}>
-        <Text style={styles.hoursText}>{data["totalHours"]}</Text>
-        <Text style={styles.labelText}>Hours Worked</Text>
-      </View>
-
-      {/* Action Icons */}
-      <TouchableOpacity onPress={() => setVis(true)}>
-        <View style={styles.iconsSection}>
-          <Ionicons
-            name="trash-outline"
-            size={30}
-            color="white"
-            style={styles.icon}
-          />
+        <View style={styles.dateSection}>
+          <Text style={styles.dateText}>{data["dayDate"]}</Text>
+          <Text style={styles.dateText}>{months[data["monthDate"]]}</Text>
         </View>
-      </TouchableOpacity>
-    </Layout>
+
+        {/* Location & Time Section */}
+        <View style={styles.middleSection}>
+          <Text style={styles.locationText}>{days[theActualDay]}</Text>
+          <Text style={styles.timeText}>
+            {data["startTime"]} - {data["endTime"]}
+          </Text>
+        </View>
+
+        {/* Hours Worked */}
+        <View style={styles.hoursSection}>
+          <Text style={styles.hoursText}>{data["totalHours"]}</Text>
+          <Text style={styles.labelText}>Hours Worked</Text>
+        </View>
+
+        {/* Action Icons */}
+        <TouchableOpacity onPress={() => setVis(true)}>
+          <View style={styles.iconsSection}>
+            <Ionicons
+              name="trash-outline"
+              size={30}
+              color="white"
+              style={styles.icon}
+            />
+          </View>
+        </TouchableOpacity>
+      </Layout>
+    </TouchableOpacity>
   );
 };
 

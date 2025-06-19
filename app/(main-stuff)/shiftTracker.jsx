@@ -14,12 +14,12 @@ import {
   Drawer,
   DrawerItem,
 } from "@ui-kitten/components";
-import Content from "../components/ShiftTracker/Content";
+import Content from "../../components/ShiftTracker/Content";
 import { SQLiteProvider } from "expo-sqlite";
-import { months } from "../constans/Constans";
+import { months } from "../../constans/Constans";
 import { Ionicons } from "@expo/vector-icons";
-import Spacer from "../components/Spacer";
-import AreYouSure from "../components/AreYouSure";
+import Spacer from "../../components/Spacer";
+import NavigationBar from "../../components/NavigationBar";
 
 const currentM = new Date().getMonth();
 const currentY = new Date().getFullYear();
@@ -31,10 +31,8 @@ const shiftTracker = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const drawerOnPress = (date) => {
-    console.log(months[currentM]);
     setMonth(date.split(" ")[0]);
     setYear(date.split(" ")[1]);
-    console.log(y, date.split(" ")[0]);
     setModalVisible(false);
   };
 
@@ -110,40 +108,29 @@ const shiftTracker = () => {
     return m + " " + y[2] + y[3];
   };
 
-  const setDateWithIcon = () => {
-    setModalVisible(true);
-  };
-
   return (
     <Layout style={{ backgroundColor: "#161616", height: "100%" }}>
       <Suspense fallback={<Spinner size="giant" />}>
         <Spacer />
-        <Layout style={styles.monthBar}>
-          <Ionicons
-            onPress={prevMonth}
-            size={35}
-            name="arrow-back-outline"
-            style={{ color: "white" }}
-          />
-          <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={setDateWithIcon}
-          >
-            <Ionicons
-              name="caret-down-outline"
-              size={25}
-              style={{ color: "white", marginRight: 8 }}
-            />
-
-            <Text style={{ color: "white", fontSize: 25 }}>{display()}</Text>
-          </TouchableOpacity>
-          <Ionicons
-            onPress={nextMonth}
-            size={35}
-            name="arrow-forward-outline"
-            style={{ color: "white" }}
-          />
-        </Layout>
+        <NavigationBar
+          forward={nextMonth}
+          backward={prevMonth}
+          showState={
+            <TouchableOpacity
+              style={{ flexDirection: "row", alignItems: "center" }}
+              onPress={() => {
+                setModalVisible(true);
+              }}
+            >
+              <Ionicons
+                name="caret-down-outline"
+                size={25}
+                style={{ color: "white", marginRight: 8 }}
+              />
+              <Text style={{ color: "white", fontSize: 25 }}>{display()}</Text>
+            </TouchableOpacity>
+          }
+        />
 
         <Modal
           visible={modalVisible}
@@ -188,15 +175,5 @@ const styles = StyleSheet.create({
     padding: "12%",
     justifyContent: "center",
     alignItems: "flex-start",
-  },
-  monthBar: {
-    width: "80%",
-    alignItems: "center",
-    alignSelf: "center",
-    justifyContent: "space-between",
-    height: 50,
-    borderRadius: 8,
-    flexDirection: "row",
-    backgroundColor: "#2c334f",
   },
 });

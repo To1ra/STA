@@ -23,7 +23,7 @@ const Content = ({ month, year }) => {
   };
   useEffect(() => {
     myFetch();
-  });
+  }, [month, year]);
   return (
     <View>
       {output.map((row, index) => {

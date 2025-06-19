@@ -2,7 +2,6 @@ import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Directions } from "react-native-gesture-handler";
 const DrawerContent = (props) => {
   const router = useRouter();
   return (

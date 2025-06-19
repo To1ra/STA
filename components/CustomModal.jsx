@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-const ShowShift = () => {
+const CustomModal = () => {
   return (
     <View>
-      <Text>ShowShift</Text>
+      <Text>CustomModal</Text>
     </View>
   );
 };
 
-export default ShowShift;
+export default CustomModal;
 
 const styles = StyleSheet.create({});
