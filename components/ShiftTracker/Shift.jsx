@@ -2,8 +2,11 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Layout, Text } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 import { months, days } from "../../constans/Constans";
-import { useSQLiteContext } from "expo-sqlite";
+import AreYouSure from "../AreYouSure";
+import { useState } from "react";
+
 const Shift = ({ data, db }) => {
+  const [vis, setVis] = useState(false);
   const del = async () => {
     await db.execAsync("DELETE FROM ALL_SHIFTS WHERE id =" + data["id"] + ";");
   };
@@ -17,6 +20,8 @@ const Shift = ({ data, db }) => {
 
   return (
     <Layout style={styles.shift}>
+      <AreYouSure action={del} vis={vis} setVis={setVis} />
+
       <View style={styles.dateSection}>
         <Text style={styles.dateText}>{data["dayDate"]}</Text>
         <Text style={styles.dateText}>{months[data["monthDate"]]}</Text>
@@ -37,7 +42,7 @@ const Shift = ({ data, db }) => {
       </View>
 
       {/* Action Icons */}
-      <TouchableOpacity onPress={del}>
+      <TouchableOpacity onPress={() => setVis(true)}>
         <View style={styles.iconsSection}>
           <Ionicons
             name="trash-outline"

@@ -19,6 +19,7 @@ import { SQLiteProvider } from "expo-sqlite";
 import { months } from "../constans/Constans";
 import { Ionicons } from "@expo/vector-icons";
 import Spacer from "../components/Spacer";
+import AreYouSure from "../components/AreYouSure";
 
 const currentM = new Date().getMonth();
 const currentY = new Date().getFullYear();
@@ -176,7 +177,7 @@ export default shiftTracker;
 const styles = StyleSheet.create({
   model: {
     width: "50%",
-    height: "50%",
+    height: "70%",
     backgroundColor: "white",
     borderRadius: 8,
     padding: 10,
