@@ -3,9 +3,15 @@ import React from "react";
 import { Layout, Button } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 
-const Container = ({ title = "hola", icon = "american-football-outline" }) => {
+const Container = ({
+  title = "hola",
+  icon = "american-football-outline",
+  data = <></>,
+}) => {
   return (
-    <Layout>
+    <Layout
+      style={{ paddingHorizontal: "5%", width: "95%", alignSelf: "center" }}
+    >
       <View style={styles.div}>
         <View
           style={[
@@ -26,9 +32,7 @@ const Container = ({ title = "hola", icon = "american-football-outline" }) => {
         </Button>
       </View>
 
-      <View style={styles.data}>
-        <Text>Checking for now</Text>
-      </View>
+      <View style={styles.data}>{data}</View>
     </Layout>
   );
 };

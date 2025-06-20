@@ -1,5 +1,5 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { Layout, Text } from "@ui-kitten/components";
+import { StyleSheet, TouchableOpacity, View, Suspense } from "react-native";
+import { Layout, Text, Spinner } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 import { months, days } from "../../constans/Constans";
 import AreYouSure from "../AreYouSure";
