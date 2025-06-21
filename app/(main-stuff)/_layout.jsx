@@ -23,7 +23,7 @@ const RootLayout = () => {
 
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
-      <Redirect href="(main-stuff)/shiftTracker" />
+      {/* <Redirect href="(modify-stuff)/BasicSalary" /> */}
       <Layout
         style={{
           flex: 1,

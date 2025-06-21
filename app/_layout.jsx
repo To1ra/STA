@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Stack } from "expo-router";
+import { Stack, usePathname } from "expo-router";
+import { titleParser } from "../constans/Constans";
 
 const _layout = () => {
   return (
@@ -8,7 +9,16 @@ const _layout = () => {
       <Stack.Screen name="(main-stuff)" options={{ headerShown: false }} />
       <Stack.Screen
         name="(view-stuff)"
-        options={{ title: "Show Shift", headerBackTitle: "Go Back" }}
+        options={{ title: "HEY", headerBackTitle: "Go Back" }}
+      />
+
+      <Stack.Screen
+        name="(modify-stuff)"
+        options={{
+          title: "HEY",
+          headerBackTitle: "Go Back",
+          headerShown: false,
+        }}
       />
     </Stack>
   );

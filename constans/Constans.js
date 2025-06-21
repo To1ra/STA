@@ -1,6 +1,7 @@
 const titleParser = {
   index: "Home",
   shiftTracker: "All Shifts",
+  BasicSalary: "Salary Settings",
 };
 
 const days = [

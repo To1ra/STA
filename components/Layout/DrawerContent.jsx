@@ -1,7 +1,9 @@
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+import DrawerGroup from "./DrawerGroup";
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import Spacer from "../Spacer";
 const DrawerContent = (props) => {
   const router = useRouter();
   return (
@@ -15,17 +17,21 @@ const DrawerContent = (props) => {
       <View style={{ padding: "10%" }}>
         <DrawerItem label="Home" onPress={() => router.push("./")} />
         <DrawerItem
-          title="All Shifts"
           label="All Shifts"
           onPress={() => router.push("./shiftTracker")}
         />
+        <Spacer space={23} />
+        <DrawerGroup title="Salary Section">
+          <DrawerItem
+            label="check1"
+            onPress={() => router.push("(modify-stuff)/BasicSalary")}
+          />
+          <DrawerItem label="check2" />
+          <DrawerItem label="check3" />
+        </DrawerGroup>
       </View>
     </DrawerContentScrollView>
   );
-};
-
-const showFolderPages = () => {
-  return;
 };
 
 export default DrawerContent;

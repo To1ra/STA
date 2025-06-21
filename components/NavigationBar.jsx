@@ -10,7 +10,6 @@ const NavigationBar = ({
   showRight = true,
   showLeft = true,
 }) => {
-  console.log(showRight, showLeft);
   return (
     <Layout style={styles.monthBar}>
       <View style={styles.side}>
