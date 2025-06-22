@@ -2,7 +2,10 @@ const titleParser = {
   index: "Home",
   shiftTracker: "All Shifts",
   BasicSalary: "Salary Settings",
+  ListWageRate: "All Wage Rates",
 };
+
+const notSqlite = ["HW", "Break", "Bus"];
 
 const days = [
   "Sunday",
@@ -29,4 +32,4 @@ const months = [
   "Dec",
 ];
 
-export { titleParser, months, days };
+export { titleParser, months, days, notSqlite };

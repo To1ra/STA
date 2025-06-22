@@ -9,14 +9,20 @@ const _layout = () => {
       <Stack.Screen name="(main-stuff)" options={{ headerShown: false }} />
       <Stack.Screen
         name="(view-stuff)"
-        options={{ title: "HEY", headerBackTitle: "Go Back" }}
+        options={{
+          headerShown: false,
+        }}
       />
 
       <Stack.Screen
-        name="(modify-stuff)"
+        name="(modify-pages)"
         options={{
-          title: "HEY",
-          headerBackTitle: "Go Back",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="(add-stuff)"
+        options={{
           headerShown: false,
         }}
       />

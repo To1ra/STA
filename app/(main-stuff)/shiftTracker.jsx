@@ -7,13 +7,9 @@ import {
   Modal,
   TouchableWithoutFeedback,
 } from "react-native";
-import {
-  Layout,
-  Text,
-  Spinner,
-  Drawer,
-  DrawerItem,
-} from "@ui-kitten/components";
+import { Layout, Text, Spinner, Drawer } from "@ui-kitten/components";
+import DrawerItem from "../../components/Drawer/DrawerItem";
+
 import Content from "../../components/ShiftTracker/Content";
 import { SQLiteProvider } from "expo-sqlite";
 import { months } from "../../constans/Constans";
@@ -49,7 +45,7 @@ const shiftTracker = () => {
           displayJSX.push(
             <DrawerItem
               key={row}
-              title={title}
+              label={title}
               onPress={() => drawerOnPress(title)}
             />
           );
@@ -60,7 +56,7 @@ const shiftTracker = () => {
           displayJSX.push(
             <DrawerItem
               key={row}
-              title={title}
+              label={title}
               onPress={() => drawerOnPress(title)}
               accessoryRight={<Ionicons size={15} name="checkmark-outline" />}
             />
@@ -69,7 +65,7 @@ const shiftTracker = () => {
           displayJSX.push(
             <DrawerItem
               key={row}
-              title={title}
+              label={title}
               onPress={() => drawerOnPress(title)}
             />
           );

@@ -5,13 +5,17 @@ import * as eva from "@eva-design/eva";
 import { ApplicationProvider, Layout } from "@ui-kitten/components";
 import { titleParser } from "../../constans/Constans";
 
-const _layout = () => {
-  const submitData = () => {};
+const OutsideLayout = () => {
+  const addData = (navigation, route) => {
+    const currentRoute = route;
+    const destiantionRoute = currentRoute.replace("List", "");
+    navigation.navigate("(modify-pages)" + destiantionRoute);
+  };
 
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
       <Stack
-        initialRouteName="BasicSalary"
+        initialRouteName="ListWageRate"
         screenOptions={({ route, navigation }) => ({
           headerLeft: () => {
             return navigation.canGoBack() ? (
@@ -19,7 +23,12 @@ const _layout = () => {
             ) : null;
           },
           headerRight: () => {
-            return <Button title="check" onPress={() => submitData()} />;
+            return (
+              <Button
+                title="check"
+                onPress={() => addData(navigation, route.name)}
+              />
+            );
           },
 
           headerTitle: () => {
@@ -27,12 +36,12 @@ const _layout = () => {
           },
         })}
       >
-        <Stack.Screen name="BasicSalary" />
+        <Stack.Screen name="ListWageRate" />
       </Stack>
     </ApplicationProvider>
   );
 };
 
-export default _layout;
+export default OutsideLayout;
 
 const styles = StyleSheet.create({});

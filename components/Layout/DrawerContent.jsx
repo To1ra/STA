@@ -1,5 +1,6 @@
-import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import DrawerGroup from "./DrawerGroup";
+import { DrawerContentScrollView } from "@react-navigation/drawer";
+import DrawerGroup from "../Drawer/DrawerGroup";
+import DrawerItem from "../Drawer/DrawerItem";
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -23,8 +24,8 @@ const DrawerContent = (props) => {
         <Spacer space={23} />
         <DrawerGroup title="Salary Section">
           <DrawerItem
-            label="check1"
-            onPress={() => router.push("(modify-stuff)/BasicSalary")}
+            label="Basic 1"
+            onPress={() => router.push("(modify-pages)/BasicSalary")}
           />
           <DrawerItem label="check2" />
           <DrawerItem label="check3" />
