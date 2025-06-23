@@ -9,13 +9,14 @@ import {
   Button,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import Container from "../../components/Container";
+import Container from "../../components/Forms/Container";
 import * as SecureStore from "expo-secure-store";
-import { useSharedRef } from "../../Context/FormContext";
 import Spacer from "../../components/Spacer";
+import ExtraHours from "../../components/Forms/ExtraHours";
+import { useSubmit } from "../../Context/FormSubmitContext";
 
 const BasicSalary = () => {
-  const Ref = useSharedRef();
+  const submitGeneral = useSubmit();
 
   useEffect(() => {
     getInit();
@@ -23,44 +24,21 @@ const BasicSalary = () => {
 
   async function getInit() {
     const res1 = await SecureStore.getItemAsync("HW");
-    const res2 = await SecureStore.getItemAsync("HW");
-    Ref.current["Table"] = "I d K ";
+    const res2 = await SecureStore.getItemAsync("bus");
+    const res3 = await SecureStore.getItemAsync("breakTime");
+
     setHW(res1);
     setBus(res2);
+    setBreakTime(res3);
   }
 
-  const submitHW = (num) => {
-    Ref.current["HW"] = num;
-    setHW(num);
-  };
-
-  const submitBus = (num) => {
-    Ref.current["Bus"] = num;
-    setBus(num);
-  };
-
-  const submitBreak = (num) => {
-    Ref.current["Break"] = num;
-    setHafsaka(num);
-  };
-
-  const submitFirst = (num) => {
-    Ref.current["First"] = num;
-    setFirst(num);
-  };
-  const submitLater = (num) => {
-    Ref.current["Later"] = num;
-    setLater(num);
-  };
-
-  const [hw, setHW] = useState();
-  const [bus, setBus] = useState();
-  const [hafsaka, setHafsaka] = useState(0);
-  const [first, setFirst] = useState("120");
-  const [later, setLater] = useState("150");
+  const [HW, setHW] = useState("0");
+  const [bus, setBus] = useState("0");
+  const [breakTime, setBreakTime] = useState("0");
   const [vis, setVis] = useState(false);
+
   return (
-    <ScrollView>
+    <ScrollView automaticallyAdjustKeyboardInsets={true}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={{ height: "100%" }}>
           <Spacer />
@@ -69,8 +47,8 @@ const BasicSalary = () => {
             <TextInput
               style={styles.inp}
               keyboardType="numeric"
-              onChangeText={(num) => submitHW(num)}
-              value={hw}
+              onChangeText={(num) => submitGeneral(num, "HW", setHW)}
+              value={HW}
               maxLength={10} //setting limit of input
             />
           </Container>
@@ -80,7 +58,7 @@ const BasicSalary = () => {
             <TextInput
               style={styles.inp}
               keyboardType="numeric"
-              onChangeText={(num) => submitBus(num)}
+              onChangeText={(num) => submitGeneral(num, "bus", setBus)}
               value={bus}
               maxLength={10} //setting limit of input
             />
@@ -95,8 +73,10 @@ const BasicSalary = () => {
               <TextInput
                 style={styles.inp}
                 keyboardType="numeric"
-                onChangeText={(num) => submitBreak(num)}
-                value={hafsaka}
+                onChangeText={(num) =>
+                  submitGeneral(num, "breakTime", setBreakTime)
+                }
+                value={breakTime}
                 maxLength={10} //setting limit of input
               />
             </Container>
@@ -104,46 +84,7 @@ const BasicSalary = () => {
           <Spacer />
           <Spacer />
           <Spacer />
-
-          <Container
-            title="Extra Hours"
-            style={{
-              alignSelf: "center",
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row-reverse",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <Text>After 2 First Hours</Text>
-              <TextInput
-                style={[styles.inp, { width: "50%" }]}
-                keyboardType="numeric"
-                onChangeText={(num) => submitFirst(num)}
-                value={first}
-                maxLength={10} //setting limit of input
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: "row-reverse",
-                alignItems: "center",
-                width: "100%",
-              }}
-            >
-              <Text>Later Hours</Text>
-              <TextInput
-                style={[styles.inp, { width: "50%" }]}
-                keyboardType="numeric"
-                onChangeText={(num) => submitLater(num)}
-                value={later}
-                maxLength={10} //setting limit of input
-              />
-            </View>
-          </Container>
+          <ExtraHours init={true} />
           <Spacer />
           <Spacer />
           <Spacer />

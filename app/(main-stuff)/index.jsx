@@ -9,6 +9,22 @@ import { useRouter } from "expo-router";
 const db = SQLite.openDatabaseSync("myDataBase");
 
 const Home = () => {
+  async function fun() {
+    await db.execAsync(`
+    PRAGMA journal_mode = WAL;
+    CREATE TABLE IF NOT EXISTS WAGE_RATES (
+      name TEXT NOT NULL,
+      startDate TEXT NOT NULL,
+      endDate TEXT NOT NULL,
+      startHour TEXT NOT NULL,
+      endHour TEXT NOT NULL,
+      rate INTEGER NOT NULL,
+      extraHorusCount INTEGER NOT NULL DEFAULT 8,
+      extraHourtsCalc TEXT NOT NULL DEFAULT '125|150'
+    );
+  `);
+  }
+
   useEffect(() => {}, []);
   useSQLiteDevTools(db);
 

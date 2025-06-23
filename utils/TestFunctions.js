@@ -6,4 +6,4 @@
 //the creation function should get: start and end date and time of shift, hourly rate of that shift, transport fees, and optional text.
 //it should create a object or struct that contains all the above data, but also calculated information like: salary for that day, special rates, overtime, overall duration.
 
-//should we use a class or struct?
+const inset = selectedDate.toString().split(" ")[4].split(":00")[0];
