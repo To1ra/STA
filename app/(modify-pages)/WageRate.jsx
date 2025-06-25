@@ -37,10 +37,7 @@ const WageRate = ({ init }) => {
         .toString()
         .split(" ")[4]
         .split(":00")[0];
-      ref.current["endHour"] = startHour
-        .toString()
-        .split(" ")[4]
-        .split(":00")[0];
+      ref.current["endHour"] = endHour.toString().split(" ")[4].split(":00")[0];
     }
   }, []);
   return (
