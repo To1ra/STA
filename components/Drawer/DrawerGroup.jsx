@@ -9,7 +9,7 @@ const DrawerGroup = ({ title, children }) => {
       <TouchableOpacity onPress={() => setVis(!vis)}>
         <Text style={styles.title}>{title}</Text>
       </TouchableOpacity>
-      {vis && <View>{children}</View>}
+      {vis ? <View>{children}</View> : null}
     </View>
   );
 };

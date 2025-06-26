@@ -1,15 +1,17 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Slot, Stack } from "expo-router";
+import { Slot, Stack, useRouter } from "expo-router";
 import * as eva from "@eva-design/eva";
 import { ApplicationProvider, Layout } from "@ui-kitten/components";
 import { titleParser } from "../../constans/Constans";
 
 const OutsideLayout = () => {
+  const router = useRouter();
+
   const addData = (navigation, route) => {
     const currentRoute = route;
     const destiantionRoute = currentRoute.replace("List", "");
-    navigation.navigate("(modify-pages)" + destiantionRoute);
+    router.push("(modify-pages)/" + destiantionRoute);
   };
 
   return (
@@ -25,7 +27,7 @@ const OutsideLayout = () => {
           headerRight: () => {
             return (
               <Button
-                title="check"
+                title="Add"
                 onPress={() => addData(navigation, route.name)}
               />
             );

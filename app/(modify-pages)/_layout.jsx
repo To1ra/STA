@@ -1,6 +1,6 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import * as eva from "@eva-design/eva";
 import { ApplicationProvider, Layout } from "@ui-kitten/components";
 import { titleParser } from "../../constans/Constans";
@@ -28,6 +28,7 @@ const OutsideLayout = () => {
 
 const InnerLayout = () => {
   const dataRef = useSharedRef();
+  const router = useRouter();
 
   const submitData = () => {
     if (!dataRef?.current) return;
@@ -57,22 +58,24 @@ const InnerLayout = () => {
 
   const submitDataSQLite = async (data) => {
     try {
-      const table = data.Table;
-      delete data.Table;
-      const fields = Object.keys(data);
-      const values = fields.map((field) => {
-        let val = data[field];
-        if (field.toLowerCase().includes("hour")) {
-          val = val.toString().split(" ")[4]?.split(":00")[0] || val;
-        }
-        return `'${val}'`; // wrap in quotes to avoid SQL injection issues
-      });
+      if (!data.edit) {
+        const table = data.Table;
+        delete data.Table;
+        const fields = Object.keys(data);
+        const values = fields.map((field) => {
+          let val = data[field];
+          if (field.toLowerCase().includes("hour")) {
+            val = val.toString().split(" ")[4]?.split(":00")[0] || val;
+          }
+          return `'${val}'`; // wrap in quotes to avoid SQL injection issues
+        });
 
-      const sqlString = `INSERT INTO ${table} (${fields.join(
-        ","
-      )}) VALUES (${values.join(",")})`;
+        const sqlString = `INSERT INTO ${table} (${fields.join(
+          ","
+        )}) VALUES (${values.join(",")})`;
 
-      await db.execAsync(sqlString);
+        await db.execAsync(sqlString);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -93,7 +96,18 @@ const InnerLayout = () => {
           ) : null;
         },
         headerRight: () => {
-          return <Button title="check" onPress={() => submitData()} />;
+          return (
+            <Button
+              title="check"
+              onPress={() => {
+                submitData();
+                if (route.name.includes("basic")) return;
+                const destiantionRoute = "List" + route.name;
+
+                router.push("../(add-pages)/" + destiantionRoute);
+              }}
+            />
+          );
         },
 
         headerTitle: () => {

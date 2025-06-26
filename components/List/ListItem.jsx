@@ -1,8 +1,16 @@
 import { StyleSheet, Text, View, Button } from "react-native";
 import React, { useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
-const ListItem = ({ data }) => {
+const ListItem = ({ data, editRoute }) => {
+  const router = useRouter();
+  const editItem = () => {
+    router.push({
+      pathname: "(modify-pages)/" + editRoute + "",
+      params: { id: data["id"] },
+    });
+  };
   return (
     <View style={styles.item}>
       <Text style={styles.bigTitle}>{data["name"]}</Text>
@@ -17,7 +25,7 @@ const ListItem = ({ data }) => {
           data["endHour"]}
       </Text>
       <Text>{data["rate"]}</Text>
-      <Button title="edit" />
+      <Button title="edit" onPress={() => editItem()} />
     </View>
   );
 };

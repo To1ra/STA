@@ -25,9 +25,12 @@ const DrawerContent = (props) => {
         <DrawerGroup title="Salary Section">
           <DrawerItem
             label="Basic 1"
-            onPress={() => router.push("(modify-pages)/BasicSalary")}
+            onPress={() => router.push("/BasicSalary")}
           />
-          <DrawerItem label="check2" />
+          <DrawerItem
+            label="List "
+            onPress={() => router.push("/ListWageRate")}
+          />
           <DrawerItem label="check3" />
         </DrawerGroup>
       </View>

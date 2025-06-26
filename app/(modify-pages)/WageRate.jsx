@@ -17,11 +17,16 @@ import DrawerMenuSelector from "../../components/DrawerMenuSelector";
 import { days } from "../../constans/Constans";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSharedRef } from "../../Context/FormContext";
+import * as SQLite from "expo-sqlite";
+import { getTodayWithTime } from "../../utils/TestFunctions";
+import { useLocalSearchParams } from "expo-router";
+
 const temp = days.map((item) => "Every " + item);
+const db = SQLite.openDatabaseSync("myDataBase");
 
-const WageRate = ({ init }) => {
+const WageRate = () => {
   const ref = useSharedRef();
-
+  const { id } = useLocalSearchParams();
   const submitGeneral = useSubmit();
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -30,14 +35,40 @@ const WageRate = ({ init }) => {
   const [endHour, setEndHour] = useState(new Date());
   const [rate, setRate] = useState("150");
 
+  const fetchSql = async () => {
+    const dbRecordVALUES = await db.getAllAsync(
+      "SELECT * FROM WAGE_RATES WHERE id =" + id
+    );
+
+    let data = dbRecordVALUES[0];
+    delete data["id"];
+
+    console.log(data);
+    for (const field in data) {
+      ref.current[field] = data[field];
+      console.log(ref.current[field]);
+    }
+
+    setName(ref.current["name"]);
+    setStartDate(ref.current["startDate"]);
+    setEndDate(ref.current["endDate"]);
+    setStartHour(getTodayWithTime(ref.current["startHour"]));
+    setEndHour(getTodayWithTime(ref.current["endHour"]));
+    setRate(ref.current["rate"].toString());
+  };
   useEffect(() => {
-    if (!init) {
-      ref.current["Table"] = "WAGE_RATES";
+    ref.current["Table"] = "WAGE_RATES";
+    console.log(id);
+    if (!id) {
+      console.log("hey");
       ref.current["startHour"] = startHour
         .toString()
         .split(" ")[4]
         .split(":00")[0];
       ref.current["endHour"] = endHour.toString().split(" ")[4].split(":00")[0];
+      ref.current["rate"] = rate;
+    } else {
+      fetchSql();
     }
   }, []);
   return (
@@ -52,7 +83,6 @@ const WageRate = ({ init }) => {
               maxLength={15} //setting limit of input
             />
           </Container>
-
           <Container title="Time">
             <Spacer />
             <Text style={styles.title}> Start</Text>
@@ -104,7 +134,7 @@ const WageRate = ({ init }) => {
               keyboardType="numeric"
               onChangeText={(num) => submitGeneral(num, "rate", setRate)}
               value={rate}
-              maxLength={15} //setting limit of input
+              maxLength={15}
             />
           </Container>
           <ExtraHours />
@@ -115,6 +145,7 @@ const WageRate = ({ init }) => {
 };
 
 export default WageRate;
+
 const styles = StyleSheet.create({
   title: { textAlign: "right", paddingHorizontal: "10", fontWeight: "bold" },
   row: {

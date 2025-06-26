@@ -19,8 +19,11 @@ const DrawerMenuSelector = ({
   const submitGeneral = useSubmit();
 
   const handleSelect = (item) => {
+    if (item.includes("Every")) item = item.split(" ")[1];
+
     setSelected(item);
     setVisible(false);
+
     submitGeneral(item, fieldName, setSelected);
   };
 

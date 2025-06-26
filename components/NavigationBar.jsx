@@ -13,27 +13,27 @@ const NavigationBar = ({
   return (
     <Layout style={styles.monthBar}>
       <View style={styles.side}>
-        {showLeft && (
+        {showLeft ? (
           <Ionicons
             onPress={backward}
             size={35}
             name="arrow-back-outline"
             style={{ color: "white" }}
           />
-        )}
+        ) : null}
       </View>
 
       <View style={styles.center}>{showState}</View>
 
       <View style={styles.side}>
-        {showRight && (
+        {showRight ? (
           <Ionicons
             onPress={forward}
             size={35}
             name="arrow-forward-outline"
             style={{ color: "white" }}
           />
-        )}
+        ) : null}
       </View>
     </Layout>
   );

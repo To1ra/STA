@@ -68,7 +68,7 @@ const BasicSalary = () => {
           <Container title="Reduce Break Time">
             <Button onPress={() => setVis(!vis)} title="Wanta fanta?" />
           </Container>
-          {vis && (
+          {vis ? (
             <Container title="Reduce Break Time">
               <TextInput
                 style={styles.inp}
@@ -80,7 +80,7 @@ const BasicSalary = () => {
                 maxLength={10} //setting limit of input
               />
             </Container>
-          )}
+          ) : null}
           <Spacer />
           <Spacer />
           <Spacer />

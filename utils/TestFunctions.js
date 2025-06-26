@@ -6,4 +6,23 @@
 //the creation function should get: start and end date and time of shift, hourly rate of that shift, transport fees, and optional text.
 //it should create a object or struct that contains all the above data, but also calculated information like: salary for that day, special rates, overtime, overall duration.
 
-const inset = selectedDate.toString().split(" ")[4].split(":00")[0];
+const getTodayWithTime = (timeStr) => {
+  if (!timeStr || !/^\d{1,2}:\d{2}$/.test(timeStr)) {
+    throw new Error("Invalid time format. Expected 'HH:MM'");
+  }
+
+  const [hours, minutes] = timeStr.split(":").map(Number);
+  const now = new Date();
+
+  return new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    hours,
+    minutes,
+    0,
+    0
+  );
+};
+
+export { getTodayWithTime };
