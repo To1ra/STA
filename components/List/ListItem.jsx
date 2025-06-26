@@ -5,9 +5,10 @@ import { useRouter } from "expo-router";
 
 const ListItem = ({ data, editRoute }) => {
   const router = useRouter();
+
   const editItem = () => {
     router.push({
-      pathname: "(modify-pages)/" + editRoute + "",
+      pathname: editRoute,
       params: { id: data["id"] },
     });
   };

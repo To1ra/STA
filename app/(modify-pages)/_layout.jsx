@@ -31,23 +31,26 @@ const InnerLayout = () => {
   const router = useRouter();
 
   const submitData = () => {
-    if (!dataRef?.current) return;
-    const data = dataRef.current;
+    try {
+      if (!dataRef?.current) return;
+      const data = dataRef.current;
 
-    if (data["Table"]) {
-      submitDataSQLite(data);
-    } else {
-      submitDataSecureStore(data);
+      if (data["Table"]) {
+        if (data["edit"]) UpdateDataSQLite(data);
+        else submitDataSQLite(data);
+      } else {
+        submitDataSecureStore(data);
+      }
+      dataRef.current = {};
+    } catch (err) {
+      console.log(err);
     }
-    dataRef.current = {};
   };
 
   const submitDataSecureStore = async (data) => {
-    console.log("This is my Secure Store ", data["Table"]);
-    console.log(data);
+    console.log("This is my Secure Store ");
     for (const field in data) {
       try {
-        console.log("Saving:", field, "=", data[field]);
         await SecureStore.setItemAsync(field, data[field]);
       } catch (err) {
         console.error("❌ Failed saving field:", field, err);
@@ -56,16 +59,39 @@ const InnerLayout = () => {
     console.log("✅ Done saving all fields");
   };
 
+  const UpdateDataSQLite = async (data) => {
+    try {
+      await db.execAsync(
+        "DELETE FROM WAGE_RATES WHERE id =" + data["id"] + ";"
+      );
+      await submitDataSQLite(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const submitDataSQLite = async (data) => {
     try {
-      if (!data.edit) {
+      if (data) {
+        if (data.edit) {
+          console.log(data);
+        }
         const table = data.Table;
         delete data.Table;
+        delete data.edit;
+        const arr = ["starthour", "endhour"];
         const fields = Object.keys(data);
         const values = fields.map((field) => {
           let val = data[field];
-          if (field.toLowerCase().includes("hour")) {
-            val = val.toString().split(" ")[4]?.split(":00")[0] || val;
+          if (arr.includes(field.toLowerCase())) {
+            if (val.length != 5) {
+              const temp = new Date(val);
+              console.log(temp, val);
+              const h = String(temp.getHours()).padStart(2, "0");
+              const m = String(temp.getMinutes()).padStart(2, "0");
+              console.log(h, m);
+              val = `${h}:${m}`;
+            }
           }
           return `'${val}'`; // wrap in quotes to avoid SQL injection issues
         });
@@ -73,7 +99,6 @@ const InnerLayout = () => {
         const sqlString = `INSERT INTO ${table} (${fields.join(
           ","
         )}) VALUES (${values.join(",")})`;
-
         await db.execAsync(sqlString);
       }
     } catch (err) {
@@ -90,6 +115,7 @@ const InnerLayout = () => {
             <Button
               title="Go Back"
               onPress={() => {
+                if (dataRef) dataRef.current = {};
                 navigation.goBack();
               }}
             />

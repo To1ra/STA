@@ -18,7 +18,7 @@ import { days } from "../../constans/Constans";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSharedRef } from "../../Context/FormContext";
 import * as SQLite from "expo-sqlite";
-import { getTodayWithTime } from "../../utils/TestFunctions";
+import { getTodayWithTime, isEmpty } from "../../utils/TestFunctions";
 import { useLocalSearchParams } from "expo-router";
 
 const temp = days.map((item) => "Every " + item);
@@ -36,38 +36,39 @@ const WageRate = () => {
   const [rate, setRate] = useState("150");
 
   const fetchSql = async () => {
-    const dbRecordVALUES = await db.getAllAsync(
-      "SELECT * FROM WAGE_RATES WHERE id =" + id
-    );
+    try {
+      console.log("entering fetchsql");
+      console.log(id);
+      const dbRecordVALUES = await db.getAllAsync(
+        "SELECT * FROM WAGE_RATES WHERE id =" + id
+      );
 
-    let data = dbRecordVALUES[0];
-    delete data["id"];
+      let data = dbRecordVALUES[0];
 
-    console.log(data);
-    for (const field in data) {
-      ref.current[field] = data[field];
-      console.log(ref.current[field]);
+      for (const field in data) {
+        ref.current[field] = data[field];
+      }
+
+      setName(ref.current["name"]);
+      setStartDate(ref.current["startDate"]);
+      setEndDate(ref.current["endDate"]);
+      setStartHour(getTodayWithTime(ref.current["startHour"]));
+      setEndHour(getTodayWithTime(ref.current["endHour"]));
+      setRate(ref.current["rate"].toString());
+    } catch (err) {
+      console.log(err);
     }
-
-    setName(ref.current["name"]);
-    setStartDate(ref.current["startDate"]);
-    setEndDate(ref.current["endDate"]);
-    setStartHour(getTodayWithTime(ref.current["startHour"]));
-    setEndHour(getTodayWithTime(ref.current["endHour"]));
-    setRate(ref.current["rate"].toString());
   };
   useEffect(() => {
     ref.current["Table"] = "WAGE_RATES";
+    console.log(ref.current);
     console.log(id);
     if (!id) {
-      console.log("hey");
-      ref.current["startHour"] = startHour
-        .toString()
-        .split(" ")[4]
-        .split(":00")[0];
-      ref.current["endHour"] = endHour.toString().split(" ")[4].split(":00")[0];
+      ref.current["startHour"] = startHour.toString();
+      ref.current["endHour"] = endHour.toString();
       ref.current["rate"] = rate;
     } else {
+      ref.current["edit"] = "yes";
       fetchSql();
     }
   }, []);

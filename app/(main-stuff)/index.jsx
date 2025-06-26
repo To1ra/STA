@@ -10,9 +10,11 @@ const db = SQLite.openDatabaseSync("myDataBase");
 
 const Home = () => {
   async function fun() {
-    await db.execAsync(`
+    try {
+      await db.execAsync(`
     PRAGMA journal_mode = WAL;
     CREATE TABLE IF NOT EXISTS WAGE_RATES (
+    id INTEGER PRIMARY KEY NOT NULL ,
       name TEXT NOT NULL,
       startDate TEXT NOT NULL,
       endDate TEXT NOT NULL,
@@ -23,6 +25,9 @@ const Home = () => {
       extraHourtsCalc TEXT NOT NULL DEFAULT '125|150'
     );
   `);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   useEffect(() => {}, []);

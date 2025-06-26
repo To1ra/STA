@@ -25,4 +25,13 @@ const getTodayWithTime = (timeStr) => {
   );
 };
 
-export { getTodayWithTime };
+const isEmpty = (obj) => {
+  if (typeof obj !== "object" || obj === null) {
+    return false;
+  }
+
+  const keys = Object.keys(obj);
+  return keys.length === 0;
+};
+
+export { getTodayWithTime, isEmpty };
