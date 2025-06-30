@@ -26,6 +26,7 @@ const WageRate = () => {
       console.error(error);
     }
   };
+
   useEffect(() => {
     myFetch();
   }, []);

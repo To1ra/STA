@@ -4,33 +4,33 @@ import { useEffect } from "react";
 import { useSQLiteDevTools } from "expo-sqlite-devtools";
 import * as SQLite from "expo-sqlite";
 import { useRouter } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
 
 //arrow function
-const db = SQLite.openDatabaseSync("myDataBase");
 
 const Home = () => {
-  async function fun() {
-    try {
-      await db.execAsync(`
-    PRAGMA journal_mode = WAL;
-    CREATE TABLE IF NOT EXISTS WAGE_RATES (
-    id INTEGER PRIMARY KEY NOT NULL ,
-      name TEXT NOT NULL,
-      startDate TEXT NOT NULL,
-      endDate TEXT NOT NULL,
-      startHour TEXT NOT NULL,
-      endHour TEXT NOT NULL,
-      rate INTEGER NOT NULL,
-      extraHorusCount INTEGER NOT NULL DEFAULT 8,
-      extraHourtsCalc TEXT NOT NULL DEFAULT '125|150'
-    );
-  `);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  const db = useSQLiteContext();
+  const func = async () => {
+    await db.execAsync(`DROP TABLE IF EXISTS ALL_SHIFTS;
 
-  useEffect(() => {}, []);
+CREATE TABLE ALL_SHIFTS (
+    id              INTEGER PRIMARY KEY NOT NULL,
+    dayDate         INTEGER NOT NULL,
+    monthDate       INTEGER NOT NULL,
+    yearDate        INTEGER NOT NULL,
+    startTime       TEXT NOT NULL,
+    endTime         TEXT NOT NULL,
+    note            TEXT,
+    hoursWorked     REAL NOT NULL,
+    rateObj         TEXT NOT NULL,
+    totalSalary     REAL NOT NULL DEFAULT 0,
+    color           TEXT NOT NULL DEFAULT 'black'
+);
+`);
+  };
+  useEffect(() => {
+    func();
+  }, []);
   useSQLiteDevTools(db);
 
   return (

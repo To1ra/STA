@@ -6,12 +6,9 @@ import AreYouSure from "../AreYouSure";
 import { useState } from "react";
 import { useRouter } from "expo-router";
 
-const Shift = ({ data, db }) => {
+const Shift = ({ data, del }) => {
   const [vis, setVis] = useState(false);
   const router = useRouter();
-  const del = async () => {
-    await db.execAsync("DELETE FROM ALL_SHIFTS WHERE id =" + data["id"] + ";");
-  };
 
   const dateObj = new Date(
     data["yearDate"],
@@ -30,7 +27,7 @@ const Shift = ({ data, db }) => {
       }
     >
       <Layout style={styles.shift}>
-        <AreYouSure action={del} vis={vis} setVis={setVis} />
+        <AreYouSure action={() => del(data["id"])} vis={vis} setVis={setVis} />
 
         <View style={styles.dateSection}>
           <Text style={styles.dateText}>{data["dayDate"]}</Text>

@@ -1,0 +1,19 @@
+WAGE_RATES: 
+
+
+ALL_SHIFTS:
+Column Name	    Type	Not Null	
+id	             NTEGER	TRUE		         Primary Key
+dayDate	        INTEGER	TRUE		
+monthDate	    INTEGER	TRUE		
+yearDate	    INTEGER	TRUE		
+startTime	    TEXT	TRUE		
+endTime	        TEXT	TRUE		
+hoursWorked 	INTEGER	TRUE
+firstExtraRate   INTEGER TRUE   125
+lastExtraRate	INTEGER TRUE   150
+firstExtraHours  INTEGER  TRUE 0 
+lastExtraHours	INTEGER  TRUE 0 
+rate	    INTEGER	TRUE	1	
+color	    TEXT	TRUE	'black'
+

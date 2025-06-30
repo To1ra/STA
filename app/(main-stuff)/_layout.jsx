@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as eva from "@eva-design/eva";
 import { Redirect, useRouter } from "expo-router";
+import { SQLiteProvider } from "expo-sqlite";
 
 import { ApplicationProvider, Layout } from "@ui-kitten/components";
 
@@ -23,24 +24,26 @@ const RootLayout = () => {
 
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
-      <Layout
-        style={{
-          flex: 1,
-          paddingTop: insets.top,
-          backgroundColor: "#161616",
-        }}
-      >
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <Drawer
-            drawerContent={(props) => <DrawerContent {...props} />}
-            screenOptions={{
-              header: ({ route, navigation, options }) => (
-                <Header title={route.name} navigation={navigation} />
-              ),
-            }}
-          />
-        </GestureHandlerRootView>
-      </Layout>
+      <SQLiteProvider databaseName="myDataBase">
+        <Layout
+          style={{
+            flex: 1,
+            paddingTop: insets.top,
+            backgroundColor: "#161616",
+          }}
+        >
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <Drawer
+              drawerContent={(props) => <DrawerContent {...props} />}
+              screenOptions={{
+                header: ({ route, navigation, options }) => (
+                  <Header title={route.name} navigation={navigation} />
+                ),
+              }}
+            />
+          </GestureHandlerRootView>
+        </Layout>
+      </SQLiteProvider>
     </ApplicationProvider>
   );
 };

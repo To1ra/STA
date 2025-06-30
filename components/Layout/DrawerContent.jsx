@@ -21,6 +21,10 @@ const DrawerContent = (props) => {
           label="All Shifts"
           onPress={() => router.push("./shiftTracker")}
         />
+        <DrawerItem
+          label="New Shift"
+          onPress={() => router.push("/NewShift")}
+        />
         <Spacer space={23} />
         <DrawerGroup title="Salary Section">
           <DrawerItem

@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import Shift from "./Shift";
 import { Divider, Layout, Text } from "@ui-kitten/components";
 import { useSQLiteContext } from "expo-sqlite";
@@ -7,6 +7,12 @@ import { useEffect, useState } from "react";
 const Content = ({ month, year }) => {
   const [output, setOutput] = useState([]);
   const db = useSQLiteContext();
+
+  const del = async (id) => {
+    await db.execAsync("DELETE FROM ALL_SHIFTS WHERE id =" + id + ";");
+    console.log("hey");
+    await myFetch();
+  };
 
   const myFetch = async () => {
     try {
@@ -26,13 +32,11 @@ const Content = ({ month, year }) => {
   }, [month, year]);
   return (
     <View>
-      {output.map((row, index) => {
-        return (
-          <View key={index}>
-            <Shift data={row} db={db} />
-          </View>
-        );
-      })}
+      <FlatList
+        data={output}
+        renderItem={({ item }) => <Shift data={item} del={del} />}
+        keyExtractor={(item) => item["id"]}
+      />
     </View>
   );
 };

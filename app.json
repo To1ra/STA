@@ -24,13 +24,18 @@
       "edgeToEdgeEnabled": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "build": {
+        "dev": {
+          "https": true
+        }
+      },
+      "babel": {
+        "useTransform": true
+      },
+      "bundler": "metro",
+      "crossOriginEmbedderPolicy": "require-corp"
     },
-    "plugins": [
-      "expo-router",
-      "expo-font",
-      "expo-sqlite",
-      "expo-secure-store"
-    ]
+    "plugins": ["expo-router", "expo-font", "expo-sqlite", "expo-secure-store"]
   }
 }

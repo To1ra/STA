@@ -146,9 +146,7 @@ const shiftTracker = () => {
 
         <Spacer />
         <SQLiteProvider databaseName="myDataBase">
-          <ScrollView>
-            <Content month={months.indexOf(m)} year={Number(y)} />
-          </ScrollView>
+          <Content month={months.indexOf(m)} year={Number(y)} />
         </SQLiteProvider>
       </Suspense>
     </Layout>

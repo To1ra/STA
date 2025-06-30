@@ -1,7 +1,1 @@
-const obj = {
-  id: "ori",
-};
-
-const { id } = obj;
-
-console.log(id);
+const id = 1;

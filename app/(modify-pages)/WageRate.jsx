@@ -22,7 +22,6 @@ import { getTodayWithTime, isEmpty } from "../../utils/TestFunctions";
 import { useLocalSearchParams } from "expo-router";
 
 const temp = days.map((item) => "Every " + item);
-const db = SQLite.openDatabaseSync("myDataBase");
 
 const WageRate = () => {
   const ref = useSharedRef();
@@ -36,6 +35,8 @@ const WageRate = () => {
   const [rate, setRate] = useState("150");
 
   const fetchSql = async () => {
+    const db = await SQLite.openDatabaseASync("myDataBase");
+
     try {
       console.log("entering fetchsql");
       console.log(id);

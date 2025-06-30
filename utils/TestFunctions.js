@@ -34,4 +34,19 @@ const isEmpty = (obj) => {
   return keys.length === 0;
 };
 
-export { getTodayWithTime, isEmpty };
+function getHoursDifference(date1, date2) {
+  const diffMilliseconds = Math.abs(date2.getTime() - date1.getTime());
+  const diffHours = diffMilliseconds / (1000 * 60 * 60);
+  return diffHours;
+}
+
+//get objects from stringifyied array of objects
+const getObjects = (str) => {
+  let newStr = str;
+  newStr = str.slice(0, -1);
+  newStr = str.slice(1);
+  const objects = newStr.map((item) => JSON.parse(item));
+  return objects;
+};
+
+export { getTodayWithTime, getHoursDifference, isEmpty, getObjects };
