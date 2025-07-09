@@ -7,6 +7,7 @@ export const SubmitProvider = ({ children }) => {
   const Ref = useSharedRef();
   const submitGeneral = (num, fieldName, update) => {
     Ref.current[fieldName] = num;
+    // console.log(`The field ${fieldName} is equal to ${num}`);
     update(num);
   };
   return (

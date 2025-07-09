@@ -8,6 +8,7 @@ import {
   Modal,
 } from "react-native";
 import { useSubmit } from "../Context/FormSubmitContext";
+import { days } from "../constans/Constans";
 
 const DrawerMenuSelector = ({
   data,
@@ -21,10 +22,9 @@ const DrawerMenuSelector = ({
   const handleSelect = (item) => {
     if (item.includes("Every")) item = item.split(" ")[1];
 
-    setSelected(item);
+    const temp = days.indexOf(item).toString();
     setVisible(false);
-
-    submitGeneral(item, fieldName, setSelected);
+    submitGeneral(temp, fieldName, setSelected);
   };
 
   return (
@@ -33,7 +33,7 @@ const DrawerMenuSelector = ({
         style={styles.dropdown}
         onPress={() => setVisible(true)}
       >
-        <Text style={styles.dropdownText}>{selected || "Select"}</Text>
+        <Text style={styles.dropdownText}>{days[selected] || "Select"}</Text>
       </TouchableOpacity>
 
       <Modal visible={visible} transparent animationType="fade">

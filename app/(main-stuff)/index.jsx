@@ -5,31 +5,18 @@ import { useSQLiteDevTools } from "expo-sqlite-devtools";
 import * as SQLite from "expo-sqlite";
 import { useRouter } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-
+import {
+  create_Table_ALLSHIFTS,
+  create_Table_WAGETATES,
+} from "../../utils/SQLite/Functions";
 //arrow function
 
 const Home = () => {
   const db = useSQLiteContext();
-  const func = async () => {
-    await db.execAsync(`DROP TABLE IF EXISTS ALL_SHIFTS;
 
-CREATE TABLE ALL_SHIFTS (
-    id              INTEGER PRIMARY KEY NOT NULL,
-    dayDate         INTEGER NOT NULL,
-    monthDate       INTEGER NOT NULL,
-    yearDate        INTEGER NOT NULL,
-    startTime       TEXT NOT NULL,
-    endTime         TEXT NOT NULL,
-    note            TEXT,
-    hoursWorked     REAL NOT NULL,
-    rateObj         TEXT NOT NULL,
-    totalSalary     REAL NOT NULL DEFAULT 0,
-    color           TEXT NOT NULL DEFAULT 'black'
-);
-`);
-  };
   useEffect(() => {
-    func();
+    // create_Table_WAGETATES(db); //fix the table to have also end-date
+    // console.log("hello");
   }, []);
   useSQLiteDevTools(db);
 

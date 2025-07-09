@@ -22,6 +22,7 @@ const Content = ({ month, year }) => {
           " AND YearDate=" +
           year
       );
+      console.log(allRows, month, year);
       setOutput(allRows);
     } catch (error) {
       console.error(error);

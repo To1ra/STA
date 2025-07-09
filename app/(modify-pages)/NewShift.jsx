@@ -1,15 +1,21 @@
 import { StyleSheet, Text, View, TextInput } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../../components/Forms/Container";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSubmit } from "../../Context/FormSubmitContext";
+import { useSharedRef } from "../../Context/FormContext";
 const NewShift = () => {
+  const ref = useSharedRef();
   const [date, setDate] = useState(new Date());
   const [startHour, setStartHour] = useState(new Date());
   const [endHour, setEndHour] = useState(new Date());
   const [note, setNote] = useState("");
-
   const submitGeneral = useSubmit();
+
+  useEffect(() => {
+    ref.current["Table"] = "ALL_SHIFTS";
+    ref.current["rate"] = 100; //for now
+  }, []);
 
   return (
     <View>
@@ -19,7 +25,7 @@ const NewShift = () => {
           mode={"date"}
           onChange={(event, selectedDate) => {
             if (selectedDate) {
-              submitGeneral(selectedDate, "date", setDate);
+              submitGeneral(selectedDate, "dateStart", setDate);
             }
           }}
         />
@@ -30,7 +36,7 @@ const NewShift = () => {
           mode={"time"}
           onChange={(event, selectedDate) => {
             if (selectedDate) {
-              submitGeneral(selectedDate, "startHour", setStartHour);
+              submitGeneral(selectedDate, "startTime", setStartHour);
             }
           }}
         />
@@ -41,7 +47,7 @@ const NewShift = () => {
           mode={"time"}
           onChange={(event, selectedDate) => {
             if (selectedDate) {
-              submitGeneral(selectedDate, "endHour", setEndHour);
+              submitGeneral(selectedDate, "endTime", setEndHour);
             }
           }}
         />

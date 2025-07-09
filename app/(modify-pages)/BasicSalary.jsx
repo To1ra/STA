@@ -84,7 +84,7 @@ const BasicSalary = () => {
           <Spacer />
           <Spacer />
           <Spacer />
-          <ExtraHours init={true} />
+          <ExtraHours />
           <Spacer />
           <Spacer />
           <Spacer />

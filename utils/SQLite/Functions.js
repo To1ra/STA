@@ -1,5 +1,11 @@
 import * as SecureStore from "expo-secure-store";
-import { getHoursDifference, getTodayWithTime } from "../TestFunctions";
+import {
+  getHoursDifference,
+  getTodayWithTime,
+  roundTotalHoursInArray,
+  roundTo,
+  combineDateAndTime,
+} from "../TestFunctions";
 import { days } from "../../constans/Constans";
 
 const submitData = (db, dataRef) => {
@@ -20,119 +26,196 @@ const submitData = (db, dataRef) => {
 };
 
 const submitShift = async (data, db) => {
-  const dateObj = new Date(
-    data["yearDate"],
-    data["monthDate"],
-    data["dayDate"]
-  );
+  try {
+    const dateObj = new Date(data["dateStart"].toISOString());
+    console.log("--------");
+    console.log(`this is dateobj ${dateObj}`);
 
-  const startTime = new Date(data["startTime"]);
-  const endTime = new Date(data["endTime"]);
-  const HorlyWage = await SecureStore.getItemAsync("HW");
+    const startTime = combineDateAndTime(dateObj, data["startTime"]);
+    const endTime = combineDateAndTime(dateObj, data["endTime"]);
 
-  //time difference
-  const dayOfTheWeek = dateObj.getDay();
-  const totalHoursWorked = getHoursDifference(date1, date2);
+    const temp = parseInt(await SecureStore.getItemAsync("HW"));
+    const HourlyWage = parseFloat(temp);
 
-  const tarrifArr = getTaarifArr(db, dayOfTheWeek);
+    const extraHoursCountFrom = await SecureStore.getItemAsync("moreHours");
+    const firstRate = await SecureStore.getItemAsync("first");
+    const lastRate = await SecureStore.getItemAsync("last");
 
-  const timeArr = createTimeObj(startTime, endTime, tarrifArr);
+    const extraHourArr = [extraHoursCountFrom, firstRate, lastRate];
+    //time difference
+    const dayOfTheWeek = dateObj.getDay();
+    const totalHoursWorked = getHoursDifference(startTime, endTime);
+    const tarrifArr = await getTaarifArr(db, dayOfTheWeek);
 
+    console.log(tarrifArr);
+    console.log(`total is ${totalHoursWorked}`);
+
+    const timeArr = await createTimeObj(
+      startTime,
+      endTime,
+      tarrifArr,
+      extraHourArr,
+      data["rate"]
+    );
+
+    console.log(timeArr);
+
+    const salary = calcMoneyFromTimeArr(timeArr, HourlyWage);
+
+    const insertValuesString = `
+  --- Values to be inserted into ALL_SHIFTS ---
+  dayDate: ${dateObj.getDate()}
+  monthDate: ${dateObj.getMonth()}
+  yearDate: ${dateObj.getYear()}
+  startTime: ${data["startTime"].toISOString()}
+  endTime: ${data["endTime"].toISOString()}
+  note: ${data["note"]}
+  hoursWorked: ${totalHoursWorked}
+  extraHoursCountFrom: ${extraHoursCountFrom}
+  firstRate: ${firstRate}
+  lastRate: ${lastRate}
+  rate: ${data["rate"]}
+  totalSalary: ${salary}
+  color: ${data["color"]}
+  -------------------------------------------
+`;
+
+    console.log(insertValuesString);
+
+    await db.execAsync(
+      `INSERT INTO ALL_SHIFTS (
+    dayDate,monthDate,yearDate,
+    startTime,endTime,note,
+    hoursWorked,extraHoursCountFrom,firstRate,lastRate,rate,
+    totalSalary
+  ) VALUES (
+    ${dateObj.getDate()},
+    ${dateObj.getMonth()},
+    ${dateObj.getFullYear()},
+    '${data["startTime"]}',     
+    '${data["endTime"]}',
+    ${data["note"] ? `'${data["note"]}'` : "NULL"},
+    ${totalHoursWorked},
+    ${extraHoursCountFrom},
+    ${firstRate},
+    ${lastRate},
+    ${data["rate"]},
+    ${salary}  )`
+    );
+  } catch (err) {
+    console.log(err);
+  }
   //insert rest & special
 };
 
-const calcHours = (start, end, count, extraArr, rate) => {
-  const obj = {};
-  const diff = count + getHoursDifference(start, end);
-  if (diff > extraArr[0]) {
-    if (diff - extraArr[0] > 2) {
-      obj.push({ totalHours: extraArr[0], rate });
-      obj.push({ totalHours: 2, rate: extraArr[1] });
-      obj.push({ totalHours: diff - extraArr[0] - 2, rate: extraArr[2] });
-    } else {
-      obj.push({ totalHours: extraArr[0], rate });
-      obj.push({ totalHours: diff - extraArr[0], rate: extraArr[1] });
-    }
-  } else obj.push({ totalHours: diff, rate });
-
-  return obj;
+const calcMoneyFromTimeArr = (arr, HourlyWage) => {
+  let sum = 0;
+  arr.forEach((obj) => {
+    sum += obj.totalHours * ((obj.rate / 100) * HourlyWage);
+  });
+  return Number(sum.toFixed(1)); // rounded result
 };
 
-const createTimeObj = async (startTime, endTime, tarrifArr) => {
-  const arr = []; //empty arr
-  let current = startTime; //keeps track of the time when looping the array
-  let count = 0; //counts the hours that has passed (trigering the extra hours)
+//MODIDY THIS FU
+const calcHours = (diff, totalHours, extraArr, rate) => {
+  const lst = [];
+  console.log(
+    `This is the current interval ${diff} , and that is the total Hours ${totalHours}`
+  );
+  if (totalHours > extraArr[0]) {
+    if (totalHours == diff) lst.push({ totalHours: extraArr[0], rate }); //first time entering
 
-  const extraHour = [
-    //data for normal extra hours
-    await SecureStore.getItemAsync("moreHours"),
-    await SecureStore.getItemAsync("first"),
-    await SecureStore.getItemAsync("last"),
-  ];
+    if (diff - extraArr[0] > 2) {
+      lst.push({ totalHours: 2, rate: extraArr[1] });
+      lst.push({ totalHours: diff - extraArr[0] - 2, rate: extraArr[2] });
+    } else lst.push({ totalHours: diff - extraArr[0], rate: extraArr[1] });
+  } else lst.push({ totalHours: diff, rate }); //no extra hours
 
-  tarrifArr.forEach((element) => {
-    data.forEach((element) => {
-      const temp1 = getTodayWithTime(data["startHour"]);
-      const temp2 = getTodayWithTime(data["endHour"]);
+  return lst;
+};
 
-      let allArgs = [];
-      let endAt = null;
-      // if (data["endHour"] == data["endDate"]) //make it work fine afer modifing the database
-      //   temp2.setDate(temp2.getDate() + 1);
+const createTimeObj = async (
+  startTime,
+  endTime,
+  tarrifArr,
+  extraHourArr,
+  rate
+) => {
+  try {
+    const arr = [];
+    let current = startTime; //keeps track of the time when looping the array
 
-      if (temp1 > endTime || current > temp2 || current == endTime)
-        return; //if its not logical
-      else if (temp1 >= current && temp2 <= endTime) {
-        arr.push(calcHours(current, temp1, count, extraHour, 1)); //start from normal rate before taarif
-        count += getHoursDifference(current, temp1);
-        current = temp1;
-        endAt = temp2;
-      }
-      //if it start after the shif but ends after
-      //
-      else if (temp1 >= current && temp2 >= endTime) {
-        current = temp1;
-        count += getHoursDifference(startTime, current);
-        arr.push(calcHours(current, temp1, count, extraHour, 1)); //start from normal rate before taarif
-        startingFrom = temp1;
-        endingAt = endTime;
-      }
-      //
-      // if it starts before the shift but ends within
-      //
-      else if (temp1 <= current && temp2 <= endTime)
-        arr.push({ start: current, end: temp2, rate: data["rate"] });
-      //
-      // if it starts before the shift but ends after
-      //
-      else if (temp1 <= current && temp2 >= endTime)
-        arr.push({ start: current, end: endTime, rate: data["rate"] });
+    let totalCount = 0; //counts the hours that has passed (trigering the extra hours)
+    let count = 0; //counts the hours that has passed (trigering the extra hours)
+    const dayOfTheWeek = startTime.getDay();
 
-      arr.push(
-        calcHours(
-          startingFrom,
-          endingAt,
-          [
-            data["extraHorusCount"],
-            data["firstExtraRate"],
-            data["lastExtraRate"],
-          ],
-          data["rate"]
-        )
+    tarrifArr.forEach((obj) => {
+      const forStartDate = dayOfTheWeek - Number(obj["startDate"]);
+      const forEndDate = Number(obj["endDate"]) - dayOfTheWeek;
+
+      const Tstart = getTodayWithTime(obj["startHour"], forStartDate, current);
+      const Tend = getTodayWithTime(obj["endHour"], forEndDate, current);
+
+      console.log(
+        `This is the start of the Taarif ${Tstart}, and that is the end ${Tend}`
       );
-      current = endingAt;
-    });
-  }); //loop and enter segments based on the Taarif arr and pay attention for extra hours, increment the current aswell
 
-  return arr;
+      const T_ExtraHoursArr = [
+        obj["extraHoursCountFrom"],
+        obj["firstRate"],
+        obj["lastRate"],
+      ];
+
+      let endingPoint = Tend;
+      let startingPoint = Tstart;
+      let flag = false;
+
+      //if the special rate does not start right away
+      if (Tstart.getTime() > current.getTime()) flag = true;
+
+      if (Tend.getTime() > endTime.getTime()) endingPoint = endTime;
+      else endingPoint = Tend; //if we have a taarif that excceeds the shift time
+
+      if (Tstart.getTime() < current.getTime()) startingPoint = current;
+      else startingPoint = Tstart;
+
+      if (flag) {
+        console.log(current, Tstart, "flag is true");
+        count = getHoursDifference(current, Tstart);
+        totalCount += count;
+        arr.push(...calcHours(count, totalCount, extraHourArr, rate));
+        current = Tstart;
+        flag = false;
+      }
+      count = getHoursDifference(startingPoint, endingPoint);
+      totalCount += count;
+      arr.push(...calcHours(count, totalCount, T_ExtraHoursArr, obj["rate"]));
+      current = endingPoint;
+    });
+
+    if (current != endTime)
+      arr.push(...calcHours(count, totalCount, extraHourArr, rate));
+
+    roundTotalHoursInArray(arr);
+
+    return arr;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const getTaarifArr = async (db, dayOfTheWeek) => {
-  const data = db.getAllAsync(
-    `SELECT * FROM WAGE_RATES WHERE startDate >=${dayOfTheWeek} AND endDate <= ${dayOfTheWeek}`
-  );
-
-  return data;
+  try {
+    const data = await db.getAllAsync(
+      `SELECT * 
+FROM WAGE_RATES 
+WHERE ${dayOfTheWeek} BETWEEN startDate AND endDate
+ORDER BY startDate ASC, startHour ASC;`
+    );
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const submitDataSecureStore = async (data) => {
@@ -166,6 +249,7 @@ const submitDataSQLite = async (data, db) => {
     delete data.edit;
 
     if (table == "ALL_SHIFTS") {
+      submitShift(data, db);
     } else {
       const arr = ["starthour", "endhour"];
       const fields = Object.keys(data);
@@ -194,4 +278,53 @@ const submitDataSQLite = async (data, db) => {
   }
 };
 
-export { submitData };
+const devideIntervals = async () => {};
+
+//SQL INSERTS
+const create_Table_ALLSHIFTS = async (db) => {
+  try {
+    const sqlString = `DROP TABLE IF EXISTS ALL_SHIFTS;
+
+CREATE TABLE ALL_SHIFTS (
+    id INTEGER PRIMARY KEY NOT NULL,
+    dayDate INTEGER NOT NULL,
+    monthDate INTEGER NOT NULL,
+    yearDate INTEGER NOT NULL,
+    startTime TEXT NOT NULL,
+    endTime TEXT NOT NULL,
+    endDate TEXT,
+    note TEXT,
+    hoursWorked REAL NOT NULL,
+    extraHoursCountFrom INTEGER NOT NULL,
+    firstRate INTEGER NOT NULL,
+    lastRate INTEGER NOT NULL,
+    totalSalary REAL NOT NULL DEFAULT 0,
+    color TEXT NOT NULL DEFAULT 'black'
+);
+`;
+    await db.execAsync(sqlString);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const create_Table_WAGETATES = async (db) => {
+  const sqlString = `DROP TABLE IF EXISTS WAGE_RATES;
+
+CREATE TABLE WAGE_RATES (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    startDate INTEGER NOT NULL,
+    endDate INTEGER NOT NULL,
+    startHour TEXT NOT NULL,
+    endHour TEXT NOT NULL,
+    rate INTEGER NOT NULL,
+    extraHoursCountFrom INTEGER NOT NULL,
+    firstRate INTEGER NOT NULL,
+    lastRate INTEGER NOT NULL
+);
+`;
+  await db.execAsync(sqlString);
+};
+
+export { submitData, create_Table_ALLSHIFTS, create_Table_WAGETATES };

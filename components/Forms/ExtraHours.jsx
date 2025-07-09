@@ -3,33 +3,55 @@ import Container from "./Container";
 import { useState, useEffect } from "react";
 import { useSubmit } from "../../Context/FormSubmitContext";
 import * as SecureStore from "expo-secure-store";
+import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 
-const ExtraHours = ({ init }) => {
+const ExtraHours = ({ init, id }) => {
+  return (
+    <SQLiteProvider databaseName="myDataBase">
+      <Inner init={init} id={id} />
+    </SQLiteProvider>
+  );
+};
+
+const Inner = ({ init, id }) => {
   const submitGeneral = useSubmit();
+  const db = useSQLiteContext();
 
   const [moreHours, setMoreHours] = useState("8");
   const [first, setFirst] = useState("125");
   const [last, setLast] = useState("150");
 
   async function getInit() {
-    const res1 = await SecureStore.getItemAsync("moreHours");
-    const res2 = await SecureStore.getItemAsync("first");
-    const res3 = await SecureStore.getItemAsync("last");
+    try {
+      const res1 = await SecureStore.getItemAsync("moreHours");
+      const res2 = await SecureStore.getItemAsync("first");
+      const res3 = await SecureStore.getItemAsync("last");
 
-    setMoreHours(res1);
-    setFirst(res2);
-    setLast(res3);
+      submitGeneral(res1.toString(), "extraHoursCountFrom", setMoreHours);
+      submitGeneral(res2.toString(), "firstRate", setFirst);
+      submitGeneral(res3.toString(), "lastRate", setLast);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async function getInitTable() {
     //from SQL
-    const res1 = await SecureStore.getItemAsync("moreHours");
-    const res2 = await SecureStore.getItemAsync("first");
-    const res3 = await SecureStore.getItemAsync("last");
+    const rows = await db.getAllAsync(
+      `SELECT extraHoursCountFrom, firstRate, lastRate FROM ${init} WHERE id = ${id}`
+    );
 
-    setMoreHours(res1);
-    setFirst(res2);
-    setLast(res3);
+    if (rows.length > 0) {
+      const { extraHoursCountFrom, firstRate, lastRate } = rows[0];
+
+      submitGeneral(
+        extraHoursCountFrom?.toString(),
+        "extraHoursCountFrom",
+        setMoreHours
+      );
+      submitGeneral(firstRate?.toString(), "firstRate", setFirst);
+      submitGeneral(lastRate?.toString(), "lastRate", setLast);
+    }
   }
 
   useEffect(() => {
@@ -48,7 +70,9 @@ const ExtraHours = ({ init }) => {
         <TextInput
           style={[styles.inp, { width: "50%" }]}
           keyboardType="numeric"
-          onChangeText={(num) => submitGeneral(num, "moreHours", setMoreHours)}
+          onChangeText={(num) =>
+            submitGeneral(num, "extraHoursCountFrom", setMoreHours)
+          }
           value={moreHours}
           maxLength={10} //setting limit of input
         />
@@ -64,7 +88,7 @@ const ExtraHours = ({ init }) => {
         <TextInput
           style={[styles.inp, { width: "50%" }]}
           keyboardType="numeric"
-          onChangeText={(num) => submitGeneral(num, "first", setFirst)}
+          onChangeText={(num) => submitGeneral(num, "firstRate", setFirst)}
           value={first}
           maxLength={10} //setting limit of input
         />
@@ -80,7 +104,7 @@ const ExtraHours = ({ init }) => {
         <TextInput
           style={[styles.inp, { width: "50%" }]}
           keyboardType="numeric"
-          onChangeText={(num) => submitGeneral(num, "last", setLast)}
+          onChangeText={(num) => submitGeneral(num, "lastRate", setLast)}
           value={last}
           maxLength={10} //setting limit of input
         />

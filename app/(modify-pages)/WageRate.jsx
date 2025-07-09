@@ -33,9 +33,11 @@ const WageRate = () => {
   const [startHour, setStartHour] = useState(new Date());
   const [endHour, setEndHour] = useState(new Date());
   const [rate, setRate] = useState("150");
+  let table = null;
 
+  //FIX FUNCTION
   const fetchSql = async () => {
-    const db = await SQLite.openDatabaseASync("myDataBase");
+    const db = await SQLite.openDatabaseAsync("myDataBase");
 
     try {
       console.log("entering fetchsql");
@@ -45,17 +47,29 @@ const WageRate = () => {
       );
 
       let data = dbRecordVALUES[0];
+      console.log(data);
 
       for (const field in data) {
         ref.current[field] = data[field];
       }
 
-      setName(ref.current["name"]);
-      setStartDate(ref.current["startDate"]);
-      setEndDate(ref.current["endDate"]);
-      setStartHour(getTodayWithTime(ref.current["startHour"]));
-      setEndHour(getTodayWithTime(ref.current["endHour"]));
-      setRate(ref.current["rate"].toString());
+      submitGeneral(ref.current["name"], "name", setName);
+      submitGeneral(days[ref.current["startDate"]], "startDate", setStartDate);
+      submitGeneral(days[ref.current["endDate"]], "endDate", setEndDate);
+      submitGeneral(ref.current["rate"].toString(), "rate", setRate);
+
+      submitGeneral(
+        getTodayWithTime(ref.current["startHour"]),
+        "startHour",
+        setStartHour
+      );
+      submitGeneral(
+        getTodayWithTime(ref.current["endHour"]),
+        "endHour",
+        setEndHour
+      );
+
+      console.log(ref.current);
     } catch (err) {
       console.log(err);
     }
@@ -68,8 +82,12 @@ const WageRate = () => {
       ref.current["startHour"] = startHour.toString();
       ref.current["endHour"] = endHour.toString();
       ref.current["rate"] = rate;
+      submitGeneral(rate, "rate", setRate);
+      submitGeneral(endHour, "endHour", setEndHour);
+      submitGeneral(startHour, "startHour", setStartHour);
     } else {
       ref.current["edit"] = "yes";
+      table = "WAGE_RATES";
       fetchSql();
     }
   }, []);
@@ -133,13 +151,12 @@ const WageRate = () => {
           <Container title="rate">
             <TextInput
               style={styles.inp}
-              keyboardType="numeric"
               onChangeText={(num) => submitGeneral(num, "rate", setRate)}
               value={rate}
               maxLength={15}
             />
           </Container>
-          <ExtraHours />
+          <ExtraHours init={table} id={id} />
         </View>
       </TouchableWithoutFeedback>
     </ScrollView>

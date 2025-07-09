@@ -33,48 +33,52 @@ const shiftTracker = () => {
   };
 
   const displayDrawerItems = () => {
-    let temp = currentM;
-    let row = 0;
-    const displayJSX = [];
-    const startingYear = Number(y) - 1;
-    const endYear = Number(y) + 1;
-    for (let index = startingYear; index <= endYear; index++) {
-      for (let i = 0; i < 12; i++) {
-        const title = months[temp] + " " + index;
-        if (temp === 11) {
-          displayJSX.push(
-            <DrawerItem
-              key={row}
-              label={title}
-              onPress={() => drawerOnPress(title)}
-            />
-          );
-          temp = 0;
-          break;
-        } else if (temp === currentM + 1 && index === endYear) break;
-        else if (temp === currentM && index === Number(y)) {
-          displayJSX.push(
-            <DrawerItem
-              key={row}
-              label={title}
-              onPress={() => drawerOnPress(title)}
-              accessoryRight={<Ionicons size={15} name="checkmark-outline" />}
-            />
-          );
-        } else
-          displayJSX.push(
-            <DrawerItem
-              key={row}
-              label={title}
-              onPress={() => drawerOnPress(title)}
-            />
-          );
+    try {
+      let temp = currentM;
+      let row = 0;
+      const displayJSX = [];
+      const startingYear = Number(y) - 1;
+      const endYear = Number(y) + 1;
+      for (let index = startingYear; index <= endYear; index++) {
+        for (let i = 0; i < 12; i++) {
+          const title = months[temp] + " " + index;
+          if (temp === 11) {
+            displayJSX.push(
+              <DrawerItem
+                key={row}
+                label={title}
+                onPress={() => drawerOnPress(title)}
+              />
+            );
+            temp = 0;
+            break;
+          } else if (temp === currentM + 1 && index === endYear) break;
+          else if (temp === currentM && index === Number(y)) {
+            displayJSX.push(
+              <DrawerItem
+                key={row}
+                label={title}
+                onPress={() => drawerOnPress(title)}
+                accessoryRight={<Ionicons size={15} name="checkmark-outline" />}
+              />
+            );
+          } else
+            displayJSX.push(
+              <DrawerItem
+                key={row}
+                label={title}
+                onPress={() => drawerOnPress(title)}
+              />
+            );
 
-        temp++;
-        row++;
+          temp++;
+          row++;
+        }
+        return displayJSX;
       }
+    } catch (err) {
+      console.log(err);
     }
-    return displayJSX;
   };
 
   const nextMonth = () => {

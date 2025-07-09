@@ -54,13 +54,11 @@ const InnerLayout = () => {
               title="check"
               onPress={() => {
                 submitData(db, dataRef);
-                if (route.name.toLocaleLowerCase().includes("basic")) {
-                  router.push("/");
+                if (route.name.toLocaleLowerCase().includes("Wage")) {
+                  router.push("/ListWageRates");
                   return;
                 }
-                const destiantionRoute = "List" + route.name;
-
-                router.push("../(add-pages)/" + destiantionRoute);
+                router.push("/");
               }}
             />
           );
