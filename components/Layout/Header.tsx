@@ -2,8 +2,16 @@
 import UserPic from "./UserPic";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { titleParser } from "../../constans/Constans";
+import React from "react";
 
-const Header = ({ title, navigation }) => {
+interface HeaderProps {
+  title: string;
+  navigation: {
+    openDrawer: () => void;
+  };
+}
+
+const Header: React.FC<HeaderProps> = ({ title, navigation }) => {
   return (
     <View style={styles.header}>
       <View style={styles.topRow}>

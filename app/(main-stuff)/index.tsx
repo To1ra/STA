@@ -9,9 +9,10 @@ import {
   create_Table_ALLSHIFTS,
   create_Table_WAGETATES,
 } from "../../utils/SQLite/Functions";
+import React from "react";
 //arrow function
 
-const Home = () => {
+const Home: React.FC = () => {
   const db = useSQLiteContext();
 
   useEffect(() => {

@@ -1,7 +1,11 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, ViewStyle } from "react-native";
 import React from "react";
 
-const UserPic = ({ style }) => {
+interface UserPicProps {
+  style?: ViewStyle;
+}
+
+const UserPic: React.FC<UserPicProps> = ({ style }) => {
   return (
     <View style={style}>
       <Image

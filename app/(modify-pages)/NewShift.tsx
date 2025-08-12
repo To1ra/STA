@@ -4,7 +4,8 @@ import Container from "../../components/Forms/Container";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSubmit } from "../../Context/FormSubmitContext";
 import { useSharedRef } from "../../Context/FormContext";
-const NewShift = () => {
+
+const NewShift: React.FC = () => {
   const ref = useSharedRef();
   const [date, setDate] = useState(new Date());
   const [startHour, setStartHour] = useState(new Date());

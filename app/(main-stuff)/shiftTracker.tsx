@@ -20,19 +20,19 @@ import NavigationBar from "../../components/NavigationBar";
 const currentM = new Date().getMonth();
 const currentY = new Date().getFullYear();
 
-const shiftTracker = () => {
+const shiftTracker: React.FC = () => {
   const [num, setNum] = useState(currentM);
   const [m, setMonth] = useState(months[currentM]);
   const [y, setYear] = useState("" + currentY);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const drawerOnPress = (date) => {
+  const drawerOnPress = (date: string) => {
     setMonth(date.split(" ")[0]);
     setYear(date.split(" ")[1]);
     setModalVisible(false);
   };
 
-  const displayDrawerItems = () => {
+  const displayDrawerItems = (): React.ReactElement[] => {
     try {
       let temp = currentM;
       let row = 0;

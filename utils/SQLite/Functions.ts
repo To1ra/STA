@@ -3,16 +3,19 @@ import {
   getHoursDifference,
   getTodayWithTime,
   roundTotalHoursInArray,
-  roundTo,
   combineDateAndTime,
 } from "../TestFunctions";
-import { days } from "../../constans/Constans";
+import { SQLiteAnyDatabase } from "expo-sqlite/build/NativeSession";
+import { DynamicObject } from "../types";
 
-const submitData = (db, dataRef) => {
+const submitData = (
+  db: SQLiteAnyDatabase,
+  dataRef: React.RefObject<DynamicObject>
+) => {
   try {
-    if (!dataRef?.current) return;
-    const data = dataRef.current;
+    if (!dataRef.current) return;
 
+    const data = dataRef.current;
     if (data["Table"]) {
       if (data["edit"]) UpdateDataSQLite(data, db);
       else submitDataSQLite(data, db);
@@ -25,8 +28,12 @@ const submitData = (db, dataRef) => {
   }
 };
 
-const submitShift = async (data, db) => {
+const submitShift = async (data: DynamicObject, db: SQLiteAnyDatabase) => {
   try {
+    if (!(data["dateStart"] && data["startTime"] && data["endTime"])) {
+      return { error: "Missing required date/time fields" };
+    }
+
     const dateObj = new Date(data["dateStart"].toISOString());
     console.log("--------");
     console.log(`this is dateobj ${dateObj}`);
@@ -34,14 +41,20 @@ const submitShift = async (data, db) => {
     const startTime = combineDateAndTime(dateObj, data["startTime"]);
     const endTime = combineDateAndTime(dateObj, data["endTime"]);
 
-    const temp = parseInt(await SecureStore.getItemAsync("HW"));
-    const HourlyWage = parseFloat(temp);
-
+    const temp = await SecureStore.getItemAsync("HW");
     const extraHoursCountFrom = await SecureStore.getItemAsync("moreHours");
     const firstRate = await SecureStore.getItemAsync("first");
     const lastRate = await SecureStore.getItemAsync("last");
 
-    const extraHourArr = [extraHoursCountFrom, firstRate, lastRate];
+    if (!(temp && extraHoursCountFrom && firstRate && lastRate)) {
+      return { error: "Missing secure store values" };
+    }
+    const HourlyWage: number = parseFloat(temp);
+    const extraHourArr: Array<number> = [
+      parseFloat(extraHoursCountFrom),
+      parseFloat(firstRate),
+      parseFloat(lastRate),
+    ];
     //time difference
     const dayOfTheWeek = dateObj.getDay();
     const totalHoursWorked = getHoursDifference(startTime, endTime);
@@ -49,6 +62,8 @@ const submitShift = async (data, db) => {
 
     console.log(tarrifArr);
     console.log(`total is ${totalHoursWorked}`);
+
+    if (!data["rate"]) return { error: "Missing the rate of the shift" };
 
     const timeArr = await createTimeObj(
       startTime,
@@ -58,6 +73,8 @@ const submitShift = async (data, db) => {
       data["rate"]
     );
 
+    if (!timeArr.length) return;
+
     console.log(timeArr);
 
     const salary = calcMoneyFromTimeArr(timeArr, HourlyWage);
@@ -66,7 +83,7 @@ const submitShift = async (data, db) => {
   --- Values to be inserted into ALL_SHIFTS ---
   dayDate: ${dateObj.getDate()}
   monthDate: ${dateObj.getMonth()}
-  yearDate: ${dateObj.getYear()}
+  yearDate: ${dateObj.getFullYear()}
   startTime: ${data["startTime"].toISOString()}
   endTime: ${data["endTime"].toISOString()}
   note: ${data["note"]}
@@ -104,11 +121,15 @@ const submitShift = async (data, db) => {
     );
   } catch (err) {
     console.log(err);
+    return err;
   }
   //insert rest & special
 };
 
-const calcMoneyFromTimeArr = (arr, HourlyWage) => {
+const calcMoneyFromTimeArr = (
+  arr: Array<{ totalHours: number; rate: number }>,
+  HourlyWage: number
+) => {
   let sum = 0;
   arr.forEach((obj) => {
     sum += obj.totalHours * ((obj.rate / 100) * HourlyWage);
@@ -117,7 +138,12 @@ const calcMoneyFromTimeArr = (arr, HourlyWage) => {
 };
 
 //MODIDY THIS FU
-const calcHours = (diff, totalHours, extraArr, rate) => {
+const calcHours = (
+  diff: number,
+  totalHours: number,
+  extraArr: Array<number>,
+  rate: number
+) => {
   const lst = [];
   console.log(
     `This is the current interval ${diff} , and that is the total Hours ${totalHours}`
@@ -135,14 +161,23 @@ const calcHours = (diff, totalHours, extraArr, rate) => {
 };
 
 const createTimeObj = async (
-  startTime,
-  endTime,
-  tarrifArr,
-  extraHourArr,
-  rate
+  startTime: Date,
+  endTime: Date,
+  tarrifArr: Array<{
+    startDate: Date;
+    endDate: Date;
+    startHour: any;
+    endHour: any;
+    extraHoursCountFrom: any;
+    firstRate: number;
+    rate: number;
+    lastRate: number;
+  }>,
+  extraHourArr: Array<number>,
+  rate: number
 ) => {
   try {
-    const arr = [];
+    const arr: Array<{ totalHours: number; rate: number }> = [];
     let current = startTime; //keeps track of the time when looping the array
 
     let totalCount = 0; //counts the hours that has passed (trigering the extra hours)
@@ -201,10 +236,11 @@ const createTimeObj = async (
     return arr;
   } catch (err) {
     console.log(err);
+    return [];
   }
 };
 
-const getTaarifArr = async (db, dayOfTheWeek) => {
+const getTaarifArr = async (db: SQLiteAnyDatabase, dayOfTheWeek: number) => {
   try {
     const data = await db.getAllAsync(
       `SELECT * 
@@ -215,14 +251,18 @@ ORDER BY startDate ASC, startHour ASC;`
     return data;
   } catch (err) {
     console.log(err);
+    return err;
   }
 };
 
-const submitDataSecureStore = async (data) => {
+const submitDataSecureStore = async (data: DynamicObject) => {
   console.log("This is my Secure Store ");
   for (const field in data) {
     try {
-      await SecureStore.setItemAsync(field, data[field]);
+      const value = data[field as keyof typeof data];
+      const stringValue =
+        typeof value === "string" ? value : JSON.stringify(value);
+      await SecureStore.setItemAsync(field, stringValue);
     } catch (err) {
       console.error("❌ Failed saving field:", field, err);
     }
@@ -230,16 +270,19 @@ const submitDataSecureStore = async (data) => {
   console.log("✅ Done saving all fields");
 };
 
-const UpdateDataSQLite = async (data, db) => {
+const UpdateDataSQLite = async (data: DynamicObject, db: SQLiteAnyDatabase) => {
   try {
-    await db.execAsync("DELETE FROM WAGE_RATES WHERE id =" + data["id"] + ";");
+    if (!data)
+      await db.execAsync(
+        "DELETE FROM WAGE_RATES WHERE id =" + data["id"] + ";"
+      );
     await submitDataSQLite(data, db);
   } catch (err) {
     console.log(err);
   }
 };
 
-const submitDataSQLite = async (data, db) => {
+const submitDataSQLite = async (data: DynamicObject, db: SQLiteAnyDatabase) => {
   try {
     if (data.edit) {
       console.log("edit for" + data);
@@ -253,8 +296,10 @@ const submitDataSQLite = async (data, db) => {
     } else {
       const arr = ["starthour", "endhour"];
       const fields = Object.keys(data);
+
       const values = fields.map((field) => {
-        let val = data[field];
+        let val = data[field as keyof typeof data]!;
+        val = val.toString();
         if (arr.includes(field.toLowerCase())) {
           if (val.length != 5) {
             const temp = new Date(val);
@@ -281,7 +326,7 @@ const submitDataSQLite = async (data, db) => {
 const devideIntervals = async () => {};
 
 //SQL INSERTS
-const create_Table_ALLSHIFTS = async (db) => {
+const create_Table_ALLSHIFTS = async (db: SQLiteAnyDatabase) => {
   try {
     const sqlString = `DROP TABLE IF EXISTS ALL_SHIFTS;
 
@@ -308,7 +353,7 @@ CREATE TABLE ALL_SHIFTS (
   }
 };
 
-const create_Table_WAGETATES = async (db) => {
+const create_Table_WAGETATES = async (db: SQLiteAnyDatabase) => {
   const sqlString = `DROP TABLE IF EXISTS WAGE_RATES;
 
 CREATE TABLE WAGE_RATES (

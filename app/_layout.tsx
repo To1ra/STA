@@ -4,7 +4,7 @@ import { Stack, usePathname } from "expo-router";
 import { titleParser } from "../constans/Constans";
 import { SQLiteProvider } from "expo-sqlite";
 
-const _layout = () => {
+const _layout: React.FC = () => {
   return (
     <SQLiteProvider databaseName="myDataBase">
       <Stack>

@@ -15,7 +15,7 @@ import Spacer from "../../components/Spacer";
 import ExtraHours from "../../components/Forms/ExtraHours";
 import { useSubmit } from "../../Context/FormSubmitContext";
 
-const BasicSalary = () => {
+const BasicSalary: React.FC = () => {
   const submitGeneral = useSubmit();
 
   useEffect(() => {

@@ -3,7 +3,22 @@ import React, { useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
-const ListItem = ({ data, editRoute }) => {
+interface ListItemData {
+  id: string | number;
+  name: string;
+  startDate: string;
+  startHour: string;
+  endDate: string;
+  endHour: string;
+  rate: string;
+}
+
+interface ListItemProps {
+  data: ListItemData;
+  editRoute: string;
+}
+
+const ListItem: React.FC<ListItemProps> = ({ data, editRoute }) => {
   const router = useRouter();
 
   const editItem = () => {

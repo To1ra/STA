@@ -1,9 +1,17 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { ReactNode } from "react";
 import { Layout } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 
-const NavigationBar = ({
+interface NavigationBarProps {
+  forward: () => void;
+  backward: () => void;
+  showState: ReactNode;
+  showRight?: boolean;
+  showLeft?: boolean;
+}
+
+const NavigationBar: React.FC<NavigationBarProps> = ({
   forward,
   backward,
   showState,

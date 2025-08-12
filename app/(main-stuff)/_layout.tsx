@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as eva from "@eva-design/eva";
 import { Redirect, useRouter } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
+import React from "react";
 
 import { ApplicationProvider, Layout } from "@ui-kitten/components";
 
@@ -16,7 +17,7 @@ export const unstable_settings = {
   initialRouteName: "shiftTracker",
 };
 
-const RootLayout = () => {
+const RootLayout: React.FC = () => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const route = useRouter();

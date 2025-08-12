@@ -5,8 +5,24 @@ import { months, days } from "../../constans/Constans";
 import AreYouSure from "../AreYouSure";
 import { useState } from "react";
 import { useRouter } from "expo-router";
+import React from "react";
 
-const Shift = ({ data, del }) => {
+interface ShiftData {
+  id: string | number;
+  yearDate: number;
+  monthDate: number;
+  dayDate: number;
+  startTime: string;
+  endTime: string;
+  totalHours: string | number;
+}
+
+interface ShiftProps {
+  data: ShiftData;
+  del: (id: string | number) => void;
+}
+
+const Shift: React.FC<ShiftProps> = ({ data, del }) => {
   const [vis, setVis] = useState(false);
   const router = useRouter();
 

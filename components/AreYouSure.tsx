@@ -7,8 +7,15 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "@ui-kitten/components";
+import React from "react";
 
-const AreYouSure = ({ action, vis, setVis }) => {
+interface AreYouSureProps {
+  action: () => void;
+  vis: boolean;
+  setVis: (visible: boolean) => void;
+}
+
+const AreYouSure: React.FC<AreYouSureProps> = ({ action, vis, setVis }) => {
   return (
     <Modal
       style={styles.modal}

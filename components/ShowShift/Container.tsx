@@ -1,9 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { ReactNode } from "react";
 import { Layout, Button } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 
-const Container = ({
+interface ContainerProps {
+  title?: string;
+  icon?: string;
+  data?: ReactNode;
+}
+
+const Container: React.FC<ContainerProps> = ({
   title = "hola",
   icon = "american-football-outline",
   data = <></>,

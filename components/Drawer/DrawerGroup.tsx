@@ -1,7 +1,13 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
+import React, { ReactNode } from "react";
 
-const DrawerGroup = ({ title, children }) => {
+interface DrawerGroupProps {
+  title: string;
+  children: ReactNode;
+}
+
+const DrawerGroup: React.FC<DrawerGroupProps> = ({ title, children }) => {
   const [vis, setVis] = useState(false);
 
   return (

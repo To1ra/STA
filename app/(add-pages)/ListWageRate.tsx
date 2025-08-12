@@ -4,12 +4,17 @@ import { useSQLiteContext } from "expo-sqlite";
 import ListItem from "../../components/List/ListItem";
 import { Ionicons } from "@expo/vector-icons";
 
-const WageRate = () => {
+interface WageRateData {
+  id: string | number;
+  [key: string]: any;
+}
+
+const WageRate: React.FC = () => {
   const db = useSQLiteContext();
-  const [output, setOutput] = useState([]);
+  const [output, setOutput] = useState<WageRateData[]>([]);
   const [vis, setVis] = useState(false);
 
-  const delRecord = async (id) => {
+  const delRecord = async (id: string | number) => {
     try {
       await db.execAsync("DELETE FROM WAGE_RATES  WHERE id=" + id + ";");
       setVis(false);
@@ -20,7 +25,9 @@ const WageRate = () => {
   };
   const myFetch = async () => {
     try {
-      const allRows = await db.getAllAsync("SELECT * FROM WAGE_RATES");
+      const allRows: WageRateData[] = await db.getAllAsync(
+        "SELECT * FROM WAGE_RATES"
+      );
       setOutput(allRows);
     } catch (error) {
       console.error(error);
@@ -43,12 +50,12 @@ const WageRate = () => {
                 <Ionicons
                   name="remove-circle-sharp"
                   size={15}
-                  onPress={() => delRecord(item["id"])}
+                  onPress={() => delRecord(item.id)}
                 />
               ) : null}
             </>
           )}
-          key={(item) => item["id"]}
+          keyExtractor={(item: WageRateData) => item.id.toString()}
         />
         <Ionicons
           name="trash-outline"

@@ -10,7 +10,14 @@ import {
 import { useSubmit } from "../Context/FormSubmitContext";
 import { days } from "../constans/Constans";
 
-const DrawerMenuSelector = ({
+interface DrawerMenuSelectorProps {
+  data: string[];
+  selected?: number | null;
+  fieldName?: string | null;
+  setSelected?: ((value: any) => void) | null;
+}
+
+const DrawerMenuSelector: React.FC<DrawerMenuSelectorProps> = ({
   data,
   selected = null,
   fieldName = null,
@@ -19,7 +26,7 @@ const DrawerMenuSelector = ({
   const [visible, setVisible] = useState(false);
   const submitGeneral = useSubmit();
 
-  const handleSelect = (item) => {
+  const handleSelect = (item: string) => {
     if (item.includes("Every")) item = item.split(" ")[1];
 
     const temp = days.indexOf(item).toString();

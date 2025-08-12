@@ -5,10 +5,10 @@ import * as eva from "@eva-design/eva";
 import { ApplicationProvider, Layout } from "@ui-kitten/components";
 import { titleParser } from "../../constans/Constans";
 
-const OutsideLayout = () => {
+const OutsideLayout: React.FC = () => {
   const router = useRouter();
 
-  const addData = (navigation, route) => {
+  const addData = (route: string) => {
     const currentRoute = route;
     const destiantionRoute = currentRoute.replace("List", "");
     router.push("(modify-pages)/" + destiantionRoute);
@@ -25,16 +25,13 @@ const OutsideLayout = () => {
             ) : null;
           },
           headerRight: () => {
-            return (
-              <Button
-                title="Add"
-                onPress={() => addData(navigation, route.name)}
-              />
-            );
+            return <Button title="Add" onPress={() => addData(route.name)} />;
           },
 
           headerTitle: () => {
-            return <Text>{titleParser[route.name]}</Text>;
+            return (
+              <Text>{titleParser[route.name as keyof typeof titleParser]}</Text>
+            );
           },
         })}
       >

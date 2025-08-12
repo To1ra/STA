@@ -1,8 +1,14 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { StyleSheet, Text, View, ViewStyle } from "react-native";
+import React, { ReactNode } from "react";
 import Spacer from "../Spacer";
 
-const Container = ({ title, children, style }) => {
+interface ContainerProps {
+  title: string;
+  children: ReactNode;
+  style?: ViewStyle;
+}
+
+const Container: React.FC<ContainerProps> = ({ title, children, style }) => {
   return (
     <View style={{ justifyContent: "center" }}>
       <Text style={{ textAlign: "right", padding: 10 }}>{title}</Text>

@@ -4,8 +4,14 @@ import { useState, useEffect } from "react";
 import { useSubmit } from "../../Context/FormSubmitContext";
 import * as SecureStore from "expo-secure-store";
 import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
+import React from "react";
 
-const ExtraHours = ({ init, id }) => {
+interface ExtraHoursProps {
+  init?: string;
+  id?: string | number;
+}
+
+const ExtraHours: React.FC<ExtraHoursProps> = ({ init, id }) => {
   return (
     <SQLiteProvider databaseName="myDataBase">
       <Inner init={init} id={id} />
@@ -13,7 +19,12 @@ const ExtraHours = ({ init, id }) => {
   );
 };
 
-const Inner = ({ init, id }) => {
+interface InnerProps {
+  init?: string;
+  id?: string | number;
+}
+
+const Inner: React.FC<InnerProps> = ({ init, id }) => {
   const submitGeneral = useSubmit();
   const db = useSQLiteContext();
 

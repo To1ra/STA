@@ -43,7 +43,14 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@react-native-community/cli": "^18.0.0",
-    "@ui-kitten/metro-config": "^5.3.1"
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.12",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@ui-kitten/metro-config": "^5.3.1",
+    "source-map-loader": "^5.0.0",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3"
   },
   "private": true
 }

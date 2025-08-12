@@ -7,14 +7,14 @@ import Container from "../../components/ShowShift/Container";
 import Spacer from "../../components/Spacer";
 import * as SQLite from "expo-sqlite";
 
-const normalRepresentation = (toNormal) => {
+const normalRepresentation = (toNormal: Date): string => {
   const formattedDate = toNormal.toISOString().split("T")[0]; // "2025-06-19"
   const [year, month, day] = formattedDate.split("-");
   const flippedDate = `${day}/${month}/${year}`;
   return flippedDate;
 };
 
-const ShowShift = () => {
+const ShowShift: React.FC = () => {
   const data = useLocalSearchParams();
   const currentShiftDate = new Date(
     data["yearDate"],

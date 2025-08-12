@@ -4,7 +4,7 @@ import { Slot, Stack } from "expo-router";
 import * as eva from "@eva-design/eva";
 import { ApplicationProvider, Layout } from "@ui-kitten/components";
 
-const _layout = () => {
+const _layout: React.FC = () => {
   return (
     <ApplicationProvider {...eva} theme={eva.light}>
       <Stack initialRouteName="ShowShift">

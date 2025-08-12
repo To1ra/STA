@@ -23,7 +23,7 @@ import { useLocalSearchParams } from "expo-router";
 
 const temp = days.map((item) => "Every " + item);
 
-const WageRate = () => {
+const WageRate: React.FC = () => {
   const ref = useSharedRef();
   const { id } = useLocalSearchParams();
   const submitGeneral = useSubmit();

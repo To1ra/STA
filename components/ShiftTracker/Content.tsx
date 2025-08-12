@@ -3,12 +3,23 @@ import Shift from "./Shift";
 import { Divider, Layout, Text } from "@ui-kitten/components";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
+import React from "react";
 
-const Content = ({ month, year }) => {
-  const [output, setOutput] = useState([]);
+interface ShiftData {
+  id: string | number;
+  [key: string]: any;
+}
+
+interface ContentProps {
+  month: number;
+  year: number;
+}
+
+const Content: React.FC<ContentProps> = ({ month, year }) => {
+  const [output, setOutput] = useState<ShiftData[]>([]);
   const db = useSQLiteContext();
 
-  const del = async (id) => {
+  const del = async (id: string | number) => {
     await db.execAsync("DELETE FROM ALL_SHIFTS WHERE id =" + id + ";");
     console.log("hey");
     await myFetch();
