@@ -50,7 +50,7 @@ export default ListItem;
 
 const styles = StyleSheet.create({
   bigTitle: {
-    fontSize: "20",
+    fontSize: 20,
   },
 
   item: {

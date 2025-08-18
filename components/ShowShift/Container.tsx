@@ -26,7 +26,7 @@ const Container: React.FC<ContainerProps> = ({
           ]}
         >
           <Text style={styles.title}>{title}</Text>
-          <Ionicons name={icon} size={15} style={{ marginLeft: 4 }} />
+          {icon && <Ionicons name={icon as any} size={15} style={{ marginLeft: 4 }} />}
         </View>
 
         <Button

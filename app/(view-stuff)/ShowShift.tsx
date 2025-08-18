@@ -17,9 +17,9 @@ const normalRepresentation = (toNormal: Date): string => {
 const ShowShift: React.FC = () => {
   const data = useLocalSearchParams();
   const currentShiftDate = new Date(
-    data["yearDate"],
-    data["monthDate"],
-    data["dayDate"]
+    Number(data["yearDate"]),
+    Number(data["monthDate"]),
+    Number(data["dayDate"])
   );
   const [date, setDate] = useState(currentShiftDate);
   const [showRight, setShowRight] = useState(true);
@@ -30,30 +30,35 @@ const ShowShift: React.FC = () => {
   }, []);
 
   const navUpdate = async () => {
-    const db = await SQLite.openDatabaseAsync("myDataBase");
+    try {
+      const db = await SQLite.openDatabaseAsync("myDataBase");
 
-    const temp1 = await db.getAllAsync(
-      `SELECT COUNT (*) FROM ALL_SHIFTS WHERE monthDate=${data["monthDate"]} AND yearDate = ${data["yearDate"]} AND dayDate >= ${data["dayDate"]};`
-    );
-    const temp2 = await db.getAllAsync(
-      `SELECT COUNT (*) FROM ALL_SHIFTS WHERE monthDate=${data["monthDate"]} AND yearDate = ${data["yearDate"]}`
-    );
-    const res1 = temp1[0]["COUNT (*)"];
-    const res2 = temp2[0]["COUNT (*)"];
-    if (res1 == 1) setshowRight(false);
-    if (res2 == res1) setShowLeft(false);
+      const temp1 = await db.getAllAsync(
+        `SELECT COUNT (*) FROM ALL_SHIFTS WHERE monthDate=${data["monthDate"]} AND yearDate=${data["yearDate"]} AND dayDate>=${data["dayDate"]}`
+      );
+      const temp2 = await db.getAllAsync(
+        `SELECT COUNT (*) FROM ALL_SHIFTS WHERE monthDate=${data["monthDate"]} AND yearDate=${data["yearDate"]}`
+      );
+      const res1 = (temp1[0] as any)["COUNT (*)"] as number;
+      const res2 = (temp2[0] as any)["COUNT (*)"] as number;
+      if (res1 == 1) setshowLeft(false);
+      if (res2 == res1) setShowRight(false);
+    } catch (err) {
+      console.log("Error in navUpdate:", err);
+    }
   };
 
   const nextDate = () => {
-    currentShiftDate.setDate(date.getDate() + 1);
-    setDate(currentShiftDate);
+    const newDate = new Date(date);
+    newDate.setDate(date.getDate() + 1);
+    setDate(newDate);
   };
+  
   const prevDate = () => {
-    currentShiftDate.setDate(date.getDate() - 1);
-    setDate(currentShiftDate);
+    const newDate = new Date(date);
+    newDate.setDate(date.getDate() - 1);
+    setDate(newDate);
   };
-
-  const showHours = () => {};
 
   const showTime = () => {
     return (
@@ -79,7 +84,7 @@ const ShowShift: React.FC = () => {
           <Text
             style={{
               color: "white",
-              fontSize: "17",
+              fontSize: 17,
             }}
           >
             {normalRepresentation(date)}

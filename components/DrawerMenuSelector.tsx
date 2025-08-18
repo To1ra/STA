@@ -31,7 +31,9 @@ const DrawerMenuSelector: React.FC<DrawerMenuSelectorProps> = ({
 
     const temp = days.indexOf(item).toString();
     setVisible(false);
-    submitGeneral(temp, fieldName, setSelected);
+    if (fieldName && setSelected) {
+      submitGeneral(temp, fieldName, setSelected);
+    }
   };
 
   return (
@@ -40,7 +42,7 @@ const DrawerMenuSelector: React.FC<DrawerMenuSelectorProps> = ({
         style={styles.dropdown}
         onPress={() => setVisible(true)}
       >
-        <Text style={styles.dropdownText}>{days[selected] || "Select"}</Text>
+        <Text style={styles.dropdownText}>{days[selected || 0] || "Select"}</Text>
       </TouchableOpacity>
 
       <Modal visible={visible} transparent animationType="fade">
@@ -58,7 +60,7 @@ const DrawerMenuSelector: React.FC<DrawerMenuSelectorProps> = ({
                   onPress={() => handleSelect(item)}
                 >
                   <Text style={styles.checkmark}>
-                    {selected === item ? "✓" : ""}
+                    {selected !== null && selected.toString() === item ? "✓" : ""}
                   </Text>
                   <Text style={styles.itemText}>{item}</Text>
                 </TouchableOpacity>

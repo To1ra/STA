@@ -1,16 +1,22 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { DrawerItem as DI } from "@react-navigation/drawer";
+import { MenuItem } from "@ui-kitten/components";
 import React from "react";
 
 interface DrawerItemProps {
-  [key: string]: any;
+  label: string;
+  onPress: () => void;
+  accessoryRight?: React.ReactElement;
+  key?: string | number;
 }
 
-const DrawerItem: React.FC<DrawerItemProps> = ({ ...props }) => {
+const DrawerItem: React.FC<DrawerItemProps> = ({ label, onPress, accessoryRight, ...props }) => {
   return (
-    <TouchableOpacity>
-      <DI {...props} />
-    </TouchableOpacity>
+    <MenuItem
+      title={label}
+      onPress={onPress}
+      accessoryRight={accessoryRight}
+      {...props}
+    />
   );
 };
 

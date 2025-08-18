@@ -43,31 +43,49 @@ const WageRate: React.FC = () => {
       console.log("entering fetchsql");
       console.log(id);
       const dbRecordVALUES = await db.getAllAsync(
-        "SELECT * FROM WAGE_RATES WHERE id =" + id
+        `SELECT * FROM WAGE_RATES WHERE id = ${id}`
       );
 
-      let data = dbRecordVALUES[0];
+      let data = dbRecordVALUES[0] as any;
       console.log(data);
 
-      for (const field in data) {
-        ref.current[field] = data[field];
+      if (data && typeof data === "object") {
+        for (const field in data) {
+          if (ref.current) {
+            ref.current[field] = data[field];
+          }
+        }
       }
 
-      submitGeneral(ref.current["name"], "name", setName);
-      submitGeneral(days[ref.current["startDate"]], "startDate", setStartDate);
-      submitGeneral(days[ref.current["endDate"]], "endDate", setEndDate);
-      submitGeneral(ref.current["rate"].toString(), "rate", setRate);
+      if (ref.current) {
+        submitGeneral(ref.current["name"] || "", "name", setName);
+        submitGeneral(
+          days[ref.current["startDate"]] || days[0],
+          "startDate",
+          setStartDate
+        );
+        submitGeneral(
+          days[ref.current["endDate"]] || days[0],
+          "endDate",
+          setEndDate
+        );
+        submitGeneral(ref.current["rate"]?.toString() || "0", "rate", setRate);
 
-      submitGeneral(
-        getTodayWithTime(ref.current["startHour"]),
-        "startHour",
-        setStartHour
-      );
-      submitGeneral(
-        getTodayWithTime(ref.current["endHour"]),
-        "endHour",
-        setEndHour
-      );
+        if (ref.current["startHour"]) {
+          submitGeneral(
+            getTodayWithTime(ref.current["startHour"]),
+            "startHour",
+            setStartHour
+          );
+        }
+        if (ref.current["endHour"]) {
+          submitGeneral(
+            getTodayWithTime(ref.current["endHour"]),
+            "endHour",
+            setEndHour
+          );
+        }
+      }
 
       console.log(ref.current);
     } catch (err) {
@@ -110,7 +128,7 @@ const WageRate: React.FC = () => {
               <Text>Day</Text>
               <DrawerMenuSelector
                 data={temp}
-                selected={startDate}
+                selected={parseInt(startDate) || 0}
                 setSelected={setStartDate}
                 fieldName={"startDate"}
               />
@@ -132,7 +150,7 @@ const WageRate: React.FC = () => {
               <Text>Day</Text>
               <DrawerMenuSelector
                 data={temp}
-                selected={endDate}
+                selected={parseInt(endDate) || 0}
                 setSelected={setEndDate}
                 fieldName={"endDate"}
               />
@@ -156,7 +174,10 @@ const WageRate: React.FC = () => {
               maxLength={15}
             />
           </Container>
-          <ExtraHours init={table} id={id} />
+          <ExtraHours
+            init={table || undefined}
+            id={id ? String(id) : undefined}
+          />
         </View>
       </TouchableWithoutFeedback>
     </ScrollView>
@@ -166,7 +187,7 @@ const WageRate: React.FC = () => {
 export default WageRate;
 
 const styles = StyleSheet.create({
-  title: { textAlign: "right", paddingHorizontal: "10", fontWeight: "bold" },
+  title: { textAlign: "right", paddingHorizontal: 10, fontWeight: "bold" },
   row: {
     flexDirection: "row-reverse",
     alignItems: "center",

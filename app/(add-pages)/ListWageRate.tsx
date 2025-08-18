@@ -3,11 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
 import ListItem from "../../components/List/ListItem";
 import { Ionicons } from "@expo/vector-icons";
-
-interface WageRateData {
-  id: string | number;
-  [key: string]: any;
-}
+import { WageRateData } from "../../utils/types";
 
 const WageRate: React.FC = () => {
   const db = useSQLiteContext();
@@ -16,19 +12,30 @@ const WageRate: React.FC = () => {
 
   const delRecord = async (id: string | number) => {
     try {
-      await db.execAsync("DELETE FROM WAGE_RATES  WHERE id=" + id + ";");
+      await db.execAsync(`DELETE FROM WAGE_RATES WHERE id=${id}`);
       setVis(false);
       await myFetch();
     } catch (err) {
       console.log(err);
     }
   };
+  
   const myFetch = async () => {
     try {
       const allRows: WageRateData[] = await db.getAllAsync(
         "SELECT * FROM WAGE_RATES"
       );
-      setOutput(allRows);
+      // Transform the data to match the expected structure
+      const transformedRows = allRows.map(row => ({
+        id: row.id,
+        name: row.name || `Wage Rate ${row.id}`,
+        startDate: row.startDate || '',
+        startHour: row.startHour || '',
+        endDate: row.endDate || '',
+        endHour: row.endHour || '',
+        rate: row.rate || '0'
+      }));
+      setOutput(transformedRows);
     } catch (error) {
       console.error(error);
     }

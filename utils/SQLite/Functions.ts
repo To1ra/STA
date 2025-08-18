@@ -5,11 +5,11 @@ import {
   roundTotalHoursInArray,
   combineDateAndTime,
 } from "../TestFunctions";
-import { SQLiteAnyDatabase } from "expo-sqlite/build/NativeSession";
+import { SQLiteDatabase } from "expo-sqlite";
 import { DynamicObject } from "../types";
 
 const submitData = (
-  db: SQLiteAnyDatabase,
+  db: SQLiteDatabase,
   dataRef: React.RefObject<DynamicObject>
 ) => {
   try {
@@ -28,7 +28,7 @@ const submitData = (
   }
 };
 
-const submitShift = async (data: DynamicObject, db: SQLiteAnyDatabase) => {
+const submitShift = async (data: DynamicObject, db: SQLiteDatabase) => {
   try {
     if (!(data["dateStart"] && data["startTime"] && data["endTime"])) {
       return { error: "Missing required date/time fields" };
@@ -240,7 +240,7 @@ const createTimeObj = async (
   }
 };
 
-const getTaarifArr = async (db: SQLiteAnyDatabase, dayOfTheWeek: number) => {
+const getTaarifArr = async (db: SQLiteDatabase, dayOfTheWeek: number) => {
   try {
     const data = await db.getAllAsync(
       `SELECT * 
@@ -248,10 +248,10 @@ FROM WAGE_RATES
 WHERE ${dayOfTheWeek} BETWEEN startDate AND endDate
 ORDER BY startDate ASC, startHour ASC;`
     );
-    return data;
+    return data as any[];
   } catch (err) {
     console.log(err);
-    return err;
+    return [];
   }
 };
 
@@ -270,19 +270,20 @@ const submitDataSecureStore = async (data: DynamicObject) => {
   console.log("✅ Done saving all fields");
 };
 
-const UpdateDataSQLite = async (data: DynamicObject, db: SQLiteAnyDatabase) => {
+const UpdateDataSQLite = async (data: DynamicObject, db: SQLiteDatabase) => {
   try {
-    if (!data)
+    if (data["id"]) {
       await db.execAsync(
         "DELETE FROM WAGE_RATES WHERE id =" + data["id"] + ";"
       );
+    }
     await submitDataSQLite(data, db);
   } catch (err) {
     console.log(err);
   }
 };
 
-const submitDataSQLite = async (data: DynamicObject, db: SQLiteAnyDatabase) => {
+const submitDataSQLite = async (data: DynamicObject, db: SQLiteDatabase) => {
   try {
     if (data.edit) {
       console.log("edit for" + data);
@@ -326,7 +327,7 @@ const submitDataSQLite = async (data: DynamicObject, db: SQLiteAnyDatabase) => {
 const devideIntervals = async () => {};
 
 //SQL INSERTS
-const create_Table_ALLSHIFTS = async (db: SQLiteAnyDatabase) => {
+const create_Table_ALLSHIFTS = async (db: SQLiteDatabase) => {
   try {
     const sqlString = `DROP TABLE IF EXISTS ALL_SHIFTS;
 
@@ -353,7 +354,7 @@ CREATE TABLE ALL_SHIFTS (
   }
 };
 
-const create_Table_WAGETATES = async (db: SQLiteAnyDatabase) => {
+const create_Table_WAGETATES = async (db: SQLiteDatabase) => {
   const sqlString = `DROP TABLE IF EXISTS WAGE_RATES;
 
 CREATE TABLE WAGE_RATES (

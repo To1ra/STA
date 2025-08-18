@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View, Suspense } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Layout, Text, Spinner } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 import { months, days } from "../../constans/Constans";
@@ -38,7 +38,15 @@ const Shift: React.FC<ShiftProps> = ({ data, del }) => {
       onPress={() =>
         router.push({
           pathname: "(view-stuff)/ShowShift",
-          params: data,
+          params: {
+            id: data.id,
+            yearDate: data.yearDate,
+            monthDate: data.monthDate,
+            dayDate: data.dayDate,
+            startTime: data.startTime,
+            endTime: data.endTime,
+            totalHours: data.totalHours
+          } as any,
         })
       }
     >
@@ -92,7 +100,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     marginHorizontal: 10,
     marginVertical: 5,
-    marginBottom: "12",
+    marginBottom: 12,
   },
   dateSection: {
     alignItems: "center",
@@ -105,8 +113,8 @@ const styles = StyleSheet.create({
   middleSection: {
     paddingHorizontal: 10,
     marginLeft: 25,
-    borderLeftWidth: "2",
-    borderRightWidth: "2",
+    borderLeftWidth: 2,
+    borderRightWidth: 2,
     borderColor: "white",
   },
 

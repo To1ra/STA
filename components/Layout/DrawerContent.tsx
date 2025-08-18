@@ -44,7 +44,7 @@ const DrawerContent: React.FC<DrawerContentProps> = (props) => {
             label="List "
             onPress={() => router.push("/ListWageRate")}
           />
-          <DrawerItem label="check3" />
+          <DrawerItem label="check3" onPress={() => {}} />
         </DrawerGroup>
       </View>
     </DrawerContentScrollView>

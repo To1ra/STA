@@ -27,9 +27,9 @@ const BasicSalary: React.FC = () => {
     const res2 = await SecureStore.getItemAsync("bus");
     const res3 = await SecureStore.getItemAsync("breakTime");
 
-    setHW(res1);
-    setBus(res2);
-    setBreakTime(res3);
+    setHW(res1 || "0");
+    setBus(res2 || "0");
+    setBreakTime(res3 || "0");
   }
 
   const [HW, setHW] = useState("0");

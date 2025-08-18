@@ -38,30 +38,41 @@ const Inner: React.FC<InnerProps> = ({ init, id }) => {
       const res2 = await SecureStore.getItemAsync("first");
       const res3 = await SecureStore.getItemAsync("last");
 
-      submitGeneral(res1.toString(), "extraHoursCountFrom", setMoreHours);
-      submitGeneral(res2.toString(), "firstRate", setFirst);
-      submitGeneral(res3.toString(), "lastRate", setLast);
+      submitGeneral(
+        (res1 || "0").toString(),
+        "extraHoursCountFrom",
+        setMoreHours
+      );
+      submitGeneral((res2 || "0").toString(), "firstRate", setFirst);
+      submitGeneral((res3 || "0").toString(), "lastRate", setLast);
     } catch (err) {
       console.log(err);
     }
   }
 
   async function getInitTable() {
-    //from SQL
-    const rows = await db.getAllAsync(
-      `SELECT extraHoursCountFrom, firstRate, lastRate FROM ${init} WHERE id = ${id}`
-    );
+    try {
+      //from SQL
+      if (!init || !id) return;
 
-    if (rows.length > 0) {
-      const { extraHoursCountFrom, firstRate, lastRate } = rows[0];
-
-      submitGeneral(
-        extraHoursCountFrom?.toString(),
-        "extraHoursCountFrom",
-        setMoreHours
+      const rows = await db.getAllAsync(
+        `SELECT extraHoursCountFrom, firstRate, lastRate FROM ${init} WHERE id = ${id}`
       );
-      submitGeneral(firstRate?.toString(), "firstRate", setFirst);
-      submitGeneral(lastRate?.toString(), "lastRate", setLast);
+
+      if (rows.length > 0) {
+        const row = rows[0] as any;
+        const { extraHoursCountFrom, firstRate, lastRate } = row;
+
+        submitGeneral(
+          extraHoursCountFrom?.toString() || "0",
+          "extraHoursCountFrom",
+          setMoreHours
+        );
+        submitGeneral(firstRate?.toString() || "0", "firstRate", setFirst);
+        submitGeneral(lastRate?.toString() || "0", "lastRate", setLast);
+      }
+    } catch (err) {
+      console.log("Error in getInitTable:", err);
     }
   }
 

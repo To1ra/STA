@@ -3,11 +3,17 @@
     "target": "ES2022",
     "module": "ES2022",
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "lib": ["ES2022", "dom"],
-    "jsx": "react-jsx" // or "preserve" depending on your setup
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
+    "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   },
   "include": [
     "app/**/*",
@@ -15,5 +21,6 @@
     "Context/**/*",
     "constans",
     "utils/**/*"
-  ]
+  ],
+  "extends": "expo/tsconfig.base"
 }

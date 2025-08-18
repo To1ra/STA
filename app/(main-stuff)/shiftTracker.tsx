@@ -36,7 +36,7 @@ const shiftTracker: React.FC = () => {
     try {
       let temp = currentM;
       let row = 0;
-      const displayJSX = [];
+      const displayJSX: React.ReactElement[] = [];
       const startingYear = Number(y) - 1;
       const endYear = Number(y) + 1;
       for (let index = startingYear; index <= endYear; index++) {
@@ -74,10 +74,11 @@ const shiftTracker: React.FC = () => {
           temp++;
           row++;
         }
-        return displayJSX;
       }
+      return displayJSX;
     } catch (err) {
       console.log(err);
+      return [];
     }
   };
 
@@ -105,7 +106,7 @@ const shiftTracker: React.FC = () => {
 
   const display = () => {
     if (Number(y) % 100 === 0) return m + " " + y;
-    return m + " " + y[2] + y[3];
+    return m + " " + y.slice(-2);
   };
 
   return (
@@ -141,7 +142,7 @@ const shiftTracker: React.FC = () => {
             <View style={styles.modalBackdrop}>
               <TouchableWithoutFeedback>
                 <View style={styles.model}>
-                  <Drawer onSelect={() => {}}>{displayDrawerItems()}</Drawer>
+                  <Drawer onSelect={() => {}}>{displayDrawerItems() as any}</Drawer>
                 </View>
               </TouchableWithoutFeedback>
             </View>
