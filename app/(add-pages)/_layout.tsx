@@ -1,8 +1,6 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Slot, Stack, useRouter } from "expo-router";
-import * as eva from "@eva-design/eva";
-import { ApplicationProvider, Layout } from "@ui-kitten/components";
 import { titleParser } from "../../constans/Constans";
 
 const OutsideLayout: React.FC = () => {
@@ -15,7 +13,6 @@ const OutsideLayout: React.FC = () => {
   };
 
   return (
-    <ApplicationProvider {...eva} theme={eva.light}>
       <Stack
         initialRouteName="ListWageRate"
         screenOptions={({ route, navigation }) => ({
@@ -37,7 +34,6 @@ const OutsideLayout: React.FC = () => {
       >
         <Stack.Screen name="ListWageRate" />
       </Stack>
-    </ApplicationProvider>
   );
 };
 

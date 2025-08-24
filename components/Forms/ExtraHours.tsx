@@ -3,7 +3,7 @@ import Container from "./Container";
 import { useState, useEffect } from "react";
 import { useSubmit } from "../../Context/FormSubmitContext";
 import * as SecureStore from "expo-secure-store";
-import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
+import { useSQLiteContext } from "expo-sqlite";
 import React from "react";
 
 interface ExtraHoursProps {
@@ -11,20 +11,16 @@ interface ExtraHoursProps {
   id?: string | number;
 }
 
-const ExtraHours: React.FC<ExtraHoursProps> = ({ init, id }) => {
-  return (
-    <SQLiteProvider databaseName="myDataBase">
-      <Inner init={init} id={id} />
-    </SQLiteProvider>
-  );
-};
+const ExtraHours: React.FC<ExtraHoursProps> = React.memo(({ init, id }) => {
+  return <Inner init={init} id={id} />;
+});
 
 interface InnerProps {
   init?: string;
   id?: string | number;
 }
 
-const Inner: React.FC<InnerProps> = ({ init, id }) => {
+const Inner: React.FC<InnerProps> = React.memo(({ init, id }) => {
   const submitGeneral = useSubmit();
   const db = useSQLiteContext();
 
@@ -133,7 +129,7 @@ const Inner: React.FC<InnerProps> = ({ init, id }) => {
       </View>
     </View>
   );
-};
+});
 
 export default ExtraHours;
 

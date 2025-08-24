@@ -9,14 +9,12 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@eva-design/eva": "^2.2.0",
     "@expo-google-fonts/poppins": "^0.4.0",
     "@expo/metro-runtime": "~5.0.4",
     "@expo/vector-icons": "^14.1.0",
     "@react-native-community/datetimepicker": "8.4.1",
     "@react-navigation/drawer": "^7.3.9",
-    "@ui-kitten/components": "^5.3.1",
-    "expo": "53.0.13",
+    "expo": "^53.0.13",
     "expo-app-loading": "^1.1.2",
     "expo-constants": "~17.1.6",
     "expo-font": "~13.3.1",
@@ -47,7 +45,6 @@
     "@types/node": "^24.0.12",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
-    "@ui-kitten/metro-config": "^5.3.1",
     "source-map-loader": "^5.0.0",
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.3"

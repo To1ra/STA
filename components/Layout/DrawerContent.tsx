@@ -14,7 +14,7 @@ interface DrawerContentProps {
   [key: string]: any;
 }
 
-const DrawerContent: React.FC<DrawerContentProps> = (props) => {
+const DrawerContent: React.FC<DrawerContentProps> = React.memo((props) => {
   const router = useRouter();
   return (
     <DrawerContentScrollView {...props}>
@@ -49,7 +49,7 @@ const DrawerContent: React.FC<DrawerContentProps> = (props) => {
       </View>
     </DrawerContentScrollView>
   );
-};
+});
 
 export default DrawerContent;
 

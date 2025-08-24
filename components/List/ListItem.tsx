@@ -18,7 +18,7 @@ interface ListItemProps {
   editRoute: string;
 }
 
-const ListItem: React.FC<ListItemProps> = ({ data, editRoute }) => {
+const ListItem: React.FC<ListItemProps> = React.memo(({ data, editRoute }) => {
   const router = useRouter();
 
   const editItem = () => {
@@ -44,7 +44,7 @@ const ListItem: React.FC<ListItemProps> = ({ data, editRoute }) => {
       <Button title="edit" onPress={() => editItem()} />
     </View>
   );
-};
+});
 
 export default ListItem;
 

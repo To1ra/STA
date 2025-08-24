@@ -1,15 +1,14 @@
-import React, { Suspense, useState } from "react";
+import React, {  useState } from "react";
 import {
   StyleSheet,
   View,
+  Text,
   ScrollView,
   TouchableOpacity,
   Modal,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Layout, Text, Spinner, Drawer } from "@ui-kitten/components";
 import DrawerItem from "../../components/Drawer/DrawerItem";
-
 import Content from "../../components/ShiftTracker/Content";
 import { SQLiteProvider } from "expo-sqlite";
 import { months } from "../../constans/Constans";
@@ -21,97 +20,85 @@ const currentM = new Date().getMonth();
 const currentY = new Date().getFullYear();
 
 const shiftTracker: React.FC = () => {
-  const [num, setNum] = useState(currentM);
-  const [m, setMonth] = useState(months[currentM]);
-  const [y, setYear] = useState("" + currentY);
+  const [m, setMonth] = useState(currentM);
+  const [y, setYear] = useState(currentY);
   const [modalVisible, setModalVisible] = useState(false);
 
   const drawerOnPress = (date: string) => {
-    setMonth(date.split(" ")[0]);
-    setYear(date.split(" ")[1]);
-    setModalVisible(false);
+    // setMonth(date.split(" ")[0]);
+    // setYear(date.split(" ")[1]);
+    // setModalVisible(false);
   };
 
-  const displayDrawerItems = (): React.ReactElement[] => {
-    try {
-      let temp = currentM;
-      let row = 0;
-      const displayJSX: React.ReactElement[] = [];
-      const startingYear = Number(y) - 1;
-      const endYear = Number(y) + 1;
-      for (let index = startingYear; index <= endYear; index++) {
-        for (let i = 0; i < 12; i++) {
-          const title = months[temp] + " " + index;
-          if (temp === 11) {
-            displayJSX.push(
-              <DrawerItem
-                key={row}
-                label={title}
-                onPress={() => drawerOnPress(title)}
-              />
-            );
-            temp = 0;
-            break;
-          } else if (temp === currentM + 1 && index === endYear) break;
-          else if (temp === currentM && index === Number(y)) {
-            displayJSX.push(
-              <DrawerItem
-                key={row}
-                label={title}
-                onPress={() => drawerOnPress(title)}
-                accessoryRight={<Ionicons size={15} name="checkmark-outline" />}
-              />
-            );
-          } else
-            displayJSX.push(
-              <DrawerItem
-                key={row}
-                label={title}
-                onPress={() => drawerOnPress(title)}
-              />
-            );
-
-          temp++;
-          row++;
-        }
-      }
-      return displayJSX;
-    } catch (err) {
-      console.log(err);
-      return [];
-    }
-  };
+  // const displayDrawerItems = (): React.ReactElement[] => {
+  //   try {
+  //     const startingYear = Number(y) - 1;
+  //     const endYear = Number(y) + 1;
+      
+  //     // Create a flat array of all month-year combinations
+  //     const monthYearCombinations = [];
+      
+  //     for (let year = startingYear; year <= endYear; year++) {
+  //       for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
+  //         const title = months[monthIndex] + " " + year;
+          
+  //         // Stop at current month + 1 for the end year
+  //         if (year === endYear && monthIndex > currentM) break;
+          
+  //         monthYearCombinations.push({
+  //           title,
+  //           monthIndex,
+  //           year,
+  //           isCurrentSelection: monthIndex === currentM && year === Number(y)
+  //         });
+  //       }
+  //     }
+      
+  //     // Map the flat array to JSX elements
+  //     return monthYearCombinations.map((item, index) => (
+  //       <DrawerItem
+  //         key={index}
+  //         label={item.title}
+  //         onPress={() => drawerOnPress(item.title)}
+  //         accessoryRight={
+  //           item.isCurrentSelection ? (
+  //             <Ionicons size={15} name="checkmark-outline" />
+  //           ) : undefined
+  //         }
+  //       />
+  //     ));
+      
+  //   } catch (err) {
+  //     console.log(err);
+  //     return [];
+  //   }
+  // };
 
   const nextMonth = () => {
-    if (num === 11) {
-      setNum(0);
-      setMonth(months[0]);
-      setYear(String(Number(y) + 1));
+    if (m == 11) {
+      setMonth(0);
+      setYear(y + 1);
     } else {
-      setNum(num + 1);
-      setMonth(months[num + 1]);
+      setMonth(m + 1);
     }
   };
 
   const prevMonth = () => {
-    if (num === 0) {
-      setNum(11);
-      setMonth(months[11]);
-      setYear(String(Number(y) - 1));
+    if (m === 0) {
+      setMonth(11);
+      setYear(Number(y) - 1);
     } else {
-      setNum(num - 1);
-      setMonth(months[num - 1]);
+      setMonth(m - 1);
     }
   };
 
   const display = () => {
-    if (Number(y) % 100 === 0) return m + " " + y;
-    return m + " " + y.slice(-2);
+    // if (Number(y) % 100 === 0) return m + " " + y;
+    // return m + " " + y.slice(-2);
   };
 
   return (
-    <Layout style={{ backgroundColor: "#161616", height: "100%" }}>
-      <Suspense fallback={<Spinner size="giant" />}>
+    <View style={{ backgroundColor: "#161616", height: "100%" }}>
         <Spacer />
         <NavigationBar
           forward={nextMonth}
@@ -123,17 +110,16 @@ const shiftTracker: React.FC = () => {
                 setModalVisible(true);
               }}
             >
-              <Ionicons
+              {/* <Ionicons
                 name="caret-down-outline"
                 size={25}
                 style={{ color: "white", marginRight: 8 }}
               />
-              <Text style={{ color: "white", fontSize: 25 }}>{display()}</Text>
+              <Text style={{ color: "white", fontSize: 25 }}>{display()}</Text> */}
             </TouchableOpacity>
           }
         />
-
-        <Modal
+     {/* <Modal
           visible={modalVisible}
           transparent={true}
           onRequestClose={() => setModalVisible(false)}
@@ -142,19 +128,19 @@ const shiftTracker: React.FC = () => {
             <View style={styles.modalBackdrop}>
               <TouchableWithoutFeedback>
                 <View style={styles.model}>
-                  <Drawer onSelect={() => {}}>{displayDrawerItems() as any}</Drawer>
+                  <ScrollView showsVerticalScrollIndicator={false}>
+                    {displayDrawerItems()}
+                  </ScrollView>
                 </View>
               </TouchableWithoutFeedback>
             </View>
           </TouchableWithoutFeedback>
-        </Modal>
-
+        </Modal> */}
         <Spacer />
-        <SQLiteProvider databaseName="myDataBase">
-          <Content month={months.indexOf(m)} year={Number(y)} />
-        </SQLiteProvider>
-      </Suspense>
-    </Layout>
+  <Content  month={m} year={Number(y)} />
+
+    </View>
+
   );
 };
 

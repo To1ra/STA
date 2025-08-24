@@ -19,7 +19,10 @@ const BasicSalary: React.FC = () => {
   const submitGeneral = useSubmit();
 
   useEffect(() => {
-    getInit();
+    const fetchData = async () => {
+      await getInit();
+    };
+    fetchData();
   }, []);
 
   async function getInit() {
@@ -63,7 +66,6 @@ const BasicSalary: React.FC = () => {
               maxLength={10} //setting limit of input
             />
           </Container>
-          <Spacer />
           <Spacer />
           <Container title="Reduce Break Time">
             <Button onPress={() => setVis(!vis)} title="Wanta fanta?" />

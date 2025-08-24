@@ -11,7 +11,7 @@ interface HeaderProps {
   };
 }
 
-const Header: React.FC<HeaderProps> = ({ title, navigation }) => {
+const Header: React.FC<HeaderProps> = React.memo(({ title, navigation }) => {
   return (
     <View style={styles.header}>
       <View style={styles.topRow}>
@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ title, navigation }) => {
       </View>
     </View>
   );
-};
+});
 
 export default Header;
 

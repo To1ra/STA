@@ -8,7 +8,7 @@ interface ContainerProps {
   style?: ViewStyle;
 }
 
-const Container: React.FC<ContainerProps> = ({ title, children, style }) => {
+const Container: React.FC<ContainerProps> = React.memo(({ title, children, style }) => {
   return (
     <View style={{ justifyContent: "center" }}>
       <Text style={{ textAlign: "right", padding: 10 }}>{title}</Text>
@@ -18,7 +18,7 @@ const Container: React.FC<ContainerProps> = ({ title, children, style }) => {
       <Spacer />
     </View>
   );
-};
+});
 
 export default Container;
 

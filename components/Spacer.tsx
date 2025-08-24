@@ -5,7 +5,7 @@ interface SpacerProps {
   space?: number;
 }
 
-const Spacer: React.FC<SpacerProps> = ({ space = 10 }) => {
+const Spacer: React.FC<SpacerProps> = React.memo(({ space = 10 }) => {
   return <View style={{ marginBottom: space }} />;
-};
+});
 export default Spacer;

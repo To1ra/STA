@@ -7,7 +7,7 @@ interface DrawerGroupProps {
   children: ReactNode;
 }
 
-const DrawerGroup: React.FC<DrawerGroupProps> = ({ title, children }) => {
+const DrawerGroup: React.FC<DrawerGroupProps> = React.memo(({ title, children }) => {
   const [vis, setVis] = useState(false);
 
   return (
@@ -18,7 +18,7 @@ const DrawerGroup: React.FC<DrawerGroupProps> = ({ title, children }) => {
       {vis ? <View>{children}</View> : null}
     </View>
   );
-};
+});
 
 export default DrawerGroup;
 

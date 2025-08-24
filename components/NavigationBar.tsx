@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { ReactNode } from "react";
-import { Layout } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 
 interface NavigationBarProps {
@@ -19,7 +18,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
   showLeft = true,
 }) => {
   return (
-    <Layout style={styles.monthBar}>
+    <View style={styles.monthBar}>
       <View style={styles.side}>
         {showLeft ? (
           <Ionicons
@@ -43,7 +42,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
           />
         ) : null}
       </View>
-    </Layout>
+    </View>
   );
 };
 

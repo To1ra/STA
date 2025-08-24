@@ -1,8 +1,6 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import { Stack, useRouter } from "expo-router";
-import * as eva from "@eva-design/eva";
-import { ApplicationProvider, Layout } from "@ui-kitten/components";
 import { titleParser } from "../../constans/Constans";
 import { RefProvider, useSharedRef } from "../../Context/FormContext";
 import { SubmitProvider } from "../../Context/FormSubmitContext";
@@ -15,7 +13,6 @@ const OutsideLayout = () => {
   useEffect(() => {}, []);
 
   return (
-    <ApplicationProvider {...eva} theme={eva.light}>
       <SQLiteProvider databaseName="myDataBase">
         <RefProvider>
           <SubmitProvider>
@@ -23,7 +20,6 @@ const OutsideLayout = () => {
           </SubmitProvider>
         </RefProvider>
       </SQLiteProvider>
-    </ApplicationProvider>
   );
 };
 

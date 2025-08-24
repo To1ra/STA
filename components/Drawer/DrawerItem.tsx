@@ -1,5 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { MenuItem } from "@ui-kitten/components";
+import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import React from "react";
 
 interface DrawerItemProps {
@@ -9,17 +8,43 @@ interface DrawerItemProps {
   key?: string | number;
 }
 
-const DrawerItem: React.FC<DrawerItemProps> = ({ label, onPress, accessoryRight, ...props }) => {
+const DrawerItem: React.FC<DrawerItemProps> = React.memo(({ label, onPress, accessoryRight, ...props }) => {
   return (
-    <MenuItem
-      title={label}
+    <TouchableOpacity
+      style={styles.menuItem}
       onPress={onPress}
-      accessoryRight={accessoryRight}
+      activeOpacity={0.7}
       {...props}
-    />
+    >
+      <Text style={styles.title}>{label}</Text>
+      {accessoryRight && (
+        <View style={styles.accessoryContainer}>
+          {accessoryRight}
+        </View>
+      )}
+    </TouchableOpacity>
   );
-};
+});
 
 export default DrawerItem;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  menuItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    minHeight: 48,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#E4E9F2",
+  },
+  title: {
+    fontSize: 16,
+    color: "#222B45",
+    flex: 1,
+  },
+  accessoryContainer: {
+    marginLeft: 8,
+  },
+});

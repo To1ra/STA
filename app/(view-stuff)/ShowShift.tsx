@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Spinner } from "@ui-kitten/components";
 import React, { useState, Suspense, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
 import NavigationBar from "../../components/NavigationBar";
@@ -29,35 +28,35 @@ const ShowShift: React.FC = () => {
     navUpdate();
   }, []);
 
-  const navUpdate = async () => {
-    try {
-      const db = await SQLite.openDatabaseAsync("myDataBase");
+  const navUpdate = async () => { //fix this when relevant
+    // try {
+    //   const db = await SQLite.openDatabaseAsync("myDataBase");
 
-      const temp1 = await db.getAllAsync(
-        `SELECT COUNT (*) FROM ALL_SHIFTS WHERE monthDate=${data["monthDate"]} AND yearDate=${data["yearDate"]} AND dayDate>=${data["dayDate"]}`
-      );
-      const temp2 = await db.getAllAsync(
-        `SELECT COUNT (*) FROM ALL_SHIFTS WHERE monthDate=${data["monthDate"]} AND yearDate=${data["yearDate"]}`
-      );
-      const res1 = (temp1[0] as any)["COUNT (*)"] as number;
-      const res2 = (temp2[0] as any)["COUNT (*)"] as number;
-      if (res1 == 1) setshowLeft(false);
-      if (res2 == res1) setShowRight(false);
-    } catch (err) {
-      console.log("Error in navUpdate:", err);
-    }
+    //   const temp1 = await db.getAllAsync(
+    //     `SELECT COUNT (*) FROM ALL_SHIFTS WHERE monthDate=${data["monthDate"]} AND yearDate=${data["yearDate"]} AND dayDate>=${data["dayDate"]}`
+    //   );
+    //   const temp2 = await db.getAllAsync(
+    //     `SELECT COUNT (*) FROM ALL_SHIFTS WHERE monthDate=${data["monthDate"]} AND yearDate=${data["yearDate"]}`
+    //   );
+    //   const res1 = (temp1[0] as any)["COUNT (*)"] as number;
+    //   const res2 = (temp2[0] as any)["COUNT (*)"] as number;
+    //   if (res1 == 1) setshowLeft(false);
+    //   if (res2 == res1) setShowRight(false);
+    // } catch (err) {
+    //   console.log("Error in navUpdate:", err);
+    // }
   };
 
   const nextDate = () => {
-    const newDate = new Date(date);
-    newDate.setDate(date.getDate() + 1);
-    setDate(newDate);
+    // const newDate = new Date(date);
+    // newDate.setDate(date.getDate() + 1);
+    // setDate(newDate);
   };
   
   const prevDate = () => {
-    const newDate = new Date(date);
-    newDate.setDate(date.getDate() - 1);
-    setDate(newDate);
+    // const newDate = new Date(date);
+    // newDate.setDate(date.getDate() - 1);
+    // setDate(newDate);
   };
 
   const showTime = () => {

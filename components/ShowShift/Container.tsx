@@ -1,6 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { ReactNode } from "react";
-import { Layout, Button } from "@ui-kitten/components";
 import { Ionicons } from "@expo/vector-icons";
 
 interface ContainerProps {
@@ -9,13 +8,13 @@ interface ContainerProps {
   data?: ReactNode;
 }
 
-const Container: React.FC<ContainerProps> = ({
+const Container: React.FC<ContainerProps> = React.memo(({
   title = "hola",
   icon = "american-football-outline",
   data = <></>,
 }) => {
   return (
-    <Layout
+    <View
       style={{ paddingHorizontal: "5%", width: "95%", alignSelf: "center" }}
     >
       <View style={styles.div}>
@@ -29,39 +28,44 @@ const Container: React.FC<ContainerProps> = ({
           {icon && <Ionicons name={icon as any} size={15} style={{ marginLeft: 4 }} />}
         </View>
 
-        <Button
-          appearance="outline" // or "ghost" or "filled", depending on your desired look
-          size="small"
+        <TouchableOpacity
           style={styles.editButton}
+          activeOpacity={0.7}
         >
-          {() => <Text style={styles.title}>Edit</Text>}
-        </Button>
+          <Text style={styles.buttonText}>Edit</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.data}>{data}</View>
-    </Layout>
+    </View>
   );
-};
+});
 
 export default Container;
 
 const styles = StyleSheet.create({
   editButton: {
-    height: 24, // match the line height of the text
+    height: 24,
     paddingHorizontal: 6,
     paddingVertical: 0,
-    minWidth: undefined, // prevent extra width from size="small"
     alignSelf: "center",
+    borderWidth: 1,
+    borderColor: "#E4E9F2",
+    borderRadius: 4,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    fontSize: 12,
+    color: "#8F9BB3",
   },
   title: {
     fontSize: 15,
-    lineHeight: 24, // important to match height
+    lineHeight: 24,
   },
-
   data: {
     alignSelf: "center",
   },
-
   element: {
     alignSelf: "center",
     marginLeft: 10,

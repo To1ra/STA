@@ -45,20 +45,19 @@ function combineDateAndTime(d1: Date, d2: Date) {
   const date1 = new Date(d1);
   const date2 = new Date(d2);
 
-  // Extract date parts from d1
-  const year = date1.getFullYear();
-  const month = date1.getMonth(); // 0-based
-  const day = date1.getDate();
-
   // Extract time parts from d2
   const hours = date2.getHours();
   const minutes = date2.getMinutes();
   const seconds = date2.getSeconds();
   const milliseconds = date2.getMilliseconds();
 
-  // Create and return new combined Date
-  return new Date(year, month, day, hours, minutes, seconds, milliseconds);
+  // Create new combined Date in local time zone
+  const combined = new Date(date1);
+  combined.setHours(hours, minutes, seconds, milliseconds);
+
+  return combined;
 }
+
 
 const isEmpty = (obj: Object) => {
   if (typeof obj !== "object" || obj === null) {

@@ -5,7 +5,7 @@ interface UserPicProps {
   style?: ViewStyle;
 }
 
-const UserPic: React.FC<UserPicProps> = ({ style }) => {
+const UserPic: React.FC<UserPicProps> = React.memo(({ style }) => {
   return (
     <View style={style}>
       <Image
@@ -16,7 +16,7 @@ const UserPic: React.FC<UserPicProps> = ({ style }) => {
       ></Image>
     </View>
   );
-};
+});
 
 export default UserPic;
 

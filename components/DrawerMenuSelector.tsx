@@ -17,7 +17,7 @@ interface DrawerMenuSelectorProps {
   setSelected?: ((value: any) => void) | null;
 }
 
-const DrawerMenuSelector: React.FC<DrawerMenuSelectorProps> = ({
+const DrawerMenuSelector: React.FC<DrawerMenuSelectorProps> = React.memo(({
   data,
   selected = null,
   fieldName = null,
@@ -27,10 +27,14 @@ const DrawerMenuSelector: React.FC<DrawerMenuSelectorProps> = ({
   const submitGeneral = useSubmit();
 
   const handleSelect = (item: string) => {
-    if (item.includes("Every")) item = item.split(" ")[1];
+    let parsed = item;
+    if (parsed.includes("Every")) parsed = parsed.split(" ")[1];
 
-    const temp = days.indexOf(item).toString();
+    const tempIndex = days.indexOf(parsed); // number index
+    const temp = tempIndex.toString();
+
     setVisible(false);
+
     if (fieldName && setSelected) {
       submitGeneral(temp, fieldName, setSelected);
     }
@@ -42,36 +46,42 @@ const DrawerMenuSelector: React.FC<DrawerMenuSelectorProps> = ({
         style={styles.dropdown}
         onPress={() => setVisible(true)}
       >
-        <Text style={styles.dropdownText}>{days[selected || 0] || "Select"}</Text>
+        <Text style={styles.dropdownText}>{selected !== null ? days[selected] : "Select"}</Text>
       </TouchableOpacity>
 
       <Modal visible={visible} transparent animationType="fade">
         <TouchableOpacity
           style={styles.backdrop}
           onPress={() => setVisible(false)}
+          activeOpacity={1}
         >
           <View style={styles.modal}>
             <FlatList
               data={data}
               keyExtractor={(item) => item}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={() => handleSelect(item)}
-                >
-                  <Text style={styles.checkmark}>
-                    {selected !== null && selected.toString() === item ? "✓" : ""}
-                  </Text>
-                  <Text style={styles.itemText}>{item}</Text>
-                </TouchableOpacity>
-              )}
+              renderItem={({ item }) => {
+                let parsed = item.includes("Every") ? item.split(" ")[1] : item;
+                const itemIndex = days.indexOf(parsed);
+
+                return (
+                  <TouchableOpacity
+                    style={styles.item}
+                    onPress={() => handleSelect(item)}
+                  >
+                    <Text style={styles.checkmark}>
+                      {selected === itemIndex ? "✓" : ""}
+                    </Text>
+                    <Text style={styles.itemText}>{item}</Text>
+                  </TouchableOpacity>
+                );
+              }}
             />
           </View>
         </TouchableOpacity>
       </Modal>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   dropdown: {

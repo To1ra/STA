@@ -1,6 +1,5 @@
 import { StyleSheet, View, FlatList } from "react-native";
 import Shift from "./Shift";
-import { Divider, Layout, Text } from "@ui-kitten/components";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import React from "react";
@@ -14,7 +13,7 @@ interface ContentProps {
 const Content: React.FC<ContentProps> = ({ month, year }) => {
   const [output, setOutput] = useState<ActualShiftData[]>([]);
   const db = useSQLiteContext();
-
+  console.log(db);
   const del = async (id: string | number) => {
     await db.execAsync("DELETE FROM ALL_SHIFTS WHERE id =" + id + ";");
     console.log("hey");
@@ -46,6 +45,7 @@ const Content: React.FC<ContentProps> = ({ month, year }) => {
     }
   };
   useEffect(() => {
+    console.log("new render");
     myFetch();
   }, [month, year]);
   return (

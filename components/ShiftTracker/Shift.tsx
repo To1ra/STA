@@ -1,5 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { Layout, Text, Spinner } from "@ui-kitten/components";
+import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { months, days } from "../../constans/Constans";
 import AreYouSure from "../AreYouSure";
@@ -22,7 +21,7 @@ interface ShiftProps {
   del: (id: string | number) => void;
 }
 
-const Shift: React.FC<ShiftProps> = ({ data, del }) => {
+const Shift: React.FC<ShiftProps> = React.memo(({ data, del }) => {
   const [vis, setVis] = useState(false);
   const router = useRouter();
 
@@ -50,7 +49,7 @@ const Shift: React.FC<ShiftProps> = ({ data, del }) => {
         })
       }
     >
-      <Layout style={styles.shift}>
+      <View style={styles.shift}>
         <AreYouSure action={() => del(data["id"])} vis={vis} setVis={setVis} />
 
         <View style={styles.dateSection}>
@@ -83,10 +82,10 @@ const Shift: React.FC<ShiftProps> = ({ data, del }) => {
             />
           </View>
         </TouchableOpacity>
-      </Layout>
+      </View>
     </TouchableOpacity>
   );
-};
+});
 
 export default Shift;
 
