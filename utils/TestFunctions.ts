@@ -58,7 +58,6 @@ function combineDateAndTime(d1: Date, d2: Date) {
   return combined;
 }
 
-
 const isEmpty = (obj: Object) => {
   if (typeof obj !== "object" || obj === null) {
     return false;
@@ -68,11 +67,24 @@ const isEmpty = (obj: Object) => {
   return keys.length === 0;
 };
 
-function getHoursDifference(date1: Date, date2: Date) {
+function getHoursDifference(d1: Date, d2: Date) {
   try {
-    const diffMilliseconds = Math.abs(date2.getTime() - date1.getTime());
-    const diffHours = diffMilliseconds / (1000 * 60 * 60);
-    const realDiff = roundTo(diffHours, 2);
+    // Extract hours, minutes, seconds
+    const h1 = d1.getHours(),
+      m1 = d1.getMinutes(),
+      s1 = d1.getSeconds();
+    const h2 = d2.getHours(),
+      m2 = d2.getMinutes(),
+      s2 = d2.getSeconds();
+
+    // Convert to total seconds
+    const total1 = h1 * 3600 + m1 * 60 + s1;
+    const total2 = h2 * 3600 + m2 * 60 + s2;
+
+    // Absolute difference in hours
+    const diffInHours = Math.abs(total1 - total2) / 3600;
+
+    const realDiff = roundTo(diffInHours, 2);
     return realDiff;
   } catch (err) {
     console.log(err);

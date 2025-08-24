@@ -8,7 +8,7 @@ import {
 import { SQLiteDatabase } from "expo-sqlite";
 import { DynamicObject } from "../types";
 
-const submitData = async ( 
+const submitData = async (
   db: SQLiteDatabase,
   dataRef: React.RefObject<DynamicObject> //you get all the values needed out of the ref
 ) => {
@@ -18,20 +18,16 @@ const submitData = async (
     const data = dataRef.current;
 
     if (data["Table"]) {
-
-      if (data["edit"]) { // first remove the row and then insert new one with the new values.
+      if (data["edit"]) {
+        // first remove the row and then insert new one with the new values.
         if (data["id"]) {
           await db.execAsync(
             "DELETE FROM WAGE_RATES WHERE id =" + data["id"] + ";"
           );
         }
-        await submitDataSQLite(data, db); 
-      }
-
-      else
-       submitDataSQLite(data, db);
-    } 
-    else {
+        await submitDataSQLite(data, db);
+      } else submitDataSQLite(data, db);
+    } else {
       submitDataSecureStore(data);
     }
     dataRef.current = {};
@@ -50,7 +46,7 @@ const submitShift = async (data: DynamicObject, db: SQLiteDatabase) => {
 
     console.log(`dateobj ${dateObj}`);
 
-    const startTime = combineDateAndTime(dateObj, data["startTime"]); //I have to store time as a date so I use that function 
+    const startTime = combineDateAndTime(dateObj, data["startTime"]); //I have to store time as a date so I use that function
     const endTime = combineDateAndTime(dateObj, data["endTime"]);
 
     const temp = await SecureStore.getItemAsync("HW");
@@ -58,9 +54,9 @@ const submitShift = async (data: DynamicObject, db: SQLiteDatabase) => {
     const firstRate = await SecureStore.getItemAsync("first");
     const lastRate = await SecureStore.getItemAsync("last");
 
-    if (!(temp && extraHoursCountFrom && firstRate && lastRate)) 
+    if (!(temp && extraHoursCountFrom && firstRate && lastRate))
       return { error: "Missing secure store values" };
-    
+
     const HourlyWage: number = parseFloat(temp);
     const extraHourArr: Array<number> = [
       parseFloat(extraHoursCountFrom),
@@ -83,6 +79,7 @@ const submitShift = async (data: DynamicObject, db: SQLiteDatabase) => {
       endTime,
       tarrifArr,
       extraHourArr,
+      totalHoursWorked,
       data["rate"]
     );
 
@@ -150,7 +147,6 @@ const calcMoneyFromTimeArr = (
   return Number(sum.toFixed(1)); // rounded result
 };
 
-
 const calcHours = (
   diff: number,
   totalHours: number,
@@ -177,76 +173,34 @@ const createTimeObj = async (
   startTime: Date,
   endTime: Date,
   tarrifArr: Array<{
-    startDate: Date;
-    endDate: Date;
-    startHour: any;
-    endHour: any;
-    extraHoursCountFrom: any;
+    endDate: number;
+    startDate: number;
+    startHour: Date;
+    endHour: Date;
+    extraHoursCountFrom: number;
     firstRate: number;
     rate: number;
     lastRate: number;
   }>,
   extraHourArr: Array<number>,
+  totalHours: number,
   rate: number
 ) => {
-  
   try {
     const arr: Array<{ totalHours: number; rate: number }> = [];
     let current = startTime; //keeps track of the time when looping the array
-
     let totalCount = 0; //counts the hours that has passed (trigering the extra hours)
     let count = 0; //counts the hours that has passed (trigering the extra hours)
     const dayOfTheWeek = startTime.getDay();
 
-    tarrifArr.forEach((obj) => {
-      const forStartDate = dayOfTheWeek - Number(obj["startDate"]);
-      const forEndDate = Number(obj["endDate"]) - dayOfTheWeek;
+    if (tarrifArr.length == 0) {
+      //if there`s no taarif involved
+      arr.push(...calcHours(totalHours, totalHours, extraHourArr, rate));
+    }
 
-      const Tstart = getTodayWithTime(obj["startHour"], forStartDate, current);
-      const Tend = getTodayWithTime(obj["endHour"], forEndDate, current);
-
-      console.log(
-        `This is the start of the Taarif ${Tstart}, and that is the end ${Tend}`
-      );
-
-      const T_ExtraHoursArr = [
-        obj["extraHoursCountFrom"],
-        obj["firstRate"],
-        obj["lastRate"],
-      ];
-
-      let endingPoint = Tend;
-      let startingPoint = Tstart;
-      let flag = false;
-
-      //if the special rate does not start right away
-      if (Tstart.getTime() > current.getTime()) flag = true;
-
-      if (Tend.getTime() > endTime.getTime()) endingPoint = endTime;
-      else endingPoint = Tend; //if we have a taarif that excceeds the shift time
-
-      if (Tstart.getTime() < current.getTime()) startingPoint = current;
-      else startingPoint = Tstart;
-
-      if (flag) {
-        console.log(current, Tstart, "flag is true");
-        count = getHoursDifference(current, Tstart);
-        totalCount += count;
-        arr.push(...calcHours(count, totalCount, extraHourArr, rate));
-        current = Tstart;
-        flag = false;
-      }
-      count = getHoursDifference(startingPoint, endingPoint);
-      totalCount += count;
-      arr.push(...calcHours(count, totalCount, T_ExtraHoursArr, obj["rate"]));
-      current = endingPoint;
-    });
-
-    if (current != endTime)
-      arr.push(...calcHours(count, totalCount, extraHourArr, rate));
+    tarrifArr.forEach((obj) => {});
 
     roundTotalHoursInArray(arr);
-
     return arr;
   } catch (err) {
     console.log(err);
@@ -284,12 +238,10 @@ const submitDataSecureStore = async (data: DynamicObject) => {
   console.log("✅ Done saving all fields");
 };
 
-
 const submitDataSQLite = async (data: DynamicObject, db: SQLiteDatabase) => {
   try {
-    if (data.edit) 
-      console.log("edit for" + data);
-    
+    if (data.edit) console.log("edit for" + data);
+
     const table = data.Table;
 
     delete data.Table;
@@ -297,8 +249,8 @@ const submitDataSQLite = async (data: DynamicObject, db: SQLiteDatabase) => {
 
     if (table == "ALL_SHIFTS") {
       submitShift(data, db);
-    }
-     else { //Later I`ll have more tables so need to make it something else
+    } else {
+      //Later I`ll have more tables so need to make it something else
       const arr = ["starthour", "endhour"];
       const fields = Object.keys(data);
 
