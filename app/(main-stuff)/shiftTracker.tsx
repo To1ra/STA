@@ -138,6 +138,10 @@ const shiftTracker: React.FC = () => {
         </Modal> */}
         <Spacer />
   <Content  month={m} year={Number(y)} />
+  <Spacer />
+  <Spacer />
+  <Spacer />
+
 
     </View>
 

@@ -69,7 +69,7 @@ const isEmpty = (obj: Object) => {
 
 function getHoursDifference(d1: Date, d2: Date) {
   try {
-    const msDiff = Math.abs(d1.getTime() - d2.getTime()); // difference in ms
+    const msDiff = Math.abs(d1.getTime() - d2.getTime() - d1.getMilliseconds() - d2.getMilliseconds()); // difference in ms
     const diffInHours = msDiff / (1000 * 60 * 60);
     return Math.round(diffInHours * 100) / 100; // round to 2 decimals
   } catch (err) {

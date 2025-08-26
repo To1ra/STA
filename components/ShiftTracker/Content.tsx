@@ -13,7 +13,7 @@ interface ContentProps {
 const Content: React.FC<ContentProps> = ({ month, year }) => {
   const [output, setOutput] = useState<ActualShiftData[]>([]);
   const db = useSQLiteContext();
-  console.log(db);
+  
   const del = async (id: string | number) => {
     await db.execAsync("DELETE FROM ALL_SHIFTS WHERE id =" + id + ";");
     console.log("hey");
@@ -35,9 +35,9 @@ const Content: React.FC<ContentProps> = ({ month, year }) => {
         yearDate: row.yearDate || year,
         monthDate: row.monthDate || month,
         dayDate: row.dayDate || 1,
-        startTime: row.startTime || '',
-        endTime: row.endTime || '',
-        totalHours: row.totalHours || 0
+        startTime: row.startTime.toString().split(" ")[4].slice(0,5) || '',
+        endTime: row.endTime.toString().split(" ")[4].slice(0,5) || '',
+        totalHours: row.hoursWorked || 0
       }));
       setOutput(transformedRows);
     } catch (error) {
