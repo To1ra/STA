@@ -7,6 +7,7 @@ import {
 } from "../TestFunctions";
 import { SQLiteDatabase } from "expo-sqlite";
 import { DynamicObject } from "../types";
+import ExtraHours from "../../components/Forms/ExtraHours";
 
 const submitData = async (
   db: SQLiteDatabase,
@@ -83,6 +84,7 @@ const submitShift = async (data: DynamicObject, db: SQLiteDatabase) => {
       data["rate"]
     );
 
+
     if (!timeArr.length) return;
 
     console.log(timeArr);
@@ -90,29 +92,9 @@ const submitShift = async (data: DynamicObject, db: SQLiteDatabase) => {
     const salary = calcMoneyFromTimeArr(timeArr, HourlyWage);
 
     const insertValuesString = `
-  --- Values to be inserted into ALL_SHIFTS ---
-  dayDate: ${dateObj.getDate()}
-  monthDate: ${dateObj.getMonth()}
-  yearDate: ${dateObj.getFullYear()}
-  startTime: ${data["startTime"].toISOString()}
-  endTime: ${data["endTime"].toISOString()}
-  note: ${data["note"]}
-  hoursWorked: ${totalHoursWorked}
-  extraHoursCountFrom: ${extraHoursCountFrom}
-  firstRate: ${firstRate}
-  lastRate: ${lastRate}
-  rate: ${data["rate"]}
-  totalSalary: ${salary}
-  color: ${data["color"]}
-  -------------------------------------------
-`;
-
-    console.log(insertValuesString);
-
-    await db.execAsync(
-      `INSERT INTO ALL_SHIFTS (
+      INSERT INTO ALL_SHIFTS (
     dayDate,monthDate,yearDate,
-    startTime,endTime,note,
+    startTime,endTime,
     hoursWorked,extraHoursCountFrom,firstRate,lastRate,rate,
     totalSalary
   ) VALUES (
@@ -120,15 +102,17 @@ const submitShift = async (data: DynamicObject, db: SQLiteDatabase) => {
     ${dateObj.getMonth()},
     ${dateObj.getFullYear()},
     '${data["startTime"]}',     
-    '${data["endTime"]}',
-    ${data["note"] ? `'${data["note"]}'` : "NULL"},
-    ${totalHoursWorked},
+    '${data["endTime"]}',    ${totalHoursWorked},
     ${extraHoursCountFrom},
     ${firstRate},
     ${lastRate},
     ${data["rate"]},
-    ${salary}  )`
-    );
+    ${salary}  
+)`;
+
+    console.log(insertValuesString);
+
+    await db.execAsync(insertValuesString);
   } catch (err) {
     console.log(err);
     return err;
@@ -147,23 +131,59 @@ const calcMoneyFromTimeArr = (
   return Number(sum.toFixed(1)); // rounded result
 };
 
-const calcHours = (
+interface test {
+  (diff: number, totalHours: number, extraArr: Array<number>, rate: number): {
+    totalHours: number;
+    rate: number;
+  }[];
+  flag?: boolean;
+  lastThreshold?: number;
+}
+
+const calcHours: test = (
   diff: number,
   totalHours: number,
   extraArr: Array<number>,
   rate: number
 ) => {
-  const lst = [];
-  console.log(
-    `This is the current interval ${diff} , and that is the total Hours ${totalHours}`
-  );
-  if (totalHours > extraArr[0]) {
-    if (totalHours == diff) lst.push({ totalHours: extraArr[0], rate }); //first time entering
+  const lst: { totalHours: number; rate: number }[] = [];
 
-    if (diff - extraArr[0] > 2) {
+  console.log(
+    `Length of current interval ${diff} ,
+    total Hours ${totalHours},
+    Extra Hour Count From ${extraArr[0]}
+    first if: ${
+      calcHours.flag ? totalHours - diff - extraArr[0] : "does not go in"
+    }
+    Second if${totalHours > extraArr[0]}
+
+    `
+  );
+
+  if (calcHours.flag) {
+    //other time passing extra Hours
+
+    if (calcHours.lastThreshold) {
+      //Migt happen only in second taarif
+      const completion = 2 - (totalHours - diff - calcHours.lastThreshold); //complete the rest hours of the first extra rate
+      lst.push({ totalHours: completion, rate: extraArr[1] });
+      lst.push({ totalHours: diff - completion, rate: extraArr[2] });
+    } else lst.push({ totalHours: diff, rate: extraArr[2] });
+
+  } else if (totalHours > extraArr[0]) {
+    //first time passing extra Hours
+    calcHours.flag = true;
+
+    if (extraArr[0] - totalHours + diff > 0)
+      lst.push({ totalHours: extraArr[0] - totalHours + diff, rate: rate }); //left over to get to the high rates
+
+    if (totalHours - extraArr[0] > 2) {
       lst.push({ totalHours: 2, rate: extraArr[1] });
-      lst.push({ totalHours: diff - extraArr[0] - 2, rate: extraArr[2] });
-    } else lst.push({ totalHours: diff - extraArr[0], rate: extraArr[1] });
+      lst.push({ totalHours: totalHours - 2 - extraArr[0], rate: extraArr[2] });
+    } else {
+      lst.push({ totalHours: totalHours - extraArr[0], rate: extraArr[1] });
+      calcHours.lastThreshold = extraArr[0];
+    }
   } else lst.push({ totalHours: diff, rate }); //no extra hours
 
   return lst;
@@ -175,8 +195,8 @@ const createTimeObj = async (
   tarrifArr: Array<{
     endDate: number;
     startDate: number;
-    startHour: Date;
-    endHour: Date;
+    startHour: string;
+    endHour: string;
     extraHoursCountFrom: number;
     firstRate: number;
     rate: number;
@@ -189,18 +209,78 @@ const createTimeObj = async (
   try {
     const arr: Array<{ totalHours: number; rate: number }> = [];
     let current = startTime; //keeps track of the time when looping the array
-    let totalCount = 0; //counts the hours that has passed (trigering the extra hours)
-    let count = 0; //counts the hours that has passed (trigering the extra hours)
+    let count = 0; //Hours in each interval
+    let totalCount = 0; //counts every  hours in interval   (<= totalHours)
+
     const dayOfTheWeek = startTime.getDay();
 
-    if (tarrifArr.length == 0) {
+    if (tarrifArr.length == 0)
       //if there`s no taarif involved
       arr.push(...calcHours(totalHours, totalHours, extraHourArr, rate));
+
+    console.log("hello?");
+    tarrifArr.forEach((obj) => {
+      //Dates init
+      let taarifD1 = new Date(current);
+      taarifD1.setDate(taarifD1.getDate() + obj.startDate - dayOfTheWeek);
+      let taarifD2 = new Date(taarifD1);
+      taarifD2.setDate(taarifD2.getDate() + obj.endDate - obj.startDate);
+
+      console.log("hello!");
+
+      if (obj.startDate > 8) {
+        //special taarif configuration
+        taarifD1 = new Date(obj.startDate);
+        taarifD2 = new Date(obj.endDate);
+      }
+
+      //Create corresponding dates
+      const startHour = obj.startHour.split(":");
+      const endHour = obj.endHour.split(":");
+      taarifD1.setHours(Number(startHour[0]));
+      taarifD2.setHours(Number(endHour[0]));
+      taarifD1.setMinutes(Number(startHour[1]));
+      taarifD2.setMinutes(Number(endHour[1]));
+
+      //stop condition
+      if (totalCount == totalHours) return;
+
+      //add before taarif
+      if (current != taarifD1) {
+        count = getHoursDifference(current, taarifD1);
+        totalCount += count;
+        arr.push(...calcHours(count, totalCount, extraHourArr, rate));
+        count = 0;
+      }
+
+      if (taarifD2.getDate() > endTime.getDate()) taarifD2 = endTime;
+
+      //add taarif
+      count = getHoursDifference(taarifD1, taarifD2);
+      totalCount += count;
+      arr.push(
+        ...calcHours(
+          count,
+          totalCount,
+          [obj.extraHoursCountFrom, obj.firstRate, obj.lastRate],
+          obj.rate
+        )
+      );
+      current = taarifD2;
+      count = 0;
+    });
+
+    if (totalCount != 0 && totalCount != totalHours) {
+      //leftover to calculate
+      arr.push(
+        ...calcHours(totalHours - totalCount, totalHours, extraHourArr, rate)
+      );
     }
 
-    tarrifArr.forEach((obj) => {});
-
     roundTotalHoursInArray(arr);
+    calcHours.flag = undefined;
+    calcHours.lastThreshold = undefined;
+
     return arr;
   } catch (err) {
     console.log(err);
@@ -249,32 +329,32 @@ const submitDataSQLite = async (data: DynamicObject, db: SQLiteDatabase) => {
 
     if (table == "ALL_SHIFTS") {
       submitShift(data, db);
-    } else {
-      //Later I`ll have more tables so need to make it something else
-      const arr = ["starthour", "endhour"];
-      const fields = Object.keys(data);
-
-      const values = fields.map((field) => {
-        let val = data[field as keyof typeof data]!;
-        val = val.toString();
-        if (arr.includes(field.toLowerCase())) {
-          if (val.length != 5) {
-            const temp = new Date(val);
-            console.log(temp, val);
-            const h = String(temp.getHours()).padStart(2, "0");
-            const m = String(temp.getMinutes()).padStart(2, "0");
-            console.log(h, m);
-            val = `${h}:${m}`;
-          }
-        }
-        return `'${val}'`; // wrap in quotes to avoid SQL injection issues
-      });
-
-      const sqlString = `INSERT INTO ${table} (${fields.join(
-        ","
-      )}) VALUES (${values.join(",")})`;
-      await db.execAsync(sqlString);
+      return;
     }
+    const arr = ["starthour", "endhour"];
+    const fields = Object.keys(data);
+
+    const values = fields.map((field) => {
+      let val = data[field as keyof typeof data]!;
+      val = val.toString();
+      if (arr.includes(field.toLowerCase())) {
+        if (val.length != 5) {
+          const temp = new Date(val);
+          console.log(temp, val);
+          const h = String(temp.getHours()).padStart(2, "0");
+          const m = String(temp.getMinutes()).padStart(2, "0");
+          console.log(h, m);
+          val = `${h}:${m}`;
+        }
+      }
+      return `'${val}'`; // wrap in quotes to avoid SQL injection issues
+    });
+
+    const sqlString = `INSERT INTO ${table} (${fields.join(
+      ","
+    )}) VALUES (${values.join(",")})`;
+    console.log(sqlString);
+    await db.execAsync(sqlString);
   } catch (err) {
     console.log(err);
   }
@@ -299,6 +379,7 @@ CREATE TABLE ALL_SHIFTS (
     hoursWorked REAL NOT NULL,
     extraHoursCountFrom INTEGER NOT NULL,
     firstRate INTEGER NOT NULL,
+    rate INTEGER NOT NULL,
     lastRate INTEGER NOT NULL,
     totalSalary REAL NOT NULL DEFAULT 0,
     color TEXT NOT NULL DEFAULT 'black'

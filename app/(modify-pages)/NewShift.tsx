@@ -10,7 +10,6 @@ const NewShift: React.FC = () => {
   const [date, setDate] = useState(new Date());
   const [startHour, setStartHour] = useState(new Date());
   const [endHour, setEndHour] = useState(new Date());
-  const [note, setNote] = useState("");
   const submitGeneral = useSubmit();
 
   useEffect(() => {
@@ -53,14 +52,14 @@ const NewShift: React.FC = () => {
           }}
         />
       </Container>
-      <Container title="Notes">
+      {/* <Container title="Notes">
         <TextInput
           value={note}
           style={styles.inp}
           maxLength={100}
           onChangeText={(text) => submitGeneral(text, "note", setNote)}
         />
-      </Container>
+      </Container> */}
     </View>
   );
 };

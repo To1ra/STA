@@ -69,25 +69,11 @@ const isEmpty = (obj: Object) => {
 
 function getHoursDifference(d1: Date, d2: Date) {
   try {
-    // Extract hours, minutes, seconds
-    const h1 = d1.getHours(),
-      m1 = d1.getMinutes(),
-      s1 = d1.getSeconds();
-    const h2 = d2.getHours(),
-      m2 = d2.getMinutes(),
-      s2 = d2.getSeconds();
-
-    // Convert to total seconds
-    const total1 = h1 * 3600 + m1 * 60 + s1;
-    const total2 = h2 * 3600 + m2 * 60 + s2;
-
-    // Absolute difference in hours
-    const diffInHours = Math.abs(total1 - total2) / 3600;
-
-    const realDiff = roundTo(diffInHours, 2);
-    return realDiff;
+    const msDiff = Math.abs(d1.getTime() - d2.getTime()); // difference in ms
+    const diffInHours = msDiff / (1000 * 60 * 60);
+    return Math.round(diffInHours * 100) / 100; // round to 2 decimals
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return 0;
   }
 }

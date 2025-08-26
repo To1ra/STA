@@ -60,12 +60,12 @@ const WageRate: React.FC = () => {
       if (ref.current) {
         submitGeneral(ref.current["name"] || "", "name", setName);
         submitGeneral(
-          days[ref.current["startDate"]] || days[0],
+          days[ref.current["startDate"]] || 0,
           "startDate",
           setStartDate
         );
         submitGeneral(
-          days[ref.current["endDate"]] || days[0],
+          days[ref.current["endDate"]] || 0,
           "endDate",
           setEndDate
         );
