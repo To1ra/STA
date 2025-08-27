@@ -38,7 +38,10 @@ const Content: React.FC<ContentProps> = ({ month, year }) => {
         startTime: row.startTime.toString().split(" ")[4].slice(0,5) || '',
         endTime: row.endTime.toString().split(" ")[4].slice(0,5) || '',
         totalHours: row.hoursWorked || 0,
-        newDay : row.startTime.toString().split(" ")[2] !=  row.endTime.toString().split(" ")[2] ? "*" : ""
+        newDay : row.startTime.toString().split(" ")[2] !=  row.endTime.toString().split(" ")[2] ? "*" : "",
+        allShiftRates: row.allShiftRates || 0,
+        totalSalary: row.totalSalary
+
       }));
       setOutput(transformedRows);
     } catch (error) {

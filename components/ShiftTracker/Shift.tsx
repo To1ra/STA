@@ -35,9 +35,11 @@ const Shift: React.FC<ShiftProps> = React.memo(({ data, del }) => {
             dayDate: data.dayDate,
             startTime: data.startTime,
             endTime: data.endTime,
+            totalSalary: data.totalSalary,
             totalHours: data.totalHours,
             newDay: data.newDay,
-          } as any,
+            allShiftRates: data.allShiftRates
+          } 
         })
       }
     >

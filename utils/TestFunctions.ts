@@ -5,6 +5,7 @@
 //the first building block of our app is the basic shift.
 //the creation function should get: start and end date and time of shift, hourly rate of that shift, transport fees, and optional text.
 //it should create a object or struct that contains all the above data, but also calculated information like: salary for that day, special rates, overtime, overall duration.
+import {ShiftData} from "../utils/types"; 
 
 const getTodayWithTime = (
   timeStr: string,
@@ -111,6 +112,20 @@ const nextDaySelector = (d1: Date, d2: Date) => {
 }
 
 
+function normalizeParams<T>(params: Record<string, string | string[]>): T {
+  const normalized: Record<string, string> = {};
+
+  for (const key in params) {
+    const value = params[key];
+    // If array → join, else keep string
+    normalized[key] = Array.isArray(value) ? value.join(",") : value;
+  }
+
+  return normalized as unknown as T;
+}
+
+
+
 export {
   getTodayWithTime,
   getHoursDifference,
@@ -120,5 +135,6 @@ export {
   roundTotalHoursInArray,
   roundTo,
   combineDateAndTime,
-  nextDaySelector
+  nextDaySelector,
+  normalizeParams
 };

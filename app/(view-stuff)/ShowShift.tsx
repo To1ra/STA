@@ -4,7 +4,8 @@ import { useLocalSearchParams } from "expo-router";
 import NavigationBar from "../../components/NavigationBar";
 import Container from "../../components/ShowShift/Container";
 import Spacer from "../../components/Spacer";
-import * as SQLite from "expo-sqlite";
+import { normalizeParams } from "../../utils/TestFunctions";
+import { ShiftData } from "../../utils/types";
 
 const normalRepresentation = (toNormal: Date): string => {
   const formattedDate = toNormal.toISOString().split("T")[0]; // "2025-06-19"
@@ -14,7 +15,10 @@ const normalRepresentation = (toNormal: Date): string => {
 };
 
 const ShowShift: React.FC = () => {
-  const data = useLocalSearchParams();
+  const dataRaw = useLocalSearchParams();
+  const data = normalizeParams<ShiftData>(dataRaw);
+
+  console.log(typeof data["allShiftRates"]);
   const currentShiftDate = new Date(
     Number(data["yearDate"]),
     Number(data["monthDate"]),
@@ -28,10 +32,10 @@ const ShowShift: React.FC = () => {
     navUpdate();
   }, []);
 
-  const navUpdate = async () => { //fix this when relevant
+  const navUpdate = async () => {
+    //fix this when relevant
     // try {
     //   const db = await SQLite.openDatabaseAsync("myDataBase");
-
     //   const temp1 = await db.getAllAsync(
     //     `SELECT COUNT (*) FROM ALL_SHIFTS WHERE monthDate=${data["monthDate"]} AND yearDate=${data["yearDate"]} AND dayDate>=${data["dayDate"]}`
     //   );
@@ -52,7 +56,7 @@ const ShowShift: React.FC = () => {
     // newDate.setDate(date.getDate() + 1);
     // setDate(newDate);
   };
-  
+
   const prevDate = () => {
     // const newDate = new Date(date);
     // newDate.setDate(date.getDate() - 1);
@@ -95,11 +99,59 @@ const ShowShift: React.FC = () => {
         showLeft={showLeft}
       />
       <Spacer space={25} />
-      <Container title="" icon="" data={showTime()} />
+      <Container title="Shift Time" icon="" data={<View style={styles.row}>
+  <View style={styles.cell}>
+    <Text style={styles.label}>Hours Worked</Text>
+    <Text style={styles.value}>{data.totalHours}</Text>
+  </View>
+
+  <View style={styles.cell}>
+    <Text style={styles.label}>Started</Text>
+    <Text style={styles.value}>{data.startTime}</Text>
+  </View>
+
+  <View style={[styles.cell, { alignItems: "center" }]}>
+    <Text style={styles.value}>-</Text>
+  </View>
+
+  <View style={styles.cell}>
+    <Text style={styles.label}>Ended</Text>
+    <Text style={styles.value}>{data.endTime}</Text>
+  </View>
+</View>} />
       <Spacer space={25} />
-      <Container title="" icon="" />
+      <Container
+  title="Taarif Tble"
+  icon=""
+  data={
+    <View>
+      {/* Header */}
+      <View style={styles.row2}>
+        <Text style={styles.cell2}>Type</Text>
+        <Text style={styles.cell2}>Taarif</Text>
+        <Text style={styles.cell2}>Hours</Text>
+      </View>
+
+      {/* Data */}
+      {data.allShiftRates.split(",").map((str, index) => {
+        const val = str.split("-");
+        return (
+          <View style={styles.row2} key={index}>
+            <Text style={styles.cell2}>Soon</Text>
+            <Text style={styles.cell2}>{val[1]}</Text>
+            <Text style={styles.cell2}>{val[0]}</Text>
+          </View>
+        );
+      })}
+    </View>
+  }
+/>
       <Spacer space={25} />
-      <Container title="" icon="" />
+      <Container title="Total Salary" icon=""  data = {
+        <View>
+            <Text>{data.totalSalary}</Text>
+          </View>
+      }/>
       <Spacer space={25} />
       <Container title="" icon="" />
     </View>
@@ -108,4 +160,35 @@ const ShowShift: React.FC = () => {
 
 export default ShowShift;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  row2: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: 250,        // fixed width keeps it compact like your original design
+    marginVertical: 2, // small spacing between rows
+  },
+  cell2: {
+    width: 80,         // each column has fixed width to align like a table
+    textAlign: "center",
+  },
+
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: 300,          // or any fixed width to keep compact
+    marginVertical: 4,
+  },
+  cell: {
+    flex: 1,
+  },
+  label: {
+    fontSize: 12,
+    color: "#555",
+    textAlign: "center",
+  },
+  value: {
+    fontSize: 14,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+});

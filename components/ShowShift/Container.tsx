@@ -28,7 +28,7 @@ const Container: React.FC<ContainerProps> = React.memo(({
           {icon && <Ionicons name={icon as any} size={15} style={{ marginLeft: 4 }} />}
         </View>
 
-        <TouchableOpacity
+        <TouchableOpacity 
           style={styles.editButton}
           activeOpacity={0.7}
         >
