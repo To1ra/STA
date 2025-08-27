@@ -16,19 +16,12 @@ export interface WageRateData {
   endDate: string;
   endHour: string;
   rate: string;
+  
 }
+
+
 
 export interface ShiftData {
-  id: string | number;
-  name: string;
-  startDate: string;
-  startHour: string;
-  endDate: string;
-  endHour: string;
-  rate: string;
-}
-
-export interface ActualShiftData {
   id: string | number;
   yearDate: number;
   monthDate: number;
@@ -36,6 +29,7 @@ export interface ActualShiftData {
   startTime: string;
   endTime: string;
   totalHours: string | number;
+  newDay: string;
 }
 
 export interface DynamicObject {
@@ -43,6 +37,7 @@ export interface DynamicObject {
   Table?: string;
   edit?: string;
   dateStart?: Date;
+  dateEnd?: Date;
   startTime?: Date;
   endTime?: Date;
   rate?: number;

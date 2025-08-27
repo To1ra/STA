@@ -5,16 +5,7 @@ import AreYouSure from "../AreYouSure";
 import { useState } from "react";
 import { useRouter } from "expo-router";
 import React from "react";
-
-interface ShiftData {
-  id: string | number;
-  yearDate: number;
-  monthDate: number;
-  dayDate: number;
-  startTime: string;
-  endTime: string;
-  totalHours: string | number;
-}
+import { ShiftData } from "../../utils/types";
 
 interface ShiftProps {
   data: ShiftData;
@@ -44,7 +35,8 @@ const Shift: React.FC<ShiftProps> = React.memo(({ data, del }) => {
             dayDate: data.dayDate,
             startTime: data.startTime,
             endTime: data.endTime,
-            totalHours: data.totalHours
+            totalHours: data.totalHours,
+            newDay: data.newDay,
           } as any,
         })
       }
@@ -59,7 +51,10 @@ const Shift: React.FC<ShiftProps> = React.memo(({ data, del }) => {
 
         {/* Location & Time Section */}
         <View style={styles.middleSection}>
-          <Text style={styles.locationText}>{days[theActualDay]}</Text>
+          <Text style={styles.locationText}>
+            {days[theActualDay] + " " + data["newDay"]}
+          </Text>
+
           <Text style={styles.timeText}>
             {data["startTime"]} - {data["endTime"]}
           </Text>

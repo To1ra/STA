@@ -3,7 +3,7 @@ import Shift from "./Shift";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import React from "react";
-import { ActualShiftData } from "../../utils/types";
+import { ShiftData } from "../../utils/types";
 
 interface ContentProps {
   month: number;
@@ -11,7 +11,7 @@ interface ContentProps {
 }
 
 const Content: React.FC<ContentProps> = ({ month, year }) => {
-  const [output, setOutput] = useState<ActualShiftData[]>([]);
+  const [output, setOutput] = useState<ShiftData[]>([]);
   const db = useSQLiteContext();
   
   const del = async (id: string | number) => {
@@ -37,7 +37,8 @@ const Content: React.FC<ContentProps> = ({ month, year }) => {
         dayDate: row.dayDate || 1,
         startTime: row.startTime.toString().split(" ")[4].slice(0,5) || '',
         endTime: row.endTime.toString().split(" ")[4].slice(0,5) || '',
-        totalHours: row.hoursWorked || 0
+        totalHours: row.hoursWorked || 0,
+        newDay : row.startTime.toString().split(" ")[2] !=  row.endTime.toString().split(" ")[2] ? "*" : ""
       }));
       setOutput(transformedRows);
     } catch (error) {

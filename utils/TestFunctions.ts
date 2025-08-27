@@ -71,7 +71,10 @@ function getHoursDifference(d1: Date, d2: Date) {
   try {
     const msDiff = Math.abs(d1.getTime() - d2.getTime() - d1.getMilliseconds() - d2.getMilliseconds()); // difference in ms
     const diffInHours = msDiff / (1000 * 60 * 60);
+    if(diffInHours < 0.1)
+      return 0;
     return Math.round(diffInHours * 100) / 100; // round to 2 decimals
+    
   } catch (err) {
     console.error(err);
     return 0;
@@ -95,6 +98,19 @@ const roundTotalHoursInArray = (arr: Array<any>, decimals = 3) => {
   });
 };
 
+const nextDaySelector = (d1: Date, d2: Date) => {
+  if(d2.getHours() < 0) 
+    return false;
+  else if(d2.getHours() > d1.getHours())
+      return false;
+  else if(d2.getHours() == d1.getHours() && d2.getMinutes() >= d1.getMinutes())
+    return false;
+
+
+  return true;
+}
+
+
 export {
   getTodayWithTime,
   getHoursDifference,
@@ -104,4 +120,5 @@ export {
   roundTotalHoursInArray,
   roundTo,
   combineDateAndTime,
+  nextDaySelector
 };

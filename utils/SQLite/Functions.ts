@@ -39,16 +39,17 @@ const submitData = async (
 
 const submitShift = async (data: DynamicObject, db: SQLiteDatabase) => {
   try {
-    if (!(data["dateStart"] && data["startTime"] && data["endTime"])) {
+    if (!(data["dateStart"] && data["dateEnd"] &&data["startTime"] && data["endTime"])) {
       return { error: "Missing required date/time fields" };
     }
 
     const dateObj = new Date(data["dateStart"].toISOString());
-
-    console.log(`dateobj ${dateObj}`);
+    const dateObj2 = new Date(data["dateEnd"].toISOString());
 
     const startTime = combineDateAndTime(dateObj, data["startTime"]); //I have to store time as a date so I use that function
-    const endTime = combineDateAndTime(dateObj, data["endTime"]);
+    const endTime = combineDateAndTime(dateObj2, data["endTime"]);
+
+    console.log(startTime, endTime);
 
     const temp = await SecureStore.getItemAsync("HW");
     const extraHoursCountFrom = await SecureStore.getItemAsync("moreHours");
@@ -84,6 +85,9 @@ const submitShift = async (data: DynamicObject, db: SQLiteDatabase) => {
       data["rate"]
     );
 
+    const allShiftRates:string = timeArr
+      .map((obj) => obj.totalHours + "-" + obj.rate)
+      .join(",");
 
     if (!timeArr.length) return;
 
@@ -96,18 +100,19 @@ const submitShift = async (data: DynamicObject, db: SQLiteDatabase) => {
     dayDate,monthDate,yearDate,
     startTime,endTime,
     hoursWorked,extraHoursCountFrom,firstRate,lastRate,rate,
-    totalSalary
+    totalSalary,allShiftRates
   ) VALUES (
     ${dateObj.getDate()},
     ${dateObj.getMonth()},
     ${dateObj.getFullYear()},
-    '${data["startTime"]}',     
-    '${data["endTime"]}',    ${totalHoursWorked},
+    '${startTime}',     
+    '${endTime}',    ${totalHoursWorked},
     ${extraHoursCountFrom},
     ${firstRate},
     ${lastRate},
     ${data["rate"]},
-    ${salary}  
+    ${salary},
+    '${allShiftRates}'
 )`;
 
     console.log(insertValuesString);
@@ -169,7 +174,6 @@ const calcHours: test = (
       lst.push({ totalHours: completion, rate: extraArr[1] });
       lst.push({ totalHours: diff - completion, rate: extraArr[2] });
     } else lst.push({ totalHours: diff, rate: extraArr[2] });
-
   } else if (totalHours > extraArr[0]) {
     //first time passing extra Hours
     calcHours.flag = true;
@@ -374,7 +378,6 @@ CREATE TABLE ALL_SHIFTS (
     yearDate INTEGER NOT NULL,
     startTime TEXT NOT NULL,
     endTime TEXT NOT NULL,
-    endDate TEXT,
     note TEXT,
     hoursWorked REAL NOT NULL,
     extraHoursCountFrom INTEGER NOT NULL,
@@ -382,7 +385,8 @@ CREATE TABLE ALL_SHIFTS (
     rate INTEGER NOT NULL,
     lastRate INTEGER NOT NULL,
     totalSalary REAL NOT NULL DEFAULT 0,
-    color TEXT NOT NULL DEFAULT 'black'
+    color TEXT NOT NULL DEFAULT 'black',
+    allShiftRates TEXT NOT NULL 
 );
 `;
     await db.execAsync(sqlString);
