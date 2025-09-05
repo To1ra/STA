@@ -1,4 +1,4 @@
-import React, { createContext, useRef, useContext, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode } from "react";
 import { useSharedRef } from "./FormContext";
 
 interface SubmitContextType {
@@ -13,7 +13,11 @@ interface SubmitProviderProps {
 
 export const SubmitProvider: React.FC<SubmitProviderProps> = ({ children }) => {
   const Ref = useSharedRef();
-  const submitGeneral = (num: any, fieldName: string, update: (value: any) => void) => {
+  const submitGeneral = (
+    num: any,
+    fieldName: string,
+    update: (value: any) => void
+  ) => {
     Ref.current[fieldName] = num;
     // console.log(`The field ${fieldName} is equal to ${num}`);
     update(num);
@@ -28,7 +32,7 @@ export const SubmitProvider: React.FC<SubmitProviderProps> = ({ children }) => {
 export const useSubmit = (): SubmitContextType => {
   const context = useContext(submitContext);
   if (!context) {
-    throw new Error('useSubmit must be used within a SubmitProvider');
+    throw new Error("useSubmit must be used within a SubmitProvider");
   }
   return context;
 };

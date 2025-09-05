@@ -6,6 +6,7 @@ const titleParser: Record<string, string> = {
   WageRate: "Wage Rate",
   NewShift: "New Shift",
   ShowShift: "Show Shift",
+  EditShift: "Edit Shift",
 };
 
 const notSqlite = ["HW", "Break", "Bus"];

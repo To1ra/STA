@@ -18,17 +18,15 @@ const NewShift: React.FC = () => {
 
   useEffect(() => {
     ref.current["Table"] = "ALL_SHIFTS";
-    ref.current["rate"] = 100; 
+    ref.current["rate"] = 100;
   }, []);
 
-
-useEffect(() => {
-  // If it's *not* next day, run submitGeneral automatically
-  if (!nextDaySelector(startHour, endHour)) {
-    submitGeneral(date, "dateEnd", setDate2);
-  }
-}, [startHour, endHour, date]); 
-
+  useEffect(() => {
+    // If it's *not* next day, run submitGeneral automatically
+    if (!nextDaySelector(startHour, endHour)) {
+      submitGeneral(date, "dateEnd", setDate2);
+    }
+  }, [startHour, endHour, date]);
 
   return (
     <View>
@@ -61,27 +59,30 @@ useEffect(() => {
           onChange={(event, selectedDate) => {
             if (selectedDate) {
               submitGeneral(selectedDate, "endTime", setEndHour);
-              console.log("startHour:", startHour.getHours(), "endHour:", endHour.getHours());
-
+              console.log(
+                "startHour:",
+                startHour.getHours(),
+                "endHour:",
+                endHour.getHours()
+              );
             }
           }}
         />
       </Container>
 
       {nextDaySelector(startHour, endHour) && (
-  <Container title="Final Date">
-    <DateTimePicker
-      value={date2}
-      mode="date"
-      onChange={(event, selectedDate) => {
-        if (selectedDate) {
-          submitGeneral(selectedDate, "dateEnd", setDate2);
-        }
-      }}
-    />
-  </Container>
-)}
-
+        <Container title="Final Date">
+          <DateTimePicker
+            value={date2}
+            mode="date"
+            onChange={(event, selectedDate) => {
+              if (selectedDate) {
+                submitGeneral(selectedDate, "dateEnd", setDate2);
+              }
+            }}
+          />
+        </Container>
+      )}
 
       {/* <Container title="Notes">
         <TextInput

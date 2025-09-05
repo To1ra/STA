@@ -13,7 +13,7 @@ interface ContentProps {
 const Content: React.FC<ContentProps> = ({ month, year }) => {
   const [output, setOutput] = useState<ShiftData[]>([]);
   const db = useSQLiteContext();
-  
+
   const del = async (id: string | number) => {
     await db.execAsync("DELETE FROM ALL_SHIFTS WHERE id =" + id + ";");
     console.log("hey");
@@ -35,13 +35,16 @@ const Content: React.FC<ContentProps> = ({ month, year }) => {
         yearDate: row.yearDate || year,
         monthDate: row.monthDate || month,
         dayDate: row.dayDate || 1,
-        startTime: row.startTime.toString().split(" ")[4].slice(0,5) || '',
-        endTime: row.endTime.toString().split(" ")[4].slice(0,5) || '',
+        startTime: row.startTime.toString().split(" ")[4].slice(0, 5) || "",
+        endTime: row.endTime.toString().split(" ")[4].slice(0, 5) || "",
         totalHours: row.hoursWorked || 0,
-        newDay : row.startTime.toString().split(" ")[2] !=  row.endTime.toString().split(" ")[2] ? "*" : "",
+        newDay:
+          row.startTime.toString().split(" ")[2] !=
+          row.endTime.toString().split(" ")[2]
+            ? "*"
+            : "",
         allShiftRates: row.allShiftRates || 0,
-        totalSalary: row.totalSalary
-
+        totalSalary: row.totalSalary,
       }));
       setOutput(transformedRows);
     } catch (error) {

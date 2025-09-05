@@ -13,13 +13,13 @@ const OutsideLayout = () => {
   useEffect(() => {}, []);
 
   return (
-      <SQLiteProvider databaseName="myDataBase">
-        <RefProvider>
-          <SubmitProvider>
-            <InnerLayout />
-          </SubmitProvider>
-        </RefProvider>
-      </SQLiteProvider>
+    <SQLiteProvider databaseName="myDataBase">
+      <RefProvider>
+        <SubmitProvider>
+          <InnerLayout />
+        </SubmitProvider>
+      </RefProvider>
+    </SQLiteProvider>
   );
 };
 
@@ -38,7 +38,8 @@ const InnerLayout = () => {
             <Button
               title="Go Back"
               onPress={() => {
-                if (dataRef) dataRef.current = {};
+                if (Object.keys(dataRef.current).length != 0)
+                  dataRef.current = {};
                 navigation.goBack();
               }}
             />
@@ -66,6 +67,8 @@ const InnerLayout = () => {
       })}
     >
       <Stack.Screen name="BasicSalary" />
+      <Stack.Screen name="NewShift" />
+      <Stack.Screen name="EditShift" />
       <Stack.Screen name="WageRate" />
     </Stack>
   );

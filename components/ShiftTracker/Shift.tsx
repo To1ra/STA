@@ -5,6 +5,7 @@ import AreYouSure from "../AreYouSure";
 import { useState } from "react";
 import { useRouter } from "expo-router";
 import React from "react";
+import { setShiftData } from "../../utils/Storage/wantedShift";
 import { ShiftData } from "../../utils/types";
 
 interface ShiftProps {
@@ -25,23 +26,10 @@ const Shift: React.FC<ShiftProps> = React.memo(({ data, del }) => {
 
   return (
     <TouchableOpacity
-      onPress={() =>
-        router.push({
-          pathname: "(view-stuff)/ShowShift",
-          params: {
-            id: data.id,
-            yearDate: data.yearDate,
-            monthDate: data.monthDate,
-            dayDate: data.dayDate,
-            startTime: data.startTime,
-            endTime: data.endTime,
-            totalSalary: data.totalSalary,
-            totalHours: data.totalHours,
-            newDay: data.newDay,
-            allShiftRates: data.allShiftRates
-          } 
-        })
-      }
+      onPress={() => {
+        router.push(`/ShowShift`);
+        setShiftData(data);
+      }}
     >
       <View style={styles.shift}>
         <AreYouSure action={() => del(data["id"])} vis={vis} setVis={setVis} />

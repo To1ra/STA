@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -34,17 +34,17 @@ const shiftTracker: React.FC = () => {
   //   try {
   //     const startingYear = Number(y) - 1;
   //     const endYear = Number(y) + 1;
-      
+
   //     // Create a flat array of all month-year combinations
   //     const monthYearCombinations = [];
-      
+
   //     for (let year = startingYear; year <= endYear; year++) {
   //       for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
   //         const title = months[monthIndex] + " " + year;
-          
+
   //         // Stop at current month + 1 for the end year
   //         if (year === endYear && monthIndex > currentM) break;
-          
+
   //         monthYearCombinations.push({
   //           title,
   //           monthIndex,
@@ -53,7 +53,7 @@ const shiftTracker: React.FC = () => {
   //         });
   //       }
   //     }
-      
+
   //     // Map the flat array to JSX elements
   //     return monthYearCombinations.map((item, index) => (
   //       <DrawerItem
@@ -67,7 +67,7 @@ const shiftTracker: React.FC = () => {
   //         }
   //       />
   //     ));
-      
+
   //   } catch (err) {
   //     console.log(err);
   //     return [];
@@ -99,27 +99,27 @@ const shiftTracker: React.FC = () => {
 
   return (
     <View style={{ backgroundColor: "#161616", height: "100%" }}>
-        <Spacer />
-        <NavigationBar
-          forward={nextMonth}
-          backward={prevMonth}
-          showState={
-            <TouchableOpacity
-              style={{ flexDirection: "row", alignItems: "center" }}
-              onPress={() => {
-                setModalVisible(true);
-              }}
-            >
-              {/* <Ionicons
+      <Spacer />
+      <NavigationBar
+        forward={nextMonth}
+        backward={prevMonth}
+        showState={
+          <TouchableOpacity
+            style={{ flexDirection: "row", alignItems: "center" }}
+            onPress={() => {
+              setModalVisible(true);
+            }}
+          >
+            {/* <Ionicons
                 name="caret-down-outline"
                 size={25}
                 style={{ color: "white", marginRight: 8 }}
               />
               <Text style={{ color: "white", fontSize: 25 }}>{display()}</Text> */}
-            </TouchableOpacity>
-          }
-        />
-     {/* <Modal
+          </TouchableOpacity>
+        }
+      />
+      {/* <Modal
           visible={modalVisible}
           transparent={true}
           onRequestClose={() => setModalVisible(false)}
@@ -136,15 +136,12 @@ const shiftTracker: React.FC = () => {
             </View>
           </TouchableWithoutFeedback>
         </Modal> */}
-        <Spacer />
-  <Content  month={m} year={Number(y)} />
-  <Spacer />
-  <Spacer />
-  <Spacer />
-
-
+      <Spacer />
+      <Content month={m} year={Number(y)} />
+      <Spacer />
+      <Spacer />
+      <Spacer />
     </View>
-
   );
 };
 

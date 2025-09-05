@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { ReactNode } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 interface ContainerProps {
   title?: string;
@@ -8,38 +9,45 @@ interface ContainerProps {
   data?: ReactNode;
 }
 
-const Container: React.FC<ContainerProps> = React.memo(({
-  title = "hola",
-  icon = "american-football-outline",
-  data = <></>,
-}) => {
-  return (
-    <View
-      style={{ paddingHorizontal: "5%", width: "95%", alignSelf: "center" }}
-    >
-      <View style={styles.div}>
-        <View
-          style={[
-            { flexDirection: "row", alignItems: "center" },
-            styles.element,
-          ]}
-        >
-          <Text style={styles.title}>{title}</Text>
-          {icon && <Ionicons name={icon as any} size={15} style={{ marginLeft: 4 }} />}
+const Container: React.FC<ContainerProps> = React.memo(
+  ({ title = "hola", icon = "american-football-outline", data = <></> }) => {
+    const router = useRouter();
+    return (
+      <View
+        style={{ paddingHorizontal: "5%", width: "95%", alignSelf: "center" }}
+      >
+        <View style={styles.div}>
+          <View
+            style={[
+              { flexDirection: "row", alignItems: "center" },
+              styles.element,
+            ]}
+          >
+            <Text style={styles.title}>{title}</Text>
+            {icon && (
+              <Ionicons
+                name={icon as any}
+                size={15}
+                style={{ marginLeft: 4 }}
+              />
+            )}
+          </View>
+
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => {
+              router.push(`/(modify-pages)/EditShift?toEdit=${title}`);
+            }}
+          >
+            <Text style={styles.buttonText}>Edit</Text>
+          </TouchableOpacity>
         </View>
 
-        <TouchableOpacity 
-          style={styles.editButton}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.buttonText}>Edit</Text>
-        </TouchableOpacity>
+        <View style={styles.data}>{data}</View>
       </View>
-
-      <View style={styles.data}>{data}</View>
-    </View>
-  );
-});
+    );
+  }
+);
 
 export default Container;
 
@@ -50,14 +58,14 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     alignSelf: "center",
     borderWidth: 1,
-    borderColor: "#E4E9F2",
+    backgroundColor: "#3A3A3A",
     borderRadius: 4,
     alignItems: "center",
     justifyContent: "center",
   },
   buttonText: {
     fontSize: 12,
-    color: "#8F9BB3",
+    color: "white",
   },
   title: {
     fontSize: 15,
