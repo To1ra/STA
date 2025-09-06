@@ -9,7 +9,6 @@ import { Redirect, useRouter } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
 import React from "react";
 
-
 // ✅ Set initial page
 export const unstable_settings = {
   initialRouteName: "shiftTracker",
@@ -22,26 +21,26 @@ const RootLayout: React.FC = () => {
   StatusBar.setBarStyle("light-content", true);
 
   return (
-      <SQLiteProvider databaseName="myDataBase">
-        <View
-          style={{
-            flex: 1,
-            paddingTop: insets.top,
-            backgroundColor: "#161616",
-          }}
-        >
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <Drawer
-              drawerContent={(props) => <DrawerContent {...props} />}
-              screenOptions={{
-                header: ({ route, navigation, options }) => (
-                  <Header title={route.name} navigation={navigation} />
-                ),
-              }}
-            />
-          </GestureHandlerRootView>
-        </View>
-      </SQLiteProvider>
+    <SQLiteProvider databaseName="myDataBase">
+      <View
+        style={{
+          flex: 1,
+          paddingTop: insets.top,
+          backgroundColor: "#161616",
+        }}
+      >
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <Drawer
+            drawerContent={(props) => <DrawerContent {...props} />}
+            screenOptions={{
+              header: ({ route, navigation, options }) => (
+                <Header title={route.name} navigation={navigation} />
+              ),
+            }}
+          />
+        </GestureHandlerRootView>
+      </View>
+    </SQLiteProvider>
   );
 };
 

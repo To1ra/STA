@@ -7,6 +7,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { setShiftData } from "../../utils/Storage/wantedShift";
 import { ShiftData } from "../../utils/types";
+import { formatTime } from "../../utils/TestFunctions";
 
 interface ShiftProps {
   data: ShiftData;
@@ -44,9 +45,8 @@ const Shift: React.FC<ShiftProps> = React.memo(({ data, del }) => {
           <Text style={styles.locationText}>
             {days[theActualDay] + " " + data["newDay"]}
           </Text>
-
           <Text style={styles.timeText}>
-            {data["startTime"]} - {data["endTime"]}
+            {formatTime(data["startTime"])} - {formatTime(data["endTime"])}
           </Text>
         </View>
 

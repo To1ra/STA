@@ -50,6 +50,7 @@ const InnerLayout = () => {
             <Button
               title="check"
               onPress={() => {
+                console.log(dataRef.current);
                 submitData(db, dataRef);
                 if (route.name.toLocaleLowerCase().includes("Wage")) {
                   router.push("/ListWageRates");
@@ -67,7 +68,6 @@ const InnerLayout = () => {
       })}
     >
       <Stack.Screen name="BasicSalary" />
-      <Stack.Screen name="NewShift" />
       <Stack.Screen name="EditShift" />
       <Stack.Screen name="WageRate" />
     </Stack>

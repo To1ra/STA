@@ -6,21 +6,11 @@ import * as SecureStore from "expo-secure-store";
 import { useSQLiteContext } from "expo-sqlite";
 import React from "react";
 
-interface ExtraHoursProps {
-  init?: string;
-  id?: string | number;
-}
-
-const ExtraHours: React.FC<ExtraHoursProps> = React.memo(({ init, id }) => {
-  return <Inner init={init} id={id} />;
-});
-
 interface InnerProps {
-  init?: string;
   id?: string | number;
 }
 
-const Inner: React.FC<InnerProps> = React.memo(({ init, id }) => {
+const ExtraHours: React.FC<InnerProps> = React.memo(({ id }) => {
   const submitGeneral = useSubmit();
   const db = useSQLiteContext();
 
@@ -49,10 +39,10 @@ const Inner: React.FC<InnerProps> = React.memo(({ init, id }) => {
   async function getInitTable() {
     try {
       //from SQL
-      if (!init || !id) return;
+      if (!id) return;
 
       const rows = await db.getAllAsync(
-        `SELECT extraHoursCountFrom, firstRate, lastRate FROM ${init} WHERE id = ${id}`
+        `SELECT extraHoursCountFrom, firstRate, lastRate FROM ALL_SHIFTS WHERE id = ${id}`
       );
 
       if (rows.length > 0) {
@@ -73,7 +63,7 @@ const Inner: React.FC<InnerProps> = React.memo(({ init, id }) => {
   }
 
   useEffect(() => {
-    if (!init) getInit();
+    if (!id) getInit();
     else getInitTable();
   }, []);
 

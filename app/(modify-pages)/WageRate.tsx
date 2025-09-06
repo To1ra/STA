@@ -170,10 +170,7 @@ const WageRate: React.FC = () => {
               maxLength={15}
             />
           </Container>
-          <ExtraHours
-            init={table || undefined}
-            id={id ? String(id) : undefined}
-          />
+          <ExtraHours id={id ? String(id) : undefined} />
         </View>
       </TouchableWithoutFeedback>
     </ScrollView>

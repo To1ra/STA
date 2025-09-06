@@ -5,7 +5,13 @@
 //the first building block of our app is the basic shift.
 //the creation function should get: start and end date and time of shift, hourly rate of that shift, transport fees, and optional text.
 //it should create a object or struct that contains all the above data, but also calculated information like: salary for that day, special rates, overtime, overall duration.
-import {ShiftData} from "../utils/types"; 
+import { ShiftData } from "../utils/types";
+
+const formatTime = (isoString?: string) => {
+  if (!isoString) return "";
+  const date = new Date(isoString);
+  return date.toTimeString().slice(0, 5); // "HH:MM"
+};
 
 const getTodayWithTime = (
   timeStr: string,
@@ -70,12 +76,12 @@ const isEmpty = (obj: Object) => {
 
 function getHoursDifference(d1: Date, d2: Date) {
   try {
-    const msDiff = Math.abs(d1.getTime() - d2.getTime() - d1.getMilliseconds() - d2.getMilliseconds()); // difference in ms
+    const msDiff = Math.abs(
+      d1.getTime() - d2.getTime() - d1.getMilliseconds() - d2.getMilliseconds()
+    ); // difference in ms
     const diffInHours = msDiff / (1000 * 60 * 60);
-    if(diffInHours < 0.1)
-      return 0;
+    if (diffInHours < 0.1) return 0;
     return Math.round(diffInHours * 100) / 100; // round to 2 decimals
-    
   } catch (err) {
     console.error(err);
     return 0;
@@ -100,17 +106,13 @@ const roundTotalHoursInArray = (arr: Array<any>, decimals = 3) => {
 };
 
 const nextDaySelector = (d1: Date, d2: Date) => {
-  if(d2.getHours() < 0) 
+  if (d2.getHours() < 0) return false;
+  else if (d2.getHours() > d1.getHours()) return false;
+  else if (d2.getHours() == d1.getHours() && d2.getMinutes() >= d1.getMinutes())
     return false;
-  else if(d2.getHours() > d1.getHours())
-      return false;
-  else if(d2.getHours() == d1.getHours() && d2.getMinutes() >= d1.getMinutes())
-    return false;
-
 
   return true;
-}
-
+};
 
 function normalizeParams<T>(params: Record<string, string | string[]>): T {
   const normalized: Record<string, string> = {};
@@ -124,8 +126,6 @@ function normalizeParams<T>(params: Record<string, string | string[]>): T {
   return normalized as unknown as T;
 }
 
-
-
 export {
   getTodayWithTime,
   getHoursDifference,
@@ -136,5 +136,6 @@ export {
   roundTo,
   combineDateAndTime,
   nextDaySelector,
-  normalizeParams
+  normalizeParams,
+  formatTime,
 };

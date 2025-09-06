@@ -19,21 +19,21 @@ const WageRate: React.FC = () => {
       console.log(err);
     }
   };
-  
+
   const myFetch = async () => {
     try {
       const allRows: WageRateData[] = await db.getAllAsync(
         "SELECT * FROM WAGE_RATES"
       );
       // Transform the data to match the expected structure
-      const transformedRows = allRows.map(row => ({
+      const transformedRows = allRows.map((row) => ({
         id: row.id,
         name: row.name || `Wage Rate ${row.id}`,
-        startDate: row.startDate || '',
-        startHour: row.startHour || '',
-        endDate: row.endDate || '',
-        endHour: row.endHour || '',
-        rate: row.rate || '0'
+        startDate: row.startDate || "",
+        startHour: row.startHour || "",
+        endDate: row.endDate || "",
+        endHour: row.endHour || "",
+        rate: row.rate || "0",
       }));
       setOutput(transformedRows);
     } catch (error) {

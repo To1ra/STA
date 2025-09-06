@@ -35,8 +35,12 @@ const Content: React.FC<ContentProps> = ({ month, year }) => {
         yearDate: row.yearDate || year,
         monthDate: row.monthDate || month,
         dayDate: row.dayDate || 1,
-        startTime: row.startTime.toString().split(" ")[4].slice(0, 5) || "",
-        endTime: row.endTime.toString().split(" ")[4].slice(0, 5) || "",
+        startTime: row.startTime,
+        endTime: row.endTime,
+        rate: row.rate || 0,
+        extraHoursCountFrom: row.extraHoursCountFrom || 0,
+        firstRate: row.firstRate || 0,
+        lastRate: row.lastRate || 0,
         totalHours: row.hoursWorked || 0,
         newDay:
           row.startTime.toString().split(" ")[2] !=
@@ -52,7 +56,6 @@ const Content: React.FC<ContentProps> = ({ month, year }) => {
     }
   };
   useEffect(() => {
-    console.log("new render");
     myFetch();
   }, [month, year]);
   return (
@@ -63,6 +66,8 @@ const Content: React.FC<ContentProps> = ({ month, year }) => {
         keyExtractor={(item) => String(item.id)}
       />
     </View>
+
+    //
   );
 };
 

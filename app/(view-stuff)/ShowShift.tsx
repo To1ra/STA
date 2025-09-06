@@ -6,6 +6,7 @@ import Container from "../../components/ShowShift/Container";
 import Spacer from "../../components/Spacer";
 import { getShiftData } from "../../utils/Storage/wantedShift";
 import { ShiftData } from "../../utils/types";
+import { formatTime } from "../../utils/TestFunctions";
 import { get } from "http";
 
 const normalRepresentation = (toNormal: Date): string => {
@@ -19,7 +20,6 @@ const ShowShift: React.FC<{ data: ShiftData }> = () => {
   let data = getShiftData(); //Load from local storage
   if (!data) return <Text>No Data</Text>;
 
-  console.log(typeof data["allShiftRates"]);
   const currentShiftDate = new Date(
     Number(data["yearDate"]),
     Number(data["monthDate"]),
@@ -33,52 +33,11 @@ const ShowShift: React.FC<{ data: ShiftData }> = () => {
     navUpdate();
   }, []);
 
-  const navUpdate = async () => {
-    //fix this when relevant
-    // try {
-    //   const db = await SQLite.openDatabaseAsync("myDataBase");
-    //   const temp1 = await db.getAllAsync(
-    //     `SELECT COUNT (*) FROM ALL_SHIFTS WHERE monthDate=${data["monthDate"]} AND yearDate=${data["yearDate"]} AND dayDate>=${data["dayDate"]}`
-    //   );
-    //   const temp2 = await db.getAllAsync(
-    //     `SELECT COUNT (*) FROM ALL_SHIFTS WHERE monthDate=${data["monthDate"]} AND yearDate=${data["yearDate"]}`
-    //   );
-    //   const res1 = (temp1[0] as any)["COUNT (*)"] as number;
-    //   const res2 = (temp2[0] as any)["COUNT (*)"] as number;
-    //   if (res1 == 1) setshowLeft(false);
-    //   if (res2 == res1) setShowRight(false);
-    // } catch (err) {
-    //   console.log("Error in navUpdate:", err);
-    // }
-  };
+  const navUpdate = async () => {};
 
-  const nextDate = () => {
-    // const newDate = new Date(date);
-    // newDate.setDate(date.getDate() + 1);
-    // setDate(newDate);
-  };
+  const nextDate = () => {};
 
-  const prevDate = () => {
-    // const newDate = new Date(date);
-    // newDate.setDate(date.getDate() - 1);
-    // setDate(newDate);
-  };
-
-  const showTime = () => {
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <Text>{data["totalHours"] + "\n" + "Hours Worked"} </Text>
-        <Text> {data["startTime"] + "\n" + "Started"} </Text>
-        <Text> - </Text>
-        <Text> {data["endTime"] + "\n" + "Ended"} </Text>
-      </View>
-    );
-  };
+  const prevDate = () => {};
 
   return (
     <View>
@@ -112,7 +71,7 @@ const ShowShift: React.FC<{ data: ShiftData }> = () => {
 
             <View style={styles.cell}>
               <Text style={styles.label}>Started</Text>
-              <Text style={styles.value}>{data.startTime}</Text>
+              <Text style={styles.value}>{formatTime(data.startTime)}</Text>
             </View>
 
             <View style={[styles.cell, { alignItems: "center" }]}>
@@ -121,7 +80,7 @@ const ShowShift: React.FC<{ data: ShiftData }> = () => {
 
             <View style={styles.cell}>
               <Text style={styles.label}>Ended</Text>
-              <Text style={styles.value}>{data.endTime}</Text>
+              <Text style={styles.value}>{formatTime(data.endTime)}</Text>
             </View>
           </View>
         }

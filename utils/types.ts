@@ -16,10 +16,7 @@ export interface WageRateData {
   endDate: string;
   endHour: string;
   rate: string;
-  
 }
-
-
 
 export interface ShiftData {
   id: string | number;
@@ -29,11 +26,16 @@ export interface ShiftData {
   startTime: string;
   allShiftRates: string;
   endTime: string;
-  totalSalary:  number;
+  totalSalary: number;
   totalHours: string | number;
   newDay: string;
+  rate: number;
+  extraHoursCountFrom: number;
+  firstRate: number;
+  lastRate: number;
 }
 
+// "global" values transfer
 export interface DynamicObject {
   id?: string | number;
   Table?: string;
@@ -42,8 +44,12 @@ export interface DynamicObject {
   dateEnd?: Date;
   startTime?: Date;
   endTime?: Date;
-  rate?: number;
   note?: string | number;
   color?: string;
+  rate?: number;
+  extraHoursCountFrom?: number;
+  totalHours?: string | number;
+  firstRate?: number;
+  lastRate?: number;
   avatar?: string;
 }

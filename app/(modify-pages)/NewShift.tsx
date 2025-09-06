@@ -5,6 +5,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useSubmit } from "../../Context/FormSubmitContext";
 import { useSharedRef } from "../../Context/FormContext";
 import { nextDaySelector } from "../../utils/TestFunctions";
+import ShiftTimeSelector from "../../components/Forms/ShiftTimeSelector";
 
 const NewShift: React.FC = () => {
   const ref = useSharedRef();
@@ -30,60 +31,7 @@ const NewShift: React.FC = () => {
 
   return (
     <View>
-      <Container title="Pick The Date">
-        <DateTimePicker
-          value={date}
-          mode={"date"}
-          onChange={(event, selectedDate) => {
-            if (selectedDate) {
-              submitGeneral(selectedDate, "dateStart", setDate);
-            }
-          }}
-        />
-      </Container>
-      <Container title="Start Time">
-        <DateTimePicker
-          value={startHour}
-          mode={"time"}
-          onChange={(event, selectedDate) => {
-            if (selectedDate) {
-              submitGeneral(selectedDate, "startTime", setStartHour);
-            }
-          }}
-        />
-      </Container>
-      <Container title="End Time">
-        <DateTimePicker
-          value={endHour}
-          mode={"time"}
-          onChange={(event, selectedDate) => {
-            if (selectedDate) {
-              submitGeneral(selectedDate, "endTime", setEndHour);
-              console.log(
-                "startHour:",
-                startHour.getHours(),
-                "endHour:",
-                endHour.getHours()
-              );
-            }
-          }}
-        />
-      </Container>
-
-      {nextDaySelector(startHour, endHour) && (
-        <Container title="Final Date">
-          <DateTimePicker
-            value={date2}
-            mode="date"
-            onChange={(event, selectedDate) => {
-              if (selectedDate) {
-                submitGeneral(selectedDate, "dateEnd", setDate2);
-              }
-            }}
-          />
-        </Container>
-      )}
-
+      <ShiftTimeSelector status={false} />
       {/* <Container title="Notes">
         <TextInput
           value={note}
