@@ -13,10 +13,10 @@ const ShiftTimeSelector: React.FC<{ status: boolean }> = React.memo(
     const currentShift = getShiftData();
     const [date, setDate] = useState(new Date());
 
-    const temo = new Date(date); //to set inital date for next date picker
-    temo.setDate(temo.getDate() + 1);
+    const endDate = new Date(date); //to set inita  l date for next date picker
+    endDate.setDate(endDate.getDate() + 1);
 
-    const [date2, setDate2] = useState(temo);
+    const [date2, setDate2] = useState(endDate);
     const [startHour, setStartHour] = useState(new Date());
     const [endHour, setEndHour] = useState(new Date());
     const submitGeneral = useSubmit();
@@ -26,6 +26,17 @@ const ShiftTimeSelector: React.FC<{ status: boolean }> = React.memo(
       if (status && currentShift) {
         ref.current["edit"] = "yes";
         ref.current["id"] = currentShift.id;
+        submitGeneral(new Date(currentShift.startTime), "dateStart", setDate);
+        submitGeneral(
+          new Date(currentShift.startTime),
+          "startTime",
+          setStartHour
+        );
+        submitGeneral(new Date(currentShift.endTime), "endTime", setEndHour);
+      } else {
+        submitGeneral(date, "dateStart", setDate);
+        submitGeneral(startHour, "startTime", setStartHour);
+        submitGeneral(endHour, "endTime", setEndHour);
       }
     }, []);
 
@@ -67,12 +78,6 @@ const ShiftTimeSelector: React.FC<{ status: boolean }> = React.memo(
             onChange={(event, selectedDate) => {
               if (selectedDate) {
                 submitGeneral(selectedDate, "endTime", setEndHour);
-                console.log(
-                  "startHour:",
-                  startHour.getHours(),
-                  "endHour:",
-                  endHour.getHours()
-                );
               }
             }}
           />
