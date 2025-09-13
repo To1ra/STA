@@ -6,7 +6,7 @@ import Container from "../../components/ShowShift/Container";
 import Spacer from "../../components/Spacer";
 import { getShiftData } from "../../utils/Storage/wantedShift";
 import { ShiftData } from "../../utils/types";
-import { formatTime } from "../../utils/TestFunctions";
+import { formatTime, displayTime } from "../../utils/TestFunctions";
 import { get } from "http";
 
 const normalRepresentation = (toNormal: Date): string => {
@@ -66,7 +66,7 @@ const ShowShift: React.FC<{ data: ShiftData }> = () => {
           <View style={styles.row}>
             <View style={styles.cell}>
               <Text style={styles.label}>Hours Worked</Text>
-              <Text style={styles.value}>{data.totalHours}</Text>
+              <Text style={styles.value}>{displayTime(data.totalHours)}</Text>
             </View>
 
             <View style={styles.cell}>
@@ -105,7 +105,9 @@ const ShowShift: React.FC<{ data: ShiftData }> = () => {
                 <View style={styles.row2} key={index}>
                   <Text style={styles.cell2}>Soon</Text>
                   <Text style={styles.cell2}>{val[1]}</Text>
-                  <Text style={styles.cell2}>{val[0]}</Text>
+                  <Text style={styles.cell2}>
+                    {displayTime(parseFloat(val[0]))}
+                  </Text>
                 </View>
               );
             })}

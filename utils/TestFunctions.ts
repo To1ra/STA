@@ -76,17 +76,23 @@ const isEmpty = (obj: Object) => {
 
 function getHoursDifference(d1: Date, d2: Date) {
   try {
-    const msDiff = Math.abs(
-      d1.getTime() - d2.getTime() - d1.getMilliseconds() - d2.getMilliseconds()
-    ); // difference in ms
-    const diffInHours = msDiff / (1000 * 60 * 60);
-    if (diffInHours < 0.1) return 0;
-    return Math.round(diffInHours * 100) / 100; // round to 2 decimals
+    const ret =
+      d2.getHours() - d1.getHours() + (d2.getMinutes() - d1.getMinutes()) / 60;
+    const finalNumber = Math.round(ret * 1000) / 1000;
+    return finalNumber;
   } catch (err) {
     console.error(err);
     return 0;
   }
 }
+
+const roundTo = (num: number, decimals = 3) => Number(num.toFixed(decimals));
+
+const roundTotalHoursInArray = (arr: Array<any>, decimals = 3) => {
+  arr.forEach((obj) => {
+    obj["totalHours"] = roundTo(obj["totalHours"]);
+  });
+};
 
 //get objects from stringifyied array of objects
 const getObjects = (str: Array<string>) => {
@@ -95,14 +101,6 @@ const getObjects = (str: Array<string>) => {
   newStr = str.slice(1);
   const objects = newStr.map((item: string) => JSON.parse(item));
   return objects;
-};
-
-const roundTo = (num: number, decimals = 3) => Number(num.toFixed(decimals));
-
-const roundTotalHoursInArray = (arr: Array<any>, decimals = 3) => {
-  arr.forEach((obj) => {
-    obj["totalHours"] = roundTo(obj["totalHours"]);
-  });
 };
 
 const nextDaySelector = (d1: Date, d2: Date) => {
@@ -126,16 +124,23 @@ function normalizeParams<T>(params: Record<string, string | string[]>): T {
   return normalized as unknown as T;
 }
 
+function displayTime(h: number) {
+  const hours = Math.trunc(h);
+  const minutes = Math.round((h - hours) * 60);
+  if (minutes < 10) return `${hours}:0${minutes}`;
+  return `${hours}:${minutes}`;
+}
+
 export {
   getTodayWithTime,
   getHoursDifference,
   isEmpty,
   getObjects,
   assignHourToDate,
-  roundTotalHoursInArray,
-  roundTo,
   combineDateAndTime,
   nextDaySelector,
   normalizeParams,
   formatTime,
+  displayTime,
+  roundTotalHoursInArray,
 };

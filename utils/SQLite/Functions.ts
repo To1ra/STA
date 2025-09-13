@@ -1,7 +1,6 @@
 import * as SecureStore from "expo-secure-store";
 import {
   getHoursDifference,
-  getTodayWithTime,
   roundTotalHoursInArray,
   combineDateAndTime,
 } from "../TestFunctions";

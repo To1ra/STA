@@ -7,7 +7,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { setShiftData } from "../../utils/Storage/wantedShift";
 import { ShiftData } from "../../utils/types";
-import { formatTime } from "../../utils/TestFunctions";
+import { formatTime, displayTime } from "../../utils/TestFunctions";
 
 interface ShiftProps {
   data: ShiftData;
@@ -52,7 +52,9 @@ const Shift: React.FC<ShiftProps> = React.memo(({ data, del }) => {
 
         {/* Hours Worked */}
         <View style={styles.hoursSection}>
-          <Text style={styles.hoursText}>{data["totalHours"]}</Text>
+          <Text style={styles.hoursText}>
+            {displayTime(data["totalHours"])}
+          </Text>
           <Text style={styles.labelText}>Hours Worked</Text>
         </View>
 
