@@ -52,9 +52,7 @@ const Shift: React.FC<ShiftProps> = React.memo(({ data, del }) => {
 
         {/* Hours Worked */}
         <View style={styles.hoursSection}>
-          <Text style={styles.hoursText}>
-            {displayTime(data["totalHours"])}
-          </Text>
+          <Text style={styles.hoursText}>{displayTime(data.hoursWorked)}</Text>
           <Text style={styles.labelText}>Hours Worked</Text>
         </View>
 

@@ -3,11 +3,13 @@ import React, { useState, Suspense, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
 import NavigationBar from "../../components/NavigationBar";
 import Container from "../../components/ShowShift/Container";
+import { days } from "../../constans/Constans";
 import Spacer from "../../components/Spacer";
 import { getShiftData } from "../../utils/Storage/wantedShift";
 import { ShiftData } from "../../utils/types";
+import { getNextShift, getPrevShift } from "../../utils/SQLite/Functions";
 import { formatTime, displayTime } from "../../utils/TestFunctions";
-import { get } from "http";
+import { useSQLiteContext } from "expo-sqlite";
 
 const normalRepresentation = (toNormal: Date): string => {
   const formattedDate = toNormal.toISOString().split("T")[0]; // "2025-06-19"
@@ -17,7 +19,9 @@ const normalRepresentation = (toNormal: Date): string => {
 };
 
 const ShowShift: React.FC<{ data: ShiftData }> = () => {
-  let data = getShiftData(); //Load from local storage
+  const db = useSQLiteContext();
+  let temp = getShiftData(); //Load from local storage
+  const [data, setData] = useState<ShiftData | null>(temp);
   if (!data) return <Text>No Data</Text>;
 
   const currentShiftDate = new Date(
@@ -25,19 +29,46 @@ const ShowShift: React.FC<{ data: ShiftData }> = () => {
     Number(data["monthDate"]),
     Number(data["dayDate"])
   );
+
   const [date, setDate] = useState(currentShiftDate);
   const [showRight, setShowRight] = useState(true);
   const [showLeft, setshowLeft] = useState(true);
+  const [nextShift, setNextShift] = useState<ShiftData | null>(null);
+  const [prevShift, setPrevShift] = useState<ShiftData | null>(null);
 
   useEffect(() => {
-    navUpdate();
+    console.log("Data changed, updating navigation");
+    (async () => {
+      await navUpdate(data);
+    })();
   }, []);
 
-  const navUpdate = async () => {};
+  const navUpdate = async (shift: ShiftData) => {
+    const nextShift = await getNextShift(shift, db);
+    const prevShift = await getPrevShift(shift, db);
+    setNextShift(nextShift);
+    setPrevShift(prevShift);
+    setShowRight(!!nextShift);
+    setshowLeft(!!prevShift);
+  };
 
-  const nextDate = () => {};
+  const nextDate = async (next: ShiftData | null) => {
+    if (!data) return;
+    if (next) {
+      setData(next);
+      setDate(new Date(next.yearDate, next.monthDate, next.dayDate + 1));
+      await navUpdate(next);
+    }
+  };
 
-  const prevDate = () => {};
+  const prevDate = async (prev: ShiftData | null) => {
+    if (!data) return;
+    if (prev) {
+      setData(prev);
+      setDate(new Date(prev.yearDate, prev.monthDate, prev.dayDate + 1));
+      await navUpdate(prev);
+    }
+  };
 
   return (
     <View>
@@ -53,11 +84,14 @@ const ShowShift: React.FC<{ data: ShiftData }> = () => {
             {normalRepresentation(date)}
           </Text>
         }
-        backward={prevDate}
-        forward={nextDate}
+        backward={() => prevDate(prevShift)}
+        forward={() => nextDate(nextShift)}
         showRight={showRight}
         showLeft={showLeft}
       />
+      <Text style={{ textAlign: "center", fontSize: 20 }}>
+        {days[date.getDay()]}
+      </Text>
       <Spacer space={25} />
       <Container
         title="Shift Time"
@@ -66,7 +100,7 @@ const ShowShift: React.FC<{ data: ShiftData }> = () => {
           <View style={styles.row}>
             <View style={styles.cell}>
               <Text style={styles.label}>Hours Worked</Text>
-              <Text style={styles.value}>{displayTime(data.totalHours)}</Text>
+              <Text style={styles.value}>{displayTime(data.hoursWorked)}</Text>
             </View>
 
             <View style={styles.cell}>

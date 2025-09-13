@@ -41,7 +41,7 @@ const Content: React.FC<ContentProps> = ({ month, year }) => {
         extraHoursCountFrom: row.extraHoursCountFrom || 0,
         firstRate: row.firstRate || 0,
         lastRate: row.lastRate || 0,
-        totalHours: row.hoursWorked || 0,
+        hoursWorked: row.hoursWorked || 0,
         newDay:
           row.startTime.toString().split(" ")[2] !=
           row.endTime.toString().split(" ")[2]

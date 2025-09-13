@@ -24,55 +24,7 @@ const shiftTracker: React.FC = () => {
   const [y, setYear] = useState(currentY);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const drawerOnPress = (date: string) => {
-    // setMonth(date.split(" ")[0]);
-    // setYear(date.split(" ")[1]);
-    // setModalVisible(false);
-  };
-
-  // const displayDrawerItems = (): React.ReactElement[] => {
-  //   try {
-  //     const startingYear = Number(y) - 1;
-  //     const endYear = Number(y) + 1;
-
-  //     // Create a flat array of all month-year combinations
-  //     const monthYearCombinations = [];
-
-  //     for (let year = startingYear; year <= endYear; year++) {
-  //       for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
-  //         const title = months[monthIndex] + " " + year;
-
-  //         // Stop at current month + 1 for the end year
-  //         if (year === endYear && monthIndex > currentM) break;
-
-  //         monthYearCombinations.push({
-  //           title,
-  //           monthIndex,
-  //           year,
-  //           isCurrentSelection: monthIndex === currentM && year === Number(y)
-  //         });
-  //       }
-  //     }
-
-  //     // Map the flat array to JSX elements
-  //     return monthYearCombinations.map((item, index) => (
-  //       <DrawerItem
-  //         key={index}
-  //         label={item.title}
-  //         onPress={() => drawerOnPress(item.title)}
-  //         accessoryRight={
-  //           item.isCurrentSelection ? (
-  //             <Ionicons size={15} name="checkmark-outline" />
-  //           ) : undefined
-  //         }
-  //       />
-  //     ));
-
-  //   } catch (err) {
-  //     console.log(err);
-  //     return [];
-  //   }
-  // };
+  const drawerOnPress = (date: string) => {};
 
   const nextMonth = () => {
     if (m == 11) {
@@ -92,10 +44,7 @@ const shiftTracker: React.FC = () => {
     }
   };
 
-  const display = () => {
-    // if (Number(y) % 100 === 0) return m + " " + y;
-    // return m + " " + y.slice(-2);
-  };
+  const display = () => {};
 
   return (
     <View style={{ backgroundColor: "#161616", height: "100%" }}>
@@ -110,6 +59,9 @@ const shiftTracker: React.FC = () => {
               setModalVisible(true);
             }}
           >
+            <Text style={{ color: "white", fontSize: 25 }}>
+              {months[m] + " " + y}
+            </Text>
             {/* <Ionicons
                 name="caret-down-outline"
                 size={25}

@@ -27,7 +27,7 @@ export interface ShiftData {
   allShiftRates: string;
   endTime: string;
   totalSalary: number;
-  totalHours: number;
+  hoursWorked: number;
   newDay: string;
   rate: number;
   extraHoursCountFrom: number;

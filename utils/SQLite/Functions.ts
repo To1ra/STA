@@ -1,4 +1,5 @@
 import * as SecureStore from "expo-secure-store";
+import { ShiftData } from "../types";
 import {
   getHoursDifference,
   roundTotalHoursInArray,
@@ -455,4 +456,36 @@ CREATE TABLE WAGE_RATES (
   await db.execAsync(sqlString);
 };
 
-export { submitData, create_Table_ALLSHIFTS, create_Table_WAGETATES };
+async function getNextShift(
+  current: ShiftData,
+  db: SQLiteDatabase
+): Promise<ShiftData | null> {
+  return await db.getFirstAsync(
+    `SELECT * FROM ALL_SHIFTS
+     WHERE  dayDate >= ? AND monthDate == ? AND startTime > ? 
+     ORDER BY startTime DESC
+     LIMIT 1`,
+    [current.dayDate, current.monthDate, current.startTime]
+  );
+}
+
+async function getPrevShift(
+  current: ShiftData,
+  db: SQLiteDatabase
+): Promise<ShiftData | null> {
+  return await db.getFirstAsync(
+    `SELECT * FROM ALL_SHIFTS
+     WHERE dayDate <= ? AND monthDate == ? AND startTime < ? 
+     ORDER BY startTime DESC
+     LIMIT 1`,
+    [current.dayDate, current.monthDate, current.startTime]
+  );
+}
+
+export {
+  submitData,
+  create_Table_ALLSHIFTS,
+  create_Table_WAGETATES,
+  getNextShift,
+  getPrevShift,
+};
